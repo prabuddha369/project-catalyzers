@@ -5,6 +5,7 @@ import { FcGoogle } from "react-icons/fc";
 import { BsGithub } from "react-icons/bs";
 import { UserAuth } from "../context/AuthContext";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 const page = () => {
   const { user, googleSignIn, githubSignIn, signUpWithEmailAndPassword } =
     UserAuth();
@@ -40,12 +41,12 @@ const page = () => {
 
   if (user) redirect("/");
   return (
-    <div className="w-screen h-screen py-5 bg-[#0b1539] text-stone-200">
-      <div className="w-1/4 h-screeen rounded-3xl bg-gradient-to-b from-[#ea64dc] to-[#2d3e7a] mx-auto items-center">
+    <div className="w-full h-screen py-5 bg-[#0b1539] text-stone-200">
+      <div className="w-1/4 h-full rounded-3xl bg-gradient-to-b from-[#ea64dc] to-[#2d3e7a] mx-auto items-center">
         <div className="p-2 m-auto w-full text-center text-4xl font-space-mono">
           Sign Up
         </div>
-        <div className="p-5 items-center flex flex-col  m-auto w-full  font-space-mono">
+        <div className="p-3 items-center flex flex-col  m-auto w-full  font-space-mono">
           <div className="flex flex-col gap-4">
             <span className="text-2xl">Name</span>
             <input
@@ -55,7 +56,7 @@ const page = () => {
             />
           </div>
         </div>
-        <div className="p-5 items-center flex flex-col  m-auto w-full font-space-mono">
+        <div className="p-3 items-center flex flex-col  m-auto w-full font-space-mono">
           <div className="flex flex-col gap-4">
             <span className="text-2xl">Email</span>
             <input
@@ -65,7 +66,7 @@ const page = () => {
             />
           </div>
         </div>
-        <div className="p-5 items-center flex flex-col  m-auto w-full text-2xl font-space-mono">
+        <div className="p-3 items-center flex flex-col  m-auto w-full text-2xl font-space-mono">
           <div className="flex flex-col gap-4">
             Password
             <input
@@ -94,6 +95,14 @@ const page = () => {
               className="cursor-pointer"
             />
           </div>
+        </div>
+        <div className="p-1 items-center flex flex-col  m-auto w-full text-md font-space-mono">
+          <p className="p-1">
+            Alredy a User?{" "}
+            <Link href="/signin">
+              <span className="text-violet-400">Sign In</span>
+            </Link>
+          </p>
         </div>
       </div>
     </div>

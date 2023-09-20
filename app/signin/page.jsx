@@ -10,7 +10,6 @@ const page = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userName, setUserName] = useState("");
   const handleGoogleSignIn = async () => {
     try {
       await googleSignIn();
@@ -39,8 +38,8 @@ const page = () => {
 
   if (user) redirect("/");
   return (
-    <div className="w-screen h-screen py-5 bg-[#0b1539] text-stone-200">
-      <div className="w-1/4 h-screeen rounded-3xl bg-gradient-to-b from-[#ea64dc] to-[#2d3e7a] mx-auto items-center">
+    <div className="w-screen h-screen pt-20 bg-[#0b1539] text-stone-200 m-auto">
+      <div className="w-1/4 h-screeen rounded-3xl bg-gradient-to-b from-[#ea64dc] to-[#2d3e7a] m-auto items-center">
         <div className="p-2 m-auto w-full text-center text-4xl font-space-mono">
           Welcome Back!
         </div>
