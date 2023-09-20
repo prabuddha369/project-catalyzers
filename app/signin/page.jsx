@@ -1,12 +1,11 @@
 "use client";
-
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { BsGithub } from "react-icons/bs";
 import { UserAuth } from "../context/AuthContext";
 import { redirect } from "next/navigation";
 const page = () => {
-  const { user, googleSignIn, githubSignIn, signUpWithEmailAndPassword } =
+  const { user, googleSignIn, githubSignIn, signInWithEmailPassword } =
     UserAuth();
 
   const [email, setEmail] = useState("");
@@ -26,9 +25,9 @@ const page = () => {
       console.log(error);
     }
   };
-  const handleEmailSignUp = async () => {
+  const handleEmailSignIn = async () => {
     try {
-      await signUpWithEmailAndPassword(email, password);
+      await signInWithEmailPassword(email, password);
     } catch (error) {
       console.log(error);
     }
@@ -43,17 +42,7 @@ const page = () => {
     <div className="w-screen h-screen py-5 bg-[#0b1539] text-stone-200">
       <div className="w-1/4 h-screeen rounded-3xl bg-gradient-to-b from-[#ea64dc] to-[#2d3e7a] mx-auto items-center">
         <div className="p-2 m-auto w-full text-center text-4xl font-space-mono">
-          Sign Up
-        </div>
-        <div className="p-5 items-center flex flex-col  m-auto w-full  font-space-mono">
-          <div className="flex flex-col gap-4">
-            <span className="text-2xl">Name</span>
-            <input
-              className="w-[19rem]  h-10 rounded-xl p-3 text-sm bg-[#0b1539] text-stone-200 "
-              type="text"
-              onChange={(e) => setUserName(e.target.value)}
-            />
-          </div>
+          Welcome Back!
         </div>
         <div className="p-5 items-center flex flex-col  m-auto w-full font-space-mono">
           <div className="flex flex-col gap-4">
@@ -76,8 +65,11 @@ const page = () => {
           </div>
         </div>
         <div className="text-center m-auto text-2xl bg-[#cc5ac6] w-fit h-9  rounded-full px-2">
-          <span className="p-4 text-center" onClick={handleEmailSignUp}>
-            Create
+          <span
+            className="p-4 text-center cursor-pointer"
+            onClick={handleEmailSignIn}
+          >
+            Sign In
           </span>
         </div>
         <div className="text-center p-3">OR</div>
