@@ -76,8 +76,8 @@ const page = () => {
             />
           </div>
         </div>
-        <div className="w-36 h-custom m-auto text-center pt-2 text-2xl font-bold bg-[#cc5ac6] rounded-full">
-          <span className="p-6 text-center" onClick={handleEmailSignUp}>
+        <div className="w-36 h-[3 rem] m-auto text-center pt-2 text-2xl font-bold bg-[#cc5ac6] rounded-full">
+          <span className="p-6 text-center cursor-pointer" onClick={handleEmailSignUp}>
             Create
           </span>
         </div>

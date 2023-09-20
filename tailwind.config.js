@@ -15,9 +15,6 @@ module.exports = {
       borderRadius: {
         '3xl': '3.5rem', // Adjust the value as needed
       },
-      height: {
-        'custom': '3rem', // Define a custom height value
-      },
     },
   },
   plugins: [],
