@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import VideoList from "./videolist";
 import { UserAuth } from "./context/AuthContext";
 import pcat from "../public/pcat_logo.png";
 import { AiOutlineFileSearch } from "react-icons/ai";
@@ -14,7 +15,7 @@ export default function Home() {
     }
   };
   return (
-    <main className=" p-10 w-full h-screen bg-gradient-to-b from-[#0c163a] to-[#ea65dd] text-stone-300 ">
+    <main className=" p-10 w-full h-screen bg-gradient-to-b from-[#ea65dd] to-[#0c163a] text-stone-300 ">
       {user ? (
         <div>
           <div className="flex justify-between">
