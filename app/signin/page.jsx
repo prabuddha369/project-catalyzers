@@ -4,6 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 import { BsGithub } from "react-icons/bs";
 import { UserAuth } from "../context/AuthContext";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 const page = () => {
   const { user, googleSignIn, githubSignIn, signInWithEmailPassword } =
     UserAuth();
@@ -39,7 +40,7 @@ const page = () => {
   if (user) redirect("/");
   return (
     <div className="w-full h-screen py-5 bg-[#0b1539] text-stone-200">
-     <div className="w-1/3 h-full rounded-3xl bg-gradient-to-b from-[#ea64dc] to-[#0b1539] mx-auto items-center">
+      <div className="w-1/3 h-full rounded-3xl bg-gradient-to-b from-[#ea64dc] to-[#0b1539] mx-auto items-center">
         <div className="pt-8 pb-8 m-auto w-full text-center text-4xl font-bold font-space-mono">
           Welcome Back!
         </div>
@@ -67,11 +68,21 @@ const page = () => {
           </div>
         </div>
         <div className="w-36 h-[3 rem] m-auto text-center pt-2 pb-2 text-2xl font-bold bg-[#cc5ac6] rounded-full">
-          <span className="p-6 text-center cursor-pointer" onClick={handleEmailSignIn}>
+          <span
+            className="p-6 text-center cursor-pointer"
+            onClick={handleEmailSignIn}
+          >
             Log In
           </span>
         </div>
-        <div className="pt-4 pb-8 w-[13rem] h-8 m-auto"><span className="text-white text-base font-normal font-['Krona One']">Need an account?</span><span className="text-blue-400 text-base font-normal font-['Krona One'] cursor-pointer"> Register</span></div>
+        <div className="pt-4 pb-8 w-[13rem] h-8 m-auto">
+          <span className="text-white text-base font-normal font-['Krona One']">
+            Need an account?
+          </span>
+          <span className="text-blue-400 text-base font-normal font-['Krona One'] cursor-pointer">
+            <Link href="/signup"> Register</Link>
+          </span>
+        </div>
         <div className="text-xs text-center p-3">OR</div>
         <div className="p-1 items-center flex flex-col m-auto w-full text-2xl font-space-mono">
           <div className="flex gap-6">

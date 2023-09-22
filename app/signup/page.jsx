@@ -31,7 +31,9 @@ const page = () => {
     try {
       await signUpWithEmailAndPassword(email, password);
     } catch (error) {
-      console.log(error);
+      if (error == "auth/invalid-login-credentials") {
+        console.log("Invalid Creds");
+      }
     }
   };
 
@@ -77,7 +79,10 @@ const page = () => {
           </div>
         </div>
         <div className="w-36 h-[3 rem] m-auto text-center pt-2 text-2xl font-bold bg-[#cc5ac6] rounded-full">
-          <span className="p-6 text-center cursor-pointer" onClick={handleEmailSignUp}>
+          <span
+            className="p-6 text-center cursor-pointer"
+            onClick={handleEmailSignUp}
+          >
             Create
           </span>
         </div>
