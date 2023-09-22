@@ -36,10 +36,10 @@ GetProjectData(proId)
     console.error(error);
   });
 
-function GetAllProjectData() {
-  return new Promise((resolve, reject) => {
+async function GetAllProjectData() {
+  return new Promise(async (resolve, reject) => {
     const dbRef = ref(database, "projects");
-    get(dbRef)
+    await get(dbRef)
       .then((snapshot) => {
         if (snapshot.exists()) {
           const projectData = snapshot.val();

@@ -11,7 +11,7 @@ import {
   GetAllProjectData,
   GetAllProjectsIdUnderProfile,
 } from "./utils/GetData";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 export default function Home() {
   const { user, logOut } = UserAuth();
   const handleSignOut = async () => {
@@ -22,16 +22,10 @@ export default function Home() {
     }
   };
 
-  const [projects, setProjects] = useState([]);
-  const handleGetAllProjects = async () => {
-    try {
-      const projects1 = await GetAllProjectData();
-      setProjects(projects1);
-      console.log(projects1);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const [projects, setProjects] = useState([]);
+  // useEffect(() => {
+  //   GetAllProjectData();
+  // }, []);
   return (
     <main className=" p-10 w-full h-screen bg-gradient-to-b from-[#0c163a] to-[#ea65dd] text-stone-300 ">
       {user ? (
@@ -63,7 +57,7 @@ export default function Home() {
                   nurture Innovation through collaborative learning.
                 </p>
               </div>
-              <Image src={pcat} width={120} height={50} />
+              <Image alt="Logo"  src={pcat} width={120}/>
             </div>
           </div>
           <div className="p-10 flex justify-between ">
@@ -120,7 +114,7 @@ export default function Home() {
           </div>
         </div>
       )}
-      <Projects projects={projects}></Projects>
+      <Projects projects={GetAllProjectData()}></Projects>
     </main>
   );
 }
