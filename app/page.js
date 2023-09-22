@@ -4,11 +4,30 @@ import Link from "next/link";
 import { UserAuth } from "./context/AuthContext";
 import pcat from "../public/pcat_logo.png";
 import { AiOutlineFileSearch } from "react-icons/ai";
+import Projects from "./components/Projects";
+
+import {
+  GetProjectData,
+  GetAllProjectData,
+  GetAllProjectsIdUnderProfile,
+} from "./utils/GetData";
+import { useState } from "react";
 export default function Home() {
   const { user, logOut } = UserAuth();
   const handleSignOut = async () => {
     try {
       await logOut();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [projects, setProjects] = useState([]);
+  const handleGetAllProjects = async () => {
+    try {
+      const projects1 = await GetAllProjectData();
+      setProjects(projects1);
+      console.log(projects1);
     } catch (error) {
       console.log(error);
     }
@@ -32,15 +51,19 @@ export default function Home() {
             <div className="w-[2.5] flex gap-4 items-center">
               <div>
                 <p className="text-4xl font-bold text-white pb-4 font-['Krona One'] tracking-[.2rem]">
-                  PROJECT<br />CATALYZERS
+                  PROJECT
+                  <br />
+                  CATALYZERS
                 </p>
-                <p className="text-xs ps-2">Welcome to<br />Project Catalyzer,where we<br />nurture Innovation through collaborative learning.</p>
+                <p className="text-xs ps-2">
+                  Welcome to
+                  <br />
+                  Project Catalyzer,where we
+                  <br />
+                  nurture Innovation through collaborative learning.
+                </p>
               </div>
-              <Image
-                src={pcat}
-                width={120}
-                height={50}
-              />
+              <Image src={pcat} width={120} height={50} />
             </div>
           </div>
           <div className="p-10 flex justify-between ">
@@ -59,7 +82,7 @@ export default function Home() {
         <div>
           <div className="flex justify-between">
             <div className="ps-14 flex gap-4 place-items-center">
-              <button className="w-36 h-12 bg-fuchsia-400 rounded-xl text-2xl font-bold text-white" >
+              <button className="w-36 h-12 bg-fuchsia-400 rounded-xl text-2xl font-bold text-white">
                 <Link href="/signup">Sign Up</Link>
               </button>
               <button class="ps-4 text-fuchsia-400 text-2xl font-bold">
@@ -69,15 +92,19 @@ export default function Home() {
             <div className="w-[2.5] flex gap-4 items-center">
               <div>
                 <p className="text-4xl font-bold text-white pb-4 font-['Krona One'] tracking-[.2rem]">
-                  PROJECT<br />CATALYZERS
+                  PROJECT
+                  <br />
+                  CATALYZERS
                 </p>
-                <p className="text-xs ps-2">Welcome to<br />Project Catalyzer,where we<br />nurture Innovation through collaborative learning.</p>
+                <p className="text-xs ps-2">
+                  Welcome to
+                  <br />
+                  Project Catalyzer,where we
+                  <br />
+                  nurture Innovation through collaborative learning.
+                </p>
               </div>
-              <Image
-                src={pcat}
-                width={120}
-                height={50}
-              />
+              <Image src={pcat} width={120} height={50} />
             </div>
           </div>
           <div className="p-10 flex justify-between ">
@@ -90,10 +117,10 @@ export default function Home() {
                 placeholder="Search"
               />
             </div>
-
           </div>
         </div>
       )}
+      <Projects projects={projects}></Projects>
     </main>
   );
 }
