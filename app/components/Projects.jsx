@@ -6,9 +6,7 @@ import {
   CardMedia,
   Stack,
   Box,
-  CardActionArea,
 } from "@mui/material";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 
 const Projects = ({ projects }) => {
