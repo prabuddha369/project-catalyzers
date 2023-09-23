@@ -7,6 +7,7 @@ import {
   GetProjectData,
   GetUserName,
   convertYouTubeURLToEmbed,
+  displayFilesAndFolders
 } from "@/app/utils/GetData";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -57,6 +58,44 @@ export default function Page({ params }) {
   console.log(OwnerName);
   console.log(project);
 
+  const hierarchy = document.getElementById("hierarchy");
+  const styleElement = document.createElement("style");
+  styleElement.textContent = `
+      #hierarchy {
+          font-family: FontAwesome;
+          width: 100%;
+      }
+      .fileData {
+          border: 1px solid #ccc;
+          padding: 10px;
+          margin-top: 10px;
+      }
+      .foldercontainer, .file, .noitems {
+          display: block;
+          padding: 5px 5px 5px 50px;
+      }
+      .folder {
+          color: blue;
+      }
+      .file {
+          color: black;
+      }
+      .folder, .file {
+          cursor: pointer;
+      }
+      .noitems {
+          display: none;
+          pointer-events: none;
+      }
+      .folder:hover, .file:hover {
+          background: yellow;
+      }
+      .folder:before, .file:before {
+          padding-right: 10px;
+      }
+  `;
+  document.head.appendChild(styleElement);
+  displayFilesAndFolders(projectID);
   return (
     <div className="h-full w-full bg-[#0b1539]">
       <div className="flex  justify-between  bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black">
@@ -108,12 +147,20 @@ export default function Page({ params }) {
                 </div>
               </div>
             </div>
-            <iframe
-              className="pt-10 p-4 h-[310px] w-1/2 rounded-2xl"
-              src={`https://www.youtube.com/embed/${project[0]?.yturl.substring(
-                17
-              )}`}
-            ></iframe>
+            <div className="mt-10 w-1/2">
+              <iframe
+                className="h-[260px] w-[460px]"
+                src={`https://www.youtube.com/embed/${project[0]?.yturl.substring(
+                  17
+                )}`}
+              ></iframe>
+              <div class="flex">
+                <div>#Hashtags</div>
+                <div>Roadmap</div>
+              </div>
+              <div id="hierarchy">
+              </div>
+            </div>
           </div>
         </div>
       </div>
