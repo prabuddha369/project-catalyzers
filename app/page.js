@@ -35,13 +35,6 @@ export default function Home() {
         <div>
           <div className="flex justify-between">
             <div className="flex gap-4 place-items-center">
-              <Image
-                src={user.photoURL}
-                alt="user photo"
-                width={50}
-                height={100}
-                className="rounded-full"
-              />
               <p>{`${user.displayName ? user.displayName : user.email}`}</p>
               <button onClick={handleSignOut}>Sign Out</button>
             </div>
