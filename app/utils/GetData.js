@@ -1,9 +1,9 @@
 import { database } from "../firebase";
-import { getDatabase, ref, child, get } from "firebase/database";
+import { ref, child, get } from "firebase/database";
 
 function GetProjectData(projectId) {
   return new Promise((resolve, reject) => {
-    const dbRef = ref(getDatabase(app));
+    const dbRef = ref(database);
     get(child(dbRef, "projects/" + projectId))
       .then((snapshot) => {
         if (snapshot.exists()) {
@@ -19,27 +19,10 @@ function GetProjectData(projectId) {
   });
 }
 //Function calling GetProjectData
-let proId = "prabuddhapiku_gmail_com_0";
-GetProjectData(proId)
-  .then((projectData) => {
-    console.log("Title:", projectData.title);
-    console.log("Owner:", projectData.owner);
-    console.log("Objective:", projectData.objective);
-    console.log("Description:", projectData.description);
-    console.log("Category:", projectData.category);
-    console.log("Thumbnail:", projectData.thumbnailurl);
-    console.log("Hastags:", projectData.hashtags);
-    console.log("Technology and Languages Used", projectData.techlang);
-    console.log("Youtube Url:", projectData.yturl);
-  })
-  .catch((error) => {
-    console.error(error);
-  });
-
-async function GetAllProjectData() {
-  return new Promise(async (resolve, reject) => {
+  function GetAllProjectData() {
+  return new Promise((resolve, reject) => {
     const dbRef = ref(database, "projects");
-    await get(dbRef)
+    get(dbRef)
       .then((snapshot) => {
         if (snapshot.exists()) {
           const projectData = snapshot.val();
@@ -71,20 +54,6 @@ async function GetAllProjectData() {
   });
 }
 //Function Calling GetALLProjectData
-GetAllProjectData()
-  .then((projectInfoArray) => {
-    // projectInfoArray will contain an array of project information objects
-    projectInfoArray.forEach((info) => {
-      console.log("Project Id:", info.projectID);
-      console.log("Title:", info.title);
-      console.log("Owner:", info.Owner);
-      console.log("Description:", info.description);
-      console.log("Thumbnail URL:", info.thumbnailUrl);
-    });
-  })
-  .catch((error) => {
-    console.error(error);
-  });
 
 function GetAllProjectsIdUnderProfile(userEmailid) {
   return get(child(ref(database), "users/" + userEmailid))
@@ -102,15 +71,4 @@ function GetAllProjectsIdUnderProfile(userEmailid) {
       throw error; // Rethrow the error to propagate it to the caller
     });
 }
-//Function Calling
-let usereId = "prabuddhapiku_gmail_com"; // Replace with the actual user's email ID
-GetAllProjectsIdUnderProfile(usereId)
-  .then((projects) => {
-    console.log("Projects:", projects);
-    // Do something with the projects array
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-  });
-
 export { GetProjectData, GetAllProjectData, GetAllProjectsIdUnderProfile };
