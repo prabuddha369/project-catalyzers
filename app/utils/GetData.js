@@ -1,7 +1,7 @@
 import { database } from "../firebase";
 import { ref, child, get } from "firebase/database";
 
-function GetProjectData(projectId) {
+async function GetProjectData(projectId) {
   return new Promise((resolve, reject) => {
     const dbRef = ref(database);
     get(child(dbRef, "projects/" + projectId))
@@ -19,7 +19,7 @@ function GetProjectData(projectId) {
   });
 }
 //Function calling GetProjectData
-  function GetAllProjectData() {
+function GetAllProjectData() {
   return new Promise((resolve, reject) => {
     const dbRef = ref(database, "projects");
     get(dbRef)
