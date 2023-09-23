@@ -12,36 +12,37 @@ import Link from "next/link";
 const Projects = ({ projects }) => {
   console.log(projects);
   return (
-    <Stack flexWrap="wrap" justifyContent="start" gap={2} direction="row">
-      {projects.map((item, index) => (
-        <Box key={index}>
-          <Link href={`/project/${item.projectID}`}>
-            <Card className="hover:scale-105 h-auto transform transition duration-150 ease-in rounded-3xl">
-              <CardMedia
-                component="img"
-                height="100"
-                alt={item.title}
-                src={item.thumbnailUrl}
-                sx={{
-                  width: { xs: "100%", sm: "358px", md: "320px" },
-                  height: 180,
-                }}
-              />
-              <CardContent className="bg-black/70 transform transition duration-150 ease-in ">
-                <Typography
-                  gutterBottom
-                  variant="h5"
-                  component="div"
-                  color="#ffffff"
-                >
-                  {item.title}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Link>
-        </Box>
-      ))}
-    </Stack>
+    <div style={{ overflow: "hidden", padding: "20px" }}>
+      <Stack flexWrap="wrap" justifyContent="start" gap={5} direction="row">
+        {projects.map((item, index) => (
+          <Box key={index}>
+            <Link href={`/project/${item.projectID}`}>
+              <Card className="h-auto transform transition duration-150 ease-in rounded-[1.5rem] hover:scale-105">
+                <CardMedia
+                  component="img"
+                  alt={item.title}
+                  src={item.thumbnailUrl}
+                  sx={{
+                    width: 250, 
+                    height: 112.5, // 16:9 aspect ratio (9 / 16 = 0.5625)
+                  }}
+                />
+                <CardContent className="bg-[#0b1539] w-auto h-10 flex items-center justify-center transform transition duration-150 ease-in">
+                  <Typography
+                    variant="h6"
+                    component="div"
+                    color="#ffffff"
+                  >
+                    {item.title}
+                  </Typography>
+                </CardContent>
+
+              </Card>
+            </Link>
+          </Box>
+        ))}
+      </Stack>
+    </div>
   );
 };
 

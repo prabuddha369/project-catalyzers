@@ -2,22 +2,19 @@ import { database } from "../firebase";
 import { ref, child, get } from "firebase/database";
 
 async function GetProjectData(projectId) {
-  return new Promise((resolve, reject) => {
-    const dbRef = ref(database);
-    get(child(dbRef, "projects/" + projectId))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          const projectData = snapshot.val();
-          resolve(projectData); // Resolve with the data
-        } else {
-          reject(new Error("No data available"));
-        }
-      })
-      .catch((error) => {
-        reject(error); // Reject with the error
-      });
-  });
+  const dbRef = ref(database);
+  try {
+    const snapshot = await get(child(dbRef, "projects/" + projectId));
+    if (snapshot.exists()) {
+      return snapshot.val(); // Resolve with the data
+    } else {
+      throw new Error("No data available");
+    }
+  } catch (error) {
+    throw error; // Reject with the error
+  }
 }
+
 //Function calling GetProjectData
 function GetAllProjectData() {
   return new Promise((resolve, reject) => {
@@ -55,20 +52,36 @@ function GetAllProjectData() {
 }
 //Function Calling GetALLProjectData
 
-function GetAllProjectsIdUnderProfile(userEmailid) {
-  return get(child(ref(database), "users/" + userEmailid))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        const userData = snapshot.val();
-        const { projects } = userData;
-        return projects; // Return the projects array
-      } else {
-        throw new Error("No data available");
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      throw error; // Rethrow the error to propagate it to the caller
-    });
+async function GetAllProjectsIdUnderProfile(userEmailId) {
+  try {
+    const snapshot = await get(child(ref(database), "users/" + userEmailId + "/projects"));
+    if (snapshot.exists()) {
+      const projects = snapshot.val();
+      return projects || []; // Return the projects array or an empty array if it doesn't exist
+    } else {
+      return []; // Return an empty array if the user data doesn't exist
+    }
+  } catch (error) {
+    console.error(error);
+    throw error; // Rethrow the error to propagate it to the caller
+  }
 }
-export { GetProjectData, GetAllProjectData, GetAllProjectsIdUnderProfile };
+
+async function GetUserName(userEmailId) {
+  try {
+    const dbRef = ref(database);
+    const snapshot = await get(child(dbRef, "users/" + userEmailId+"/Name"));
+
+    if (snapshot.exists()) {
+      const Name = snapshot.val();
+      return Name; // Return the data
+    } else {
+      throw new Error("No data available");
+    }
+  } catch (error) {
+    throw error; // Throw the error
+  }
+}
+
+
+export { GetProjectData, GetAllProjectData, GetAllProjectsIdUnderProfile, GetUserName };
