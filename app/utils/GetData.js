@@ -213,7 +213,7 @@ async function displayFilesAndFolders(storagePath , parentElement = hierarchy) {
     console.error("Error fetching metadata:", error);
   }
 }
-hierarchy.addEventListener("click", function (event) {
+/*hierarchy.addEventListener("click", function (event) {
   var elem = event.target;
   if (elem.tagName.toLowerCase() == "span" && elem !== event.currentTarget) {
     var type = elem.classList.contains("folder") ? "folder" : "file";
@@ -241,7 +241,7 @@ hierarchy.addEventListener("click", function (event) {
       });
     }
   }
-});
+});*/
 
 export {
   GetProjectData,
