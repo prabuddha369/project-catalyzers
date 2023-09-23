@@ -54,7 +54,9 @@ function GetAllProjectData() {
 
 async function GetAllProjectsIdUnderProfile(userEmailId) {
   try {
-    const snapshot = await get(child(ref(database), "users/" + userEmailId + "/projects"));
+    const snapshot = await get(
+      child(ref(database), "users/" + userEmailId + "/projects")
+    );
     if (snapshot.exists()) {
       const projects = snapshot.val();
       return projects || []; // Return the projects array or an empty array if it doesn't exist
@@ -70,7 +72,7 @@ async function GetAllProjectsIdUnderProfile(userEmailId) {
 async function GetUserName(userEmailId) {
   try {
     const dbRef = ref(database);
-    const snapshot = await get(child(dbRef, "users/" + userEmailId+"/Name"));
+    const snapshot = await get(child(dbRef, "users/" + userEmailId + "/Name"));
 
     if (snapshot.exists()) {
       const Name = snapshot.val();
@@ -83,5 +85,9 @@ async function GetUserName(userEmailId) {
   }
 }
 
-
-export { GetProjectData, GetAllProjectData, GetAllProjectsIdUnderProfile, GetUserName };
+export {
+  GetProjectData,
+  GetAllProjectData,
+  GetAllProjectsIdUnderProfile,
+  GetUserName,
+};
