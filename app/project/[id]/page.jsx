@@ -131,7 +131,7 @@ export default function Page({ params }) {
                                                       }
                       `}
                   </style>
-                  <Hierarchy storagePath={customStoragePath} />
+                  <Hierarchy className="text-white" storagePath={customStoragePath} />
                 </div>
               </div>
             </div>

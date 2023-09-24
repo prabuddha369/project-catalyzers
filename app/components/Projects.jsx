@@ -10,7 +10,7 @@ import {
 import Link from "next/link";
 import { UserAuth } from "../context/AuthContext";
 const Projects = ({ projects }) => {
-  console.log(projects);
+  
   const { user } = UserAuth();
   return (
     <div style={{ overflow: "hidden", padding: "20px" }}>

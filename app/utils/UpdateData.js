@@ -89,18 +89,25 @@ async function createProjectId(userEmailId) {
 }
 
 //Call While SIgnUp and First AUthentication
-function UploadUserData(userEmailId, name) {
-  set(ref(database, "users/" + userEmailId), {
-    Name: name,
-    Follower: 0,
-    Following: 0,
+async function UploadUserData(userEmailId, name) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await set(ref(database, "users/" + userEmailId), {
+        Name: name,
+        Follower: 0,
+        Following: 0,
+      });
+      resolve(); // Resolve the promise if the data is successfully uploaded.
+    } catch (error) {
+      reject(error); // Reject the promise with an error if there's any issue.
+    }
   });
 }
 //UploadUserData calling
-let userid = "dasguptasrinjay2004_gmail_com"; // Replace with the actual user's email ID
-let name = "Srinjay Dasgupta "; // Replace with the actual name
-
-UploadUserData(userid, name);
-console.log("User data uploaded successfully!");
-
-export { UploadProject, UploadUserData, UpdateProjectCountInProfile };
+function convertEmailToDomain(email) {
+  // Split the email address at the `@` sign.
+  const parts = email.split('@');
+  // Return the second part of the email address, which is the domain name.
+  return parts[1];
+}
+export { UploadProject, UploadUserData, UpdateProjectCountInProfile,convertEmailToDomain};

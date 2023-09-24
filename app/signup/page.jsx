@@ -6,6 +6,7 @@ import { BsGithub } from "react-icons/bs";
 import { UserAuth } from "../context/AuthContext";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { UploadUserData ,convertEmailToDomain} from "../utils/UpdateData";
 import { updateProfile } from "firebase/auth";
 const page = () => {
   const { user, googleSignIn, githubSignIn, signUpWithEmailAndPassword } =
@@ -34,10 +35,10 @@ const page = () => {
     await signUpWithEmailAndPassword(email, password);
     // After successful signup, update the user's profile
     if (user) {
-      await updateProfile(user, {
-        displayName: userName, // Set the username
-        photoURL: 'https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png', // Set the user's photo URL
-      });
+      const formattedUserEmailId=convertEmailToDomain()+"_gmail_com" 
+      console.log(formattedUserEmailId);
+      await updateProfile(user, {displayName:{userName}, photoURL:'https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png'});
+      await UploadUserData(formattedUserEmailId, userName);
     }
   } catch (error) {
     if (error == "auth/invalid-login-credentials") {
@@ -45,9 +46,9 @@ const page = () => {
     }
   }
 };
-  console.log(user);
-  console.log(email);
-  console.log(password);
+  // console.log(user);
+  // console.log(email);
+  // console.log(password);
 
   if (user) redirect("/");
   return (
