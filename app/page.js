@@ -28,7 +28,7 @@ export default function Home() {
       setProjects([...data]);
     });
   }, []);
-
+  console.log(user);
   return (
     <main className=" p-10 w-full h-screen bg-gradient-to-b from-[#0c163a] to-[#ea65dd] text-stone-300 ">
       {user ? (

@@ -8,6 +8,7 @@ import {
   signInWithPopup,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile
 } from "firebase/auth";
 import { auth } from "../firebase";
 const AuthContext = createContext();
@@ -36,7 +37,7 @@ export const AuthContextProvider = ({ children }) => {
   const logOut = () => {
     signOut(auth);
   };
-
+  
   useEffect(() => {
     const unSub = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);

@@ -3,11 +3,11 @@
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiFillMail } from "react-icons/ai";
 import { BiHomeAlt } from "react-icons/bi";
+import Hierarchy from "@/app/hierarchy/hierarchy";
 import {
   GetProjectData,
   GetUserName,
   convertYouTubeURLToEmbed,
-  displayFilesAndFolders
 } from "@/app/utils/GetData";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -54,48 +54,11 @@ export default function Page({ params }) {
         });
     }
   }, [url]);
+  const customStoragePath = projectID + "/";
   console.log(project[0]?.yturl);
   console.log(OwnerName);
   console.log(project);
 
-  const hierarchy = document.getElementById("hierarchy");
-  const styleElement = document.createElement("style");
-  styleElement.textContent = `
-      #hierarchy {
-          font-family: FontAwesome;
-          width: 100%;
-      }
-      .fileData {
-          border: 1px solid #ccc;
-          padding: 10px;
-          margin-top: 10px;
-      }
-      .foldercontainer, .file, .noitems {
-          display: block;
-          padding: 5px 5px 5px 50px;
-      }
-      .folder {
-          color: blue;
-      }
-      .file {
-          color: black;
-      }
-      .folder, .file {
-          cursor: pointer;
-      }
-      .noitems {
-          display: none;
-          pointer-events: none;
-      }
-      .folder:hover, .file:hover {
-          background: yellow;
-      }
-      .folder:before, .file:before {
-          padding-right: 10px;
-      }
-  `;
-  document.head.appendChild(styleElement);
-  displayFilesAndFolders(projectID);
   return (
     <div className="h-full w-full bg-[#0b1539]">
       <div className="flex  justify-between  bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black">
@@ -111,7 +74,7 @@ export default function Page({ params }) {
         </div>
       </div>
       <div className="px-20">
-        <div className="w-full overflow-hidden h-screen bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl">
+        <div className="w-full overflow-hidden h-[50rem] bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl">
           <div className="flex justify-between gap-1">
             <div className="w-1/2">
               <div className="flex flex-wrap items-center gap-2 pt-10 pb-10">
@@ -126,7 +89,7 @@ export default function Page({ params }) {
               <div className="px-10 flex flex-wrap justify-center items-center">
                 <div className="text-white font-space-mono font-bold">
                   <div className="text-white font-space-mono font-bold">
-                    <div className="overflow-y-auto max-h-[350px]">
+                    <div className="overflow-y-auto max-h-[550px]">
                       <style>
                         {`
                         .overflow-y-auto::-webkit-scrollbar {
@@ -134,11 +97,11 @@ export default function Page({ params }) {
                                                       }
                       `}
                       </style>
-                      <p className="text-3xl">Objectives</p>
+                      <p className="text-2xl">Objectives</p>
                       <p className="py-2 font-normal">
                         {project[0]?.objective}
                       </p>
-                      <p className="text-3xl">Description</p>
+                      <p className="text-2xl">Description</p>
                       <p className="py-2 font-normal">
                         {project[0]?.description}
                       </p>
@@ -147,7 +110,7 @@ export default function Page({ params }) {
                 </div>
               </div>
             </div>
-            <div className="mt-10 w-1/2">
+            <div className="mt-20 w-1/2">
               <iframe
                 className="h-[260px] w-[460px]"
                 src={`https://www.youtube.com/embed/${project[0]?.yturl.substring(
@@ -155,10 +118,21 @@ export default function Page({ params }) {
                 )}`}
               ></iframe>
               <div class="flex">
-                <div>#Hashtags</div>
-                <div>Roadmap</div>
+                <div className="m-5">#Hashtags</div>
+                <div className="m-5">Roadmap</div>
               </div>
-              <div id="hierarchy">
+              <div className="p-4 bg-[#0b1539] me-10 rounded-2xl">
+                <p className="text-2xl text-white pb-4">Folders</p>
+                <div className="ps-5 overflow-y-auto max-h-[550px] w-100%">
+                  <style>
+                    {`
+                        .overflow-y-auto::-webkit-scrollbar {
+                           width: 0;
+                                                      }
+                      `}
+                  </style>
+                  <Hierarchy storagePath={customStoragePath} />
+                </div>
               </div>
             </div>
           </div>

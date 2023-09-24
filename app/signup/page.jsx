@@ -6,6 +6,7 @@ import { BsGithub } from "react-icons/bs";
 import { UserAuth } from "../context/AuthContext";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { updateProfile } from "firebase/auth";
 const page = () => {
   const { user, googleSignIn, githubSignIn, signUpWithEmailAndPassword } =
     UserAuth();
@@ -28,15 +29,22 @@ const page = () => {
     }
   };
   const handleEmailSignUp = async () => {
-    try {
-      await signUpWithEmailAndPassword(email, password);
-    } catch (error) {
-      if (error == "auth/invalid-login-credentials") {
-        console.log("Invalid Creds");
-      }
+  try {
+    // Sign up the user with email and password
+    await signUpWithEmailAndPassword(email, password);
+    // After successful signup, update the user's profile
+    if (user) {
+      await updateProfile(user, {
+        displayName: userName, // Set the username
+        photoURL: 'https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png', // Set the user's photo URL
+      });
     }
-  };
-
+  } catch (error) {
+    if (error == "auth/invalid-login-credentials") {
+      console.log("Invalid Creds");
+    }
+  }
+};
   console.log(user);
   console.log(email);
   console.log(password);
