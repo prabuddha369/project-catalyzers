@@ -23,7 +23,7 @@ export default function Home() {
     }
   };
   const [userName, setUserName] = useState("<Anonymous>");
-  const [dpUrl , setDpUrl] = useState("https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png");
+  const [dpUrl, setDpUrl] = useState("https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png");
   const [projects, setProjects] = useState([]);
   useEffect(() => {
     GetAllProjectData().then((data) => {
@@ -49,8 +49,10 @@ export default function Home() {
         <div>
           <div className="flex justify-between">
             <div className="flex gap-4 place-items-center">
-             <Image src={dpUrl} alt="Photo" width={50} height={50} className="rounded-full"/> 
-             <p>{userName}</p>
+              <Link href="/profile/myprofile" className="flex gap-4 place-items-center">
+                <Image src={dpUrl} alt="Photo" width={50} height={50} className="rounded-full" />
+                <p>{userName}</p>
+              </Link>
               <button onClick={handleSignOut}>Sign Out</button>
             </div>
             <div className="w-[2.5] flex gap-4 items-center">

@@ -15,44 +15,49 @@ async function GetProjectData(projectId) {
   }
 }
 
-async function GetProjectTittle(projectId) {
+function GetProjectTitle(projectId) {
   const dbRef = ref(database);
-  try {
-    const snapshot = await get(child(dbRef, "projects/" + projectId+"/tittle"));
-    if (snapshot.exists()) {
-      return snapshot.val(); // Resolve with the data
-    } else {
-      throw new Error("No data available");
-    }
-  } catch (error) {
-    throw error; // Reject with the error
-  }
+  return get(child(dbRef, "projects/" + projectId + "/title"))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        return snapshot.val(); // Resolve with the data
+      } else {
+        throw new Error("No data available");
+      }
+    })
+    .catch((error) => {
+      throw error; // Reject with the error
+    });
 }
-async function GetProjectDescription(projectId) {
+
+function GetProjectDescription(projectId) {
   const dbRef = ref(database);
-  try {
-    const snapshot = await get(child(dbRef, "projects/" + projectId+"/description"));
-    if (snapshot.exists()) {
-      return snapshot.val(); // Resolve with the data
-    } else {
-      throw new Error("No data available");
-    }
-  } catch (error) {
-    throw error; // Reject with the error
-  }
+  return get(child(dbRef, "projects/" + projectId + "/description"))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        return snapshot.val(); // Resolve with the data
+      } else {
+        throw new Error("No data available");
+      }
+    })
+    .catch((error) => {
+      throw error; // Reject with the error
+    });
 }
-async function GetProjectThumbnailurl(projectId) {
+
+function GetProjectThumbnailUrl(projectId) {
   const dbRef = ref(database);
-  try {
-    const snapshot = await get(child(dbRef, "projects/" + projectId+"/thumbnailurl"));
-    if (snapshot.exists()) {
-      return snapshot.val(); // Resolve with the data
-    } else {
-      throw new Error("No data available");
-    }
-  } catch (error) {
-    throw error; // Reject with the error
-  }
+  return get(child(dbRef, "projects/" + projectId + "/thumbnailurl"))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        return snapshot.val(); // Resolve with the data
+      } else {
+        throw new Error("No data available");
+      }
+    })
+    .catch((error) => {
+      throw error; // Reject with the error
+    });
 }
 
 
@@ -92,14 +97,19 @@ function GetAllProjectData() {
 }
 //Function Calling GetALLProjectData
 
-async function GetAllProjectsIdUnderProfile(userEmailId) {
+async function GetAllProjectsDataUnderProfile(userEmailId) {
   try {
     const snapshot = await get(
       child(ref(database), "users/" + userEmailId + "/projects")
     );
     if (snapshot.exists()) {
-      const projects = snapshot.val();
-      return projects || []; // Return the projects array or an empty array if it doesn't exist
+      const projects = snapshot.val().split(',');
+      let projectData = [];
+      for (const projectId of projects) {
+        const project = await GetProjectData(projectId);
+        projectData.push(project);
+      }
+      return projectData;
     } else {
       return []; // Return an empty array if the user data doesn't exist
     }
@@ -176,7 +186,7 @@ async function GetFollowing(userEmailId) {
 export {
   GetProjectData,
   GetAllProjectData,
-  GetAllProjectsIdUnderProfile,
+  GetAllProjectsDataUnderProfile,
   GetUserName,
-  GetUserPhotoUrl,GetFollower,GetFollowing,GetProjectThumbnailurl,GetProjectTittle,GetProjectDescription
+  GetUserPhotoUrl,GetFollower,GetFollowing,GetProjectThumbnailUrl,GetProjectTitle,GetProjectDescription
 };

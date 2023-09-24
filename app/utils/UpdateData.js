@@ -1,5 +1,6 @@
 import { database } from "../firebase";
 import { getDatabase, ref, set, child, get, update } from "firebase/database";
+import {GetFollower,GetFollowing} from "./GetData"
 
 async function UploadProject(
   userEmailId,
@@ -88,6 +89,36 @@ async function createProjectId(userEmailId) {
   }
 }
 
+function IncrementFollower(userEmailId) {
+  const userRef = ref(database, "users/" + userEmailId);
+  const follower=GetFollower(userEmailId)+1;
+  set(userRef, {
+    Follower: follower
+  });
+}
+function DecrementFollower(userEmailId) {
+  const userRef = ref(database, "users/" + userEmailId);
+  const follower=GetFollower(userEmailId)-1;
+  set(userRef, {
+    Follower: follower
+  });
+}
+
+function IncrementFollowing(userEmailId) {
+  const userRef = ref(database, "users/" + userEmailId);
+  const follower=GetFollowing(userEmailId)+1;
+  set(userRef, {
+    Following: 0
+  });
+}
+function DecrementFollowing(userEmailId) {
+  const userRef = ref(database, "users/" + userEmailId);
+  const follower=GetFollowing(userEmailId)-1;
+  set(userRef, {
+    Following: 0
+  });
+}
+
 //Call While SIgnUp and First AUthentication
 function UploadUserData(userEmailId, name, dpurl) {
   const userRef = ref(database, "users/" + userEmailId);
@@ -103,4 +134,6 @@ function convertEmailToDomain(email) {
   const sanitizedEmail = email.replace(/[.@]/g, '_');
   return sanitizedEmail;
 }
+
+
 export { UploadProject, UploadUserData, UpdateProjectCountInProfile,convertEmailToDomain};

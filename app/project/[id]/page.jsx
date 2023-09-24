@@ -83,7 +83,7 @@ export default function Page({ params }) {
   console.log(userDp);
 
   return (
-    <div className="h-screen w-screen bg-[#0b1539] flex flex-wrap">
+    <div className="h-full w-full bg-[#0b1539]">
       <div className="flex  justify-between  bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black">
         <div className="text-white flex gap-8 text-xl place-items-center ps-5">
           <GiHamburgerMenu size={30} />
@@ -101,7 +101,7 @@ export default function Page({ params }) {
         </div>
       </div>
       <div className="px-20">
-        <div className="w-full overflow-hidden h-[50rem] bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl">
+        <div className="w-full overflow-hidden h-[50rem] bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl mt-5">
         <div className="flex flex-wrap items-center gap-2 pt-3 pb-5">
                 <div className="ps-5 text-3xl text-white font-space-mono font-bold p-2 pe-10">
                   {project[0]?.title}
@@ -145,7 +145,7 @@ export default function Page({ params }) {
                 </div>
               </div>
             </div>
-            <div className="mt-5 w-1/2">
+            <div className="w-1/2">
               <iframe
                 className="h-[260px] w-[460px]"
                 src={`https://www.youtube.com/embed/${project[0]?.yturl.substring(
@@ -153,13 +153,13 @@ export default function Page({ params }) {
                 )}`}
               ></iframe>
               <div class="flex">
-                <div className="m-5 flex flex-wrap">
+                <div className="m-5 flex flex-wrap text-sm p-">
                   {project[0]?.hashtags && (
                     project[0].hashtags
                       .split(',') // Split the hashtags by comma
                       .slice(0, 3) // Take the first three hashtags
                       .map((hashtag, index) => (
-                        <span key={index} className="p-1 mx-1 ps-2 pe-2 rounded-full border-[0.1rem] border-white text-center text-white placeholder-white">
+                        <span key={index} className="p-1 m-1 ps-2 pe-2 rounded-full border-[0.1rem] border-white text-center text-white placeholder-white">
                           {index > 0}
                           {hashtag}
                         </span>
