@@ -15,8 +15,8 @@ import { UserAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 export default function Page({ params }) {
-  
-  const {user} = UserAuth();
+
+  const { user } = UserAuth();
   const [project, setProject] = useState([]);
   const [userDp, setUserDp] = useState("");
   const [OwnerName, setOwnerName] = useState("");
@@ -85,10 +85,12 @@ export default function Page({ params }) {
   return (
     <div className="h-full w-full bg-[#0b1539]">
       <div className="flex  justify-between  bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black">
-        <div className="text-white flex gap-8 text-xl place-items-center ps-10">
-          <GiHamburgerMenu size={40} />
-          <Image src={ownerdpurl} alt="photo" height={50} width={50} className="rounded-full" />
-          {OwnerName}
+        <div className="text-white flex gap-8 text-xl place-items-center ps-5">
+          <GiHamburgerMenu size={30} />
+          <Link href={user ? `../../profile/${project[0]?.owner}` : "/signin"} className="text-white flex gap-8 text-xl place-items-center">
+            <Image src={ownerdpurl} alt="photo" height={50} width={50} className="rounded-full" />
+            {OwnerName}
+          </Link>
         </div>
         <div className="flex justify-between gap-4 text-white p-4 pe-10 place-items-center">
           <Image src={userDp} alt="Current User Photo" height={50} width={40} className="rounded-full" />
@@ -100,21 +102,20 @@ export default function Page({ params }) {
       </div>
       <div className="px-20">
         <div className="w-full overflow-hidden h-[50rem] bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl">
-          <div className="flex justify-between gap-1">
-            <div className="w-1/2">
-              <div className="flex flex-wrap items-center gap-2 pt-10 pb-10">
-                <div className="ps-5 text-3xl text-white font-space-mono font-bold p-2">
+        <div className="flex flex-wrap items-center gap-2 pt-3 pb-5">
+                <div className="ps-5 text-3xl text-white font-space-mono font-bold p-2 pe-10">
                   {project[0]?.title}
                 </div>
-                <div className="w-1/3 px-4 rounded-full bg-[#9e4495] text-center">
+                <div className="px-10 rounded-full bg-[#9e4495] text-center">
                   {project[0]?.category}
                 </div>
               </div>
-
+          <div className="flex justify-between gap-1">
+            <div className="w-1/2">
               <div className="px-10 flex flex-wrap justify-center items-center">
                 <div className="text-white font-space-mono font-bold">
                   <div className="text-white font-space-mono font-bold">
-                    <div className="overflow-y-auto max-h-[550px]">
+                    <div className="overflow-y-auto max-h-[550px] mb-6">
                       <style>
                         {`
                         .overflow-y-auto::-webkit-scrollbar {
@@ -123,19 +124,28 @@ export default function Page({ params }) {
                       `}
                       </style>
                       <p className="text-2xl">Objectives</p>
-                      <p className="py-2 font-normal">
+                      <p className="py-2 font-normal pb-5">
                         {project[0]?.objective}
+                      </p>
+                      <p className="text-2xl">Technology Used</p>
+                      <p className="py-2 font-normal pb-5">
+                        {project[0]?.techlang}
                       </p>
                       <p className="text-2xl">Description</p>
                       <p className="py-2 font-normal">
                         {project[0]?.description}
                       </p>
                     </div>
+                    <input
+                      type="text"
+                      className="w-[300px] px-4 rounded-[0.6rem] bg-[#0b1539] border-[0.1rem] border-white py-0.5 ms-10 text-white placeholder-white"
+                      placeholder="Add comment ..."
+                    />
                   </div>
                 </div>
               </div>
             </div>
-            <div className="mt-20 w-1/2">
+            <div className="mt-5 w-1/2">
               <iframe
                 className="h-[260px] w-[460px]"
                 src={`https://www.youtube.com/embed/${project[0]?.yturl.substring(
@@ -143,7 +153,19 @@ export default function Page({ params }) {
                 )}`}
               ></iframe>
               <div class="flex">
-                <div className="m-5">#Hashtags</div>
+                <div className="m-5">
+                  {project[0]?.hashtags && (
+                    project[0].hashtags
+                      .split(',') // Split the hashtags by comma
+                      .slice(0, 3) // Take the first three hashtags
+                      .map((hashtag, index) => (
+                        <span key={index} className="p-1 mx-1 ps-2 pe-2 rounded-full border-[0.1rem] border-white text-center text-white placeholder-white">
+                          {index > 0}
+                          {hashtag}
+                        </span>
+                      ))
+                  )}
+                </div>
                 <div className="m-5">Roadmap</div>
               </div>
               <div className="p-4 bg-[#0b1539] me-10 rounded-2xl">

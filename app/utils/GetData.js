@@ -15,6 +15,47 @@ async function GetProjectData(projectId) {
   }
 }
 
+async function GetProjectTittle(projectId) {
+  const dbRef = ref(database);
+  try {
+    const snapshot = await get(child(dbRef, "projects/" + projectId+"/tittle"));
+    if (snapshot.exists()) {
+      return snapshot.val(); // Resolve with the data
+    } else {
+      throw new Error("No data available");
+    }
+  } catch (error) {
+    throw error; // Reject with the error
+  }
+}
+async function GetProjectDescription(projectId) {
+  const dbRef = ref(database);
+  try {
+    const snapshot = await get(child(dbRef, "projects/" + projectId+"/description"));
+    if (snapshot.exists()) {
+      return snapshot.val(); // Resolve with the data
+    } else {
+      throw new Error("No data available");
+    }
+  } catch (error) {
+    throw error; // Reject with the error
+  }
+}
+async function GetProjectThumbnailurl(projectId) {
+  const dbRef = ref(database);
+  try {
+    const snapshot = await get(child(dbRef, "projects/" + projectId+"/thumbnailurl"));
+    if (snapshot.exists()) {
+      return snapshot.val(); // Resolve with the data
+    } else {
+      throw new Error("No data available");
+    }
+  } catch (error) {
+    throw error; // Reject with the error
+  }
+}
+
+
 //Function calling GetProjectData
 function GetAllProjectData() {
   return new Promise((resolve, reject) => {
@@ -33,7 +74,6 @@ function GetAllProjectData() {
                 projectID: projectId,
                 Owner: project.owner,
                 title: project.title,
-                description: project.description,
                 thumbnailUrl: project.thumbnailurl,
               };
               projectInfoArray.push(projectInfo);
@@ -138,5 +178,5 @@ export {
   GetAllProjectData,
   GetAllProjectsIdUnderProfile,
   GetUserName,
-  GetUserPhotoUrl,GetFollower,GetFollowing,
+  GetUserPhotoUrl,GetFollower,GetFollowing,GetProjectThumbnailurl,GetProjectTittle,GetProjectDescription
 };
