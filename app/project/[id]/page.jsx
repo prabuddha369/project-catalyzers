@@ -8,14 +8,13 @@ import Hierarchy from "../../hierarchy/hierarchy";
 import {
   GetProjectData,
   GetUserName,
-  GetUserPhotoUrl
+  GetUserPhotoUrl,
 } from "../../utils/GetData.js";
 import { convertEmailToDomain } from "../../utils/UpdateData";
 import { UserAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 export default function Page({ params }) {
-
   const { user } = UserAuth();
   const [project, setProject] = useState([]);
   const [userDp, setUserDp] = useState("");
@@ -83,17 +82,41 @@ export default function Page({ params }) {
   console.log(userDp);
 
   return (
-    <div className="h-screen w-screen bg-[#0b1539] flex flex-wrap">
+    <div className="h-full w-full bg-[#0b1539]">
       <div className="flex  justify-between  bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black">
         <div className="text-white flex gap-8 text-xl place-items-center ps-5">
           <GiHamburgerMenu size={30} />
-          <Link href={user ? (convertEmailToDomain(user.email)==project[0]?.owner)? `../../profile/myprofile`: `../../profile/${project[0]?.owner}`: "/signin"} className="text-white flex gap-8 text-xl place-items-center">
-            <Image src={ownerdpurl} alt="photo" height={50} width={50} className="rounded-full" />
+          <Link
+            href={
+              user
+                ? convertEmailToDomain(user.email) == project[0]?.owner
+                  ? `../../profile/myprofile`
+                  : `../../profile/${project[0]?.owner}`
+                : "/signin"
+            }
+            className="text-white flex gap-8 text-xl place-items-center"
+          >
+            <Image
+              src={ownerdpurl}
+              alt="photo"
+              height={50}
+              width={50}
+              className="rounded-full"
+            />
             {OwnerName}
           </Link>
         </div>
         <div className="flex justify-between gap-4 text-white p-4 pe-10 place-items-center">
-          <Image src={userDp} alt="Current User Photo" height={50} width={40} className="rounded-full" />
+          <Link href="/profile/myprofile">
+            <Image
+              src={userDp}
+              alt="Current User Photo"
+              height={50}
+              width={40}
+              className="rounded-full"
+            />
+          </Link>
+
           <AiFillMail size={30} />
           <Link href="/">
             <BiHomeAlt size={30} />
@@ -101,15 +124,15 @@ export default function Page({ params }) {
         </div>
       </div>
       <div className="px-20">
-        <div className="w-full overflow-hidden h-[50rem] bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl">
-        <div className="flex flex-wrap items-center gap-2 pt-3 pb-5">
-                <div className="ps-5 text-3xl text-white font-space-mono font-bold p-2 pe-10">
-                  {project[0]?.title}
-                </div>
-                <div className="px-10 rounded-full bg-[#9e4495] text-center">
-                  {project[0]?.category}
-                </div>
-              </div>
+        <div className="w-full overflow-hidden h-[50rem] bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl mt-5">
+          <div className="flex flex-wrap items-center gap-2 pt-3 pb-5">
+            <div className="ps-5 text-3xl text-white font-space-mono font-bold p-2 pe-10">
+              {project[0]?.title}
+            </div>
+            <div className="px-10 rounded-full bg-[#9e4495] text-center">
+              {project[0]?.category}
+            </div>
+          </div>
           <div className="flex justify-between gap-1">
             <div className="w-1/2">
               <div className="px-10 flex flex-wrap justify-center items-center">
@@ -145,7 +168,7 @@ export default function Page({ params }) {
                 </div>
               </div>
             </div>
-            <div className="mt-5 w-1/2">
+            <div className="w-1/2">
               <iframe
                 className="h-[260px] w-[460px]"
                 src={`https://www.youtube.com/embed/${project[0]?.yturl.substring(
@@ -153,18 +176,20 @@ export default function Page({ params }) {
                 )}`}
               ></iframe>
               <div class="flex">
-                <div className="m-5 flex flex-wrap">
-                  {project[0]?.hashtags && (
+                <div className="m-5 flex flex-wrap text-sm p-">
+                  {project[0]?.hashtags &&
                     project[0].hashtags
-                      .split(',') // Split the hashtags by comma
+                      .split(",") // Split the hashtags by comma
                       .slice(0, 3) // Take the first three hashtags
                       .map((hashtag, index) => (
-                        <span key={index} className="p-1 mx-1 ps-2 pe-2 rounded-full border-[0.1rem] border-white text-center text-white placeholder-white">
+                        <span
+                          key={index}
+                          className="p-1 m-1 ps-2 pe-2 rounded-full border-[0.1rem] border-white text-center text-white placeholder-white"
+                        >
                           {index > 0}
                           {hashtag}
                         </span>
-                      ))
-                  )}
+                      ))}
                 </div>
                 <div className="m-5">Roadmap</div>
               </div>
@@ -178,7 +203,10 @@ export default function Page({ params }) {
                                                       }
                       `}
                   </style>
-                  <Hierarchy className="text-white" storagePath={customStoragePath} />
+                  <Hierarchy
+                    className="text-white"
+                    storagePath={customStoragePath}
+                  />
                 </div>
               </div>
             </div>
