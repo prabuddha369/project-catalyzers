@@ -3,12 +3,11 @@
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiFillMail } from "react-icons/ai";
 import { BiHomeAlt } from "react-icons/bi";
-import Hierarchy from "@/app/hierarchy/hierarchy";
+import Hierarchy from "../../hierarchy/hierarchy";
 import {
   GetProjectData,
   GetUserName,
-  convertYouTubeURLToEmbed,
-} from "@/app/utils/GetData";
+} from "../../utils/GetData.js";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 export default function Page({ params }) {

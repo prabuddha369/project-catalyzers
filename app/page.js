@@ -5,7 +5,8 @@ import { UserAuth } from "./context/AuthContext";
 import pcat from "../public/pcat_logo.png";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import Projects from "./components/Projects";
-
+import { GetUserPhotoUrl, GetUserName } from "./utils/GetData";
+import { convertEmailToDomain } from "./utils/UpdateData";
 import {
   GetProjectData,
   GetAllProjectData,
@@ -21,20 +22,35 @@ export default function Home() {
       console.log(error);
     }
   };
-
+  const [userName, setUserName] = useState("<Anonymous>");
+  const [dpUrl , setDpUrl] = useState("https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png");
   const [projects, setProjects] = useState([]);
   useEffect(() => {
     GetAllProjectData().then((data) => {
       setProjects([...data]);
     });
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      GetUserName(convertEmailToDomain(user.email)).then((name) => {
+        setUserName(name);
+      });
+      GetUserPhotoUrl(convertEmailToDomain(user.email)).then((url) => {
+        setDpUrl(url);
+      });
+    }
+  }, [user]);
+  console.log(user);
+
   return (
     <main className=" p-10 w-full h-screen bg-gradient-to-b from-[#0c163a] to-[#ea65dd] text-stone-300 ">
       {user ? (
         <div>
           <div className="flex justify-between">
             <div className="flex gap-4 place-items-center">
-              <p>{`${user.displayName ? user.displayName : user.email}`}</p>
+             <Image src={dpUrl} alt="Photo" width={50} height={50} className="rounded-full"/> 
+             <p>{userName}</p>
               <button onClick={handleSignOut}>Sign Out</button>
             </div>
             <div className="w-[2.5] flex gap-4 items-center">
@@ -93,7 +109,7 @@ export default function Home() {
                   nurture Innovation through collaborative learning.
                 </p>
               </div>
-              <Image src={pcat} width={120} height={50} />
+              <Image alt="logo" src={pcat} width={120} height={50} />
             </div>
           </div>
           <div className="p-10 flex justify-between ">

@@ -85,11 +85,58 @@ async function GetUserName(userEmailId) {
   }
 }
 
+async function GetUserPhotoUrl(userEmailId) {
+  try {
+    const dbRef = ref(database);
+    const snapshot = await get(child(dbRef, "users/" + userEmailId + "/dpUrl"));
 
+    if (snapshot.exists()) {
+      const Dpurl = snapshot.val();
+      return Dpurl; // Return the data
+    } else {
+      throw new Error("No data available");
+    }
+  } catch (error) {
+    throw error; // Throw the error
+  }
+}
+
+async function GetFollower(userEmailId) {
+  try {
+    const dbRef = ref(database);
+    const snapshot = await get(child(dbRef, "users/" + userEmailId + "/Follower"));
+
+    if (snapshot.exists()) {
+      const Follower = snapshot.val();
+      return Follower; // Return the data
+    } else {
+      throw new Error("No data available");
+    }
+  } catch (error) {
+    throw error; // Throw the error
+  }
+}
+
+async function GetFollowing(userEmailId) {
+  try {
+    const dbRef = ref(database);
+    const snapshot = await get(child(dbRef, "users/" + userEmailId + "/Following"));
+
+    if (snapshot.exists()) {
+      const Following = snapshot.val();
+      return Following; // Return the data
+    } else {
+      throw new Error("No data available");
+    }
+  } catch (error) {
+    throw error; // Throw the error
+  }
+}
 
 export {
   GetProjectData,
   GetAllProjectData,
   GetAllProjectsIdUnderProfile,
   GetUserName,
+  GetUserPhotoUrl,GetFollower,GetFollowing,
 };

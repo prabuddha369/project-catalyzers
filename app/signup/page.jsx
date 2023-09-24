@@ -7,7 +7,7 @@ import { UserAuth } from "../context/AuthContext";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { UploadUserData ,convertEmailToDomain} from "../utils/UpdateData";
-import { updateProfile } from "firebase/auth";
+
 const page = () => {
   const { user, googleSignIn, githubSignIn, signUpWithEmailAndPassword } =
     UserAuth();
@@ -29,24 +29,21 @@ const page = () => {
       console.log(error);
     }
   };
-  const handleEmailSignUp = async () => {
+  const handleEmailSignUp = () => {
   try {
     // Sign up the user with email and password
-    await signUpWithEmailAndPassword(email, password);
+     signUpWithEmailAndPassword(email, password);
     // After successful signup, update the user's profile
-    if (user) {
-      const formattedUserEmailId=convertEmailToDomain()+"_gmail_com" 
+      const formattedUserEmailId=convertEmailToDomain(email); 
       console.log(formattedUserEmailId);
-      await updateProfile(user, {displayName:{userName}, photoURL:'https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png'});
-      await UploadUserData(formattedUserEmailId, userName);
-    }
+      UploadUserData(formattedUserEmailId, userName, "https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png");
   } catch (error) {
     if (error == "auth/invalid-login-credentials") {
       console.log("Invalid Creds");
     }
   }
 };
-  // console.log(user);
+  console.log(userName);
   // console.log(email);
   // console.log(password);
 

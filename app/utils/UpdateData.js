@@ -89,25 +89,18 @@ async function createProjectId(userEmailId) {
 }
 
 //Call While SIgnUp and First AUthentication
-async function UploadUserData(userEmailId, name) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      await set(ref(database, "users/" + userEmailId), {
-        Name: name,
-        Follower: 0,
-        Following: 0,
-      });
-      resolve(); // Resolve the promise if the data is successfully uploaded.
-    } catch (error) {
-      reject(error); // Reject the promise with an error if there's any issue.
-    }
+function UploadUserData(userEmailId, name, dpurl) {
+  const userRef = ref(database, "users/" + userEmailId);
+  set(userRef, {
+    Name: name,
+    Follower: 0,
+    Following: 0,
+    dpUrl: dpurl
   });
 }
 //UploadUserData calling
 function convertEmailToDomain(email) {
-  // Split the email address at the `@` sign.
-  const parts = email.split('@');
-  // Return the second part of the email address, which is the domain name.
-  return parts[1];
+  const sanitizedEmail = email.replace(/[.@]/g, '_');
+  return sanitizedEmail;
 }
 export { UploadProject, UploadUserData, UpdateProjectCountInProfile,convertEmailToDomain};
