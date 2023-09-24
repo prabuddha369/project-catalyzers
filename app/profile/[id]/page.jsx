@@ -38,29 +38,27 @@ export default function Page({ params }) {
 
     useEffect(() => {
         // Fetch owner's name asynchronously and update state
-        if (user) {
-            GetUserName(profileID)
-                .then((name) => {
-                    setProfileName(name);
-                })
-                .catch((error) => {
-                    // Handle errors if needed
-                    console.error(error);
-                });
-        }
+        GetUserName(profileID)
+            .then((name) => {
+                setProfileName(name);
+            })
+            .catch((error) => {
+                // Handle errors if needed
+                console.error(error);
+            });
     },);
 
     useEffect(() => {
         // Fetch owner's name asynchronously and update state
-          GetUserPhotoUrl(profileID)
+        GetUserPhotoUrl(profileID)
             .then((link) => {
-              setProfiledpurl(link);
+                setProfiledpurl(link);
             })
             .catch((error) => {
-              // Handle errors if needed
-              console.error(error);
+                // Handle errors if needed
+                console.error(error);
             });
-      },);
+    },);
 
     useEffect(() => {
         // Fetch owner's name asynchronously and update state
@@ -85,7 +83,7 @@ export default function Page({ params }) {
                     {ProfileName}
                 </div>
                 <div className="flex justify-between gap-4 text-white p-4 pe-10 place-items-center">
-                <Image src={userDp} alt="Current User Photo" height={50} width={40} className="rounded-full" />
+                    <Image src={userDp} alt="Current User Photo" height={50} width={40} className="rounded-full" />
                     <AiFillMail size={30} />
                     <Link href="/">
                         <BiHomeAlt size={30} />
@@ -93,8 +91,8 @@ export default function Page({ params }) {
                 </div>
             </div>
             <div className="px-20">
-         <div className="w-full overflow-hidden h-[50rem] bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl">
-            </div>
+                <div className="w-full overflow-hidden h-[50rem] bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl">
+                </div>
             </div>
         </div>
     );

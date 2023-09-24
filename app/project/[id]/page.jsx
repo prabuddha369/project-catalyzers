@@ -83,11 +83,11 @@ export default function Page({ params }) {
   console.log(userDp);
 
   return (
-    <div className="h-full w-full bg-[#0b1539]">
+    <div className="h-screen w-screen bg-[#0b1539] flex flex-wrap">
       <div className="flex  justify-between  bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black">
         <div className="text-white flex gap-8 text-xl place-items-center ps-5">
           <GiHamburgerMenu size={30} />
-          <Link href={user ? `../../profile/${project[0]?.owner}` : "/signin"} className="text-white flex gap-8 text-xl place-items-center">
+          <Link href={user ? (convertEmailToDomain(user.email)==project[0]?.owner)? `../../profile/myprofile`: `../../profile/${project[0]?.owner}`: "/signin"} className="text-white flex gap-8 text-xl place-items-center">
             <Image src={ownerdpurl} alt="photo" height={50} width={50} className="rounded-full" />
             {OwnerName}
           </Link>
@@ -153,7 +153,7 @@ export default function Page({ params }) {
                 )}`}
               ></iframe>
               <div class="flex">
-                <div className="m-5">
+                <div className="m-5 flex flex-wrap">
                   {project[0]?.hashtags && (
                     project[0].hashtags
                       .split(',') // Split the hashtags by comma
