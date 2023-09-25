@@ -28,7 +28,7 @@ const Projects = ({ projects }) => {
                     height: 112.5, // 16:9 aspect ratio (9 / 16 = 0.5625)
                   }}
                 />
-                <CardContent className="bg-[#0b1539] w-auto h-10 flex items-center justify-center transform transition duration-150 ease-in">
+                <CardContent className="bg-[#0b1539] w-auto h-10 flex items-center justify-center transform transition duration-150 ease-in ">
                   <Typography variant="h6" component="div" color="#ffffff">
                     {item.title}
                   </Typography>
