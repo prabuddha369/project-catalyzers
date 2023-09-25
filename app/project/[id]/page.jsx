@@ -82,7 +82,7 @@ export default function Page({ params }) {
   console.log(userDp);
 
   return (
-    <div className="h-full w-full bg-[#0b1539]">
+    <div className="h-screen w-screen bg-[#0b1539] flex flex-wrap">
       <div className="flex  justify-between  bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black">
         <div className="text-white flex gap-8 text-xl place-items-center ps-5">
           <GiHamburgerMenu size={30} />
@@ -184,7 +184,7 @@ export default function Page({ params }) {
                       .map((hashtag, index) => (
                         <span
                           key={index}
-                          className="p-1 m-1 ps-2 pe-2 rounded-full border-[0.1rem] border-white text-center text-white placeholder-white"
+                          className="p-1 mx-1 ps-2 pe-2 rounded-full border-[0.1rem] border-white text-center text-white placeholder-white"
                         >
                           {index > 0}
                           {hashtag}

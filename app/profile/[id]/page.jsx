@@ -104,7 +104,6 @@ export default function Page({ params }) {
       <div className="flex  justify-between py-3 bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black ">
         <div className="text-white flex gap-10 text-xl place-items-center ps-10">
           <GiHamburgerMenu size={40} />
-
           <Image
             src={profiledpurl}
             alt="Current User Photo"
@@ -112,7 +111,6 @@ export default function Page({ params }) {
             width={40}
             className="rounded-full"
           />
-
           <div className="flex flex-col">
             {ProfileName}
             <div className="flex gap-1">
