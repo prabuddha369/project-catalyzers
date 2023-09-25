@@ -3,6 +3,7 @@
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiFillMail } from "react-icons/ai";
 import { BiHomeAlt } from "react-icons/bi";
+import { FaRoad } from "react-icons/fa";
 import Image from "next/image";
 import Hierarchy from "../../hierarchy/hierarchy";
 import {
@@ -123,7 +124,7 @@ export default function Page({ params }) {
           </Link>
         </div>
       </div>
-      <div className="px-20">
+      <div className="px-[60px]">
         <div className="w-full overflow-hidden h-[50rem] bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl mt-5">
           <div className="flex flex-wrap items-center gap-2 pt-3 pb-5">
             <div className="ps-5 text-3xl text-white font-space-mono font-bold p-2 pe-10">
@@ -176,7 +177,7 @@ export default function Page({ params }) {
                 )}`}
               ></iframe>
               <div class="flex">
-                <div className="m-5 flex flex-wrap text-sm p-">
+                <div className="m-2 flex flex-wrap text-xs">
                   {project[0]?.hashtags &&
                     project[0].hashtags
                       .split(",") // Split the hashtags by comma
@@ -184,14 +185,21 @@ export default function Page({ params }) {
                       .map((hashtag, index) => (
                         <span
                           key={index}
-                          className="p-1 m-1 ps-2 pe-2 rounded-full border-[0.1rem] border-white text-center text-white placeholder-white"
+                          className="p-1 m-auto ps-2 pe-2 rounded-full border-[0.1rem] border-white text-center text-white placeholder-white"
                         >
                           {index > 0}
                           {hashtag}
                         </span>
                       ))}
                 </div>
-                <div className="m-5">Roadmap</div>
+                <div className="m-1">
+                  <Link href={`/roadmap/${params.id}`}>
+                    <div className="flex justify-center gap-3 place-items-center border p-1 rounded-xl text-white">
+                      <span className="flex flex-wrap text-sm">Roadmap</span>
+                      <FaRoad size={40} />
+                    </div>
+                  </Link>
+                </div>
               </div>
               <div className="p-4 bg-[#0b1539] me-10 rounded-2xl">
                 <p className="text-2xl text-white pb-4">Folders</p>
