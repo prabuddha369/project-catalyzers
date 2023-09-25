@@ -8,25 +8,22 @@ import {
   TimelineDot,
   TimelineConnector
 } from '@mui/lab';
-import {TiCode} from 'react-icons/ti'
+import { TiCode } from 'react-icons/ti'
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiFillMail } from "react-icons/ai";
 import { BiHomeAlt } from "react-icons/bi";
 import Link from 'next/link';
 import {
   GetProjectData,
-  GetUserName,
   GetUserPhotoUrl,
 } from "../../utils/GetData.js";
 import { convertEmailToDomain } from "../../utils/UpdateData";
 import { UserAuth } from "../../context/AuthContext";
 import Image from 'next/image';
 const Page = ({ params }) => {
-    const { user } = UserAuth();
+  const { user } = UserAuth();
   const [project, setProject] = useState([]);
-    const [userDp, setUserDp] = useState("");
-  const [OwnerName, setOwnerName] = useState("");
-  const [ownerdpurl, setOwnerdpurl] = useState("");
+  const [userDp, setUserDp] = useState("");
   const projectID = params.id;
   let techLang = [];
 
@@ -45,33 +42,8 @@ const Page = ({ params }) => {
   if (project[0]) {
     techLang = project[0].techlang.split(',');
   }
-useEffect(() => {
-    // Fetch owner's name asynchronously and update state
-    if (project[0]?.owner) {
-      GetUserName(project[0]?.owner)
-        .then((name) => {
-          setOwnerName(name);
-        })
-        .catch((error) => {
-          // Handle errors if needed
-          console.error(error);
-        });
-    }
-  }, [project]);
 
-  useEffect(() => {
-    // Fetch owner's name asynchronously and update state
-    if (project[0]?.owner) {
-      GetUserPhotoUrl(project[0]?.owner)
-        .then((link) => {
-          setOwnerdpurl(link);
-        })
-        .catch((error) => {
-          // Handle errors if needed
-          console.error(error);
-        });
-    }
-  }, [project[0]?.owner]);
+  
   useEffect(() => {
     // Fetch owner's name asynchronously and update state
     if (user) {
@@ -90,28 +62,10 @@ useEffect(() => {
 
   return (
     <div className="h-full w-full bg-[#0b1539]">
-        <div className="flex justify-between  bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black">
+      <div className="flex justify-between  bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black" style={{ zIndex: 50 }}>
         <div className="text-white flex gap-8 text-xl place-items-center ps-5">
           <GiHamburgerMenu size={30} />
-          <Link
-            href={
-              user
-                ? convertEmailToDomain(user.email) == project[0]?.owner
-                  ? `../../profile/myprofile`
-                  : `../../profile/${project[0]?.owner}`
-                : "/signin"
-            }
-            className="text-white flex gap-8 text-xl place-items-center"
-          >
-            <Image
-              src={ownerdpurl}
-              alt="photo"
-              height={50}
-              width={50}
-              className="rounded-full"
-            />
-            {OwnerName}
-          </Link>
+            Road Map
         </div>
         <div className="flex justify-between gap-4 text-white p-4 pe-10 place-items-center">
           <Link href="/profile/myprofile">
@@ -130,35 +84,39 @@ useEffect(() => {
           </Link>
         </div>
       </div>
-    <Timeline position='alternate'>
-        <TimelineItem>
-          <TimelineSeparator>
-            <TimelineDot variant='outline'>
-                <TiCode/>
-            </TimelineDot>
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent className='place-items-center'>START</TimelineContent>
-        </TimelineItem>
-      {techLang.map((item, index) => ( // Fixed the order of arguments in map function
-        <TimelineItem key={index}>
-          <TimelineSeparator>
-            <TimelineDot variant='outline'>
-                <TiCode/>
-            </TimelineDot>
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent className='place-items-center'>{item}</TimelineContent>
-        </TimelineItem>
-      ))}<TimelineItem>
-          <TimelineSeparator>
-            <TimelineDot variant='outline'>
-                <TiCode/>
-            </TimelineDot>
-          </TimelineSeparator>
-          <TimelineContent className='place-items-center'>END</TimelineContent>
-        </TimelineItem>
-    </Timeline>
+      <div className='px-20'>
+        <div className="w-full overflow-hidden h-wrap bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl mt-10 pt-10">
+          <Timeline position='alternate'>
+            <TimelineItem>
+              <TimelineSeparator>
+                <TimelineDot variant='outline'>
+                  <TiCode />
+                </TimelineDot>
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent className='place-items-center'>START</TimelineContent>
+            </TimelineItem>
+            {techLang.map((item, index) => ( // Fixed the order of arguments in map function
+              <TimelineItem key={index}>
+                <TimelineSeparator>
+                  <TimelineDot variant='outline'>
+                    <TiCode />
+                  </TimelineDot>
+                  <TimelineConnector />
+                </TimelineSeparator>
+                <TimelineContent className='place-items-center'>{item}</TimelineContent>
+              </TimelineItem>
+            ))}<TimelineItem>
+              <TimelineSeparator>
+                <TimelineDot variant='outline'>
+                  <TiCode />
+                </TimelineDot>
+              </TimelineSeparator>
+              <TimelineContent className='place-items-center'>END</TimelineContent>
+            </TimelineItem>
+          </Timeline>
+        </div>
+      </div>
     </div>
   );
 };

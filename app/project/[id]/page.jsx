@@ -126,7 +126,7 @@ export default function Page({ params }) {
       </div>
       <div className="px-[60px]">
         <div className="w-full overflow-hidden h-[50rem] bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl mt-5">
-          <div className="flex flex-wrap items-center gap-2 pt-3 pb-5">
+          <div className=" w-screen flex flex-wrap items-center gap-6 pt-3 pb-5">
             <div className="ps-5 text-3xl text-white font-space-mono font-bold p-2 pe-10">
               {project[0]?.title}
             </div>
@@ -177,7 +177,7 @@ export default function Page({ params }) {
                 )}`}
               ></iframe>
               <div class="flex">
-                <div className="m-1 flex flex-wrap text-xs">
+                <div className="w-[200px] flex flex-wrap text-xs py-3">
                   {project[0]?.hashtags &&
                     project[0].hashtags
                       .split(",") // Split the hashtags by comma
@@ -192,10 +192,10 @@ export default function Page({ params }) {
                         </span>
                       ))}
                 </div>
-                <div className="m-1">
+                <div className="py-2 ms-[130px]">
                   <Link href={`/roadmap/${params.id}`}>
-                    <div className="flex justify-center gap-3 place-items-center border p-1 rounded-xl text-white me-10">
-                      <span className="flex flex-wrap text-sm">Roadmap</span>
+                    <div className="flex justify-center gap-3 place-items-center border rounded-xl text-white pe-3">
+                      <span className="flex flex-wrap ps-3 text-sm">Roadmap</span>
                       <FaRoad size={40} />
                     </div>
                   </Link>
