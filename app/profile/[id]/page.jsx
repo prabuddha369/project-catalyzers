@@ -99,9 +99,10 @@ export default function Page({ params }) {
     }
   }, [Followers, Following]);
   console.log(project);
+
   return (
     <div className="h-full w-full bg-[#0b1539]">
-      <div className="flex  justify-between py-3 bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black ">
+      <div className="flex  justify-between py-3 bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black" style={{ zIndex: 50 }}>
         <div className="text-white flex gap-10 text-xl place-items-center ps-10">
           <GiHamburgerMenu size={40} />
           <Image
@@ -146,27 +147,35 @@ export default function Page({ params }) {
             Project Library
           </span>
           <section>
-            {project.map((item, index) => (
-              <div
-                key={index}
-                className="flex flex-row w-1/2 gap-8 items-center m-auto py-8 px-10 hover:scale-105 transform transition duration-150"
-              >
-                <div className="flex justify-between place-items-center w-full bg-white h-auto rounded-xl">
-                  <Link href={`/project/${item.owner}_${index}`}>
-                    <span className="ms-5 text-2xl font-bold ">
-                      {item.title}
-                    </span>
+            {project.map((item, index) => {
+               const truncatedDescription = item.description.slice(0, 100);
+              return (
+                <div
+                  key={index}
+                  className="flex flex-row w-full gap-8 items-center m-auto py-8 px-10 hover:scale-105 transform transition duration-150"
+                >
+                  <Link href={`/project/${item.owner}_${index}`} className="flex flex-row w-full gap-8 items-center m-auto py-8 px-10 hover:scale-105 transform transition duration-150">
+                    <div className="flex justify-between place-items-center w-full bg-white h-auto rounded-xl">
+                      <div className="flex flex-col">
+                        <span className="ms-5 text-2xl font-bold">
+                          {item.title}
+                        </span>
+                        <div className="mt-2 ms-5 text-xl max-h-20"> 
+                          {truncatedDescription+"..."}
+                        </div>
+                      </div>
+                      <Image
+                        className="rounded-xl"
+                        src={item.thumbnailurl}
+                        alt="project thumbnail"
+                        height={200}
+                        width={250}
+                      />
+                    </div>
                   </Link>
-                  <Image
-                    className="rounded-xl"
-                    src={item.thumbnailurl}
-                    alt="project thumbnail"
-                    height={200}
-                    width={200}
-                  />
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </section>
         </div>
       </div>
