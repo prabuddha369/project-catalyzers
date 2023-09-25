@@ -177,7 +177,7 @@ export default function Page({ params }) {
                 )}`}
               ></iframe>
               <div class="flex">
-                <div className="m-2 flex flex-wrap text-xs">
+                <div className="m-1 flex flex-wrap text-xs">
                   {project[0]?.hashtags &&
                     project[0].hashtags
                       .split(",") // Split the hashtags by comma
@@ -194,7 +194,7 @@ export default function Page({ params }) {
                 </div>
                 <div className="m-1">
                   <Link href={`/roadmap/${params.id}`}>
-                    <div className="flex justify-center gap-3 place-items-center border p-1 rounded-xl text-white">
+                    <div className="flex justify-center gap-3 place-items-center border p-1 rounded-xl text-white me-10">
                       <span className="flex flex-wrap text-sm">Roadmap</span>
                       <FaRoad size={40} />
                     </div>
