@@ -9,9 +9,15 @@ import {
   TimelineConnector
 } from '@mui/lab';
 import { TiCode } from 'react-icons/ti'
-import { GiHamburgerMenu } from "react-icons/gi";
+import { GiHamburgerMenu, GiFinishLine } from "react-icons/gi";
 import { AiFillMail } from "react-icons/ai";
 import { BiHomeAlt } from "react-icons/bi";
+import { DiJavascript, DiPython, DiJava, DiNodejsSmall, DiHtml5 } from 'react-icons/di';
+import { BiLogoTailwindCss } from 'react-icons/bi';
+import {SiNextdotjs} from 'react-icons/si'
+import { SiAndroidstudio, SiKotlin } from 'react-icons/si';
+import {FaFontAwesomeFlag} from 'react-icons/fa'
+import {TbFileTypeXml, TbApi} from 'react-icons/tb'
 import Link from 'next/link';
 import {
   GetProjectData,
@@ -60,6 +66,36 @@ const Page = ({ params }) => {
 
   console.log(techLang);
 
+  function getIconForTech(item) {
+    switch (item.trim().toLowerCase()) {
+      case 'javascript':
+        return <DiJavascript size={40} style={{ color: '#f0fa2d' }}/>;
+      case 'python':
+        return <DiPython size={40} />;
+      case 'java':
+        return <DiJava size={40}  style={{ color: '#040d78' }}/>;
+      case 'node.js':
+        return <DiNodejsSmall size={40} style={{ color: 'lime' }}/>;
+      case 'next.js':
+        return <SiNextdotjs size={40} />;
+      case 'tailwind css':
+        return <BiLogoTailwindCss size={40} style={{ color: 'aqua' }}/>;
+      case 'android studio':
+        return <SiAndroidstudio size={40} style={{ color: 'lime' }}/>;
+      case 'html':
+        return <DiHtml5 size={40} style={{ color: '#fa642d' }}/>;
+      case 'kotlin':
+        return <SiKotlin size={30} style={{color:"#f29446"}}/>;
+      case 'xml':
+        return <TbFileTypeXml size={30} style={{color:"#f29446"}}/>;
+      case 'api':
+        return <TbApi size={40} />
+      default:
+        // You can return a default icon for unknown values or handle it differently
+        return <TiCode size={40}/>;
+    }
+  }  
+
   return (
     <div className="h-full w-full bg-[#0b1539]">
       <div className="flex justify-between  bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black" style={{ zIndex: 50 }}>
@@ -86,33 +122,33 @@ const Page = ({ params }) => {
       </div>
       <div className='px-20'>
         <div className="w-full overflow-hidden h-wrap bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl mt-10 pt-10">
-          <Timeline position='alternate'>
+          <Timeline position='alternate' className='text-white'>
             <TimelineItem>
-              <TimelineSeparator>
-                <TimelineDot variant='outline'>
-                  <TiCode />
+              <TimelineSeparator sx={{height:'100px'}}>
+                <TimelineDot variant='outline' >
+                  <FaFontAwesomeFlag size={30}/>
                 </TimelineDot>
                 <TimelineConnector />
               </TimelineSeparator>
-              <TimelineContent className='place-items-center'>START</TimelineContent>
+              <TimelineContent className='justify-start mt-4 text-xl font-bold'>START</TimelineContent>
             </TimelineItem>
             {techLang.map((item, index) => ( // Fixed the order of arguments in map function
               <TimelineItem key={index}>
-                <TimelineSeparator>
+                <TimelineSeparator sx={{height:'100px'}}>
                   <TimelineDot variant='outline'>
-                    <TiCode />
+                    {getIconForTech(item)}
                   </TimelineDot>
                   <TimelineConnector />
                 </TimelineSeparator>
-                <TimelineContent className='place-items-center'>{item}</TimelineContent>
+                <TimelineContent className='justify-start mt-5 text-xl font-bold'>{item}</TimelineContent>
               </TimelineItem>
             ))}<TimelineItem>
-              <TimelineSeparator>
+              <TimelineSeparator sx={{height:'100px'}}>
                 <TimelineDot variant='outline'>
-                  <TiCode />
+                  <GiFinishLine  size={30}/>
                 </TimelineDot>
               </TimelineSeparator>
-              <TimelineContent className='place-items-center'>END</TimelineContent>
+              <TimelineContent className='justify-start mt-5 text-xl font-bold'>FINISH</TimelineContent>
             </TimelineItem>
           </Timeline>
         </div>

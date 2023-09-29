@@ -2,7 +2,7 @@
 
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiFillMail } from "react-icons/ai";
-import { BiHomeAlt } from "react-icons/bi";
+import { BiHomeAlt, BiLike, BiSolidLike } from "react-icons/bi";
 import { FaRoad } from "react-icons/fa";
 import Image from "next/image";
 import Hierarchy from "../../hierarchy/hierarchy";
@@ -21,7 +21,13 @@ export default function Page({ params }) {
   const [userDp, setUserDp] = useState("");
   const [OwnerName, setOwnerName] = useState("");
   const [ownerdpurl, setOwnerdpurl] = useState("");
+  const [liked, setLiked] = useState(false);
   const projectID = params.id;
+
+  const handleLike = () =>{
+    setLiked(!liked);
+  }
+
   useEffect(() => {
     // Fetch project data
     GetProjectData(projectID)
@@ -134,7 +140,7 @@ export default function Page({ params }) {
               {project[0]?.category}
             </div>
           </div>
-          <div className="flex justify-between gap-1">
+          <div className="flex ">
             <div className="w-1/2">
               <div className="px-10 flex flex-wrap justify-center items-center">
                 <div className="text-white font-space-mono font-bold">
@@ -171,13 +177,13 @@ export default function Page({ params }) {
             </div>
             <div className="w-1/2">
               <iframe
-                className="h-[260px] w-[460px]"
+                className="h-[373px] w-[660px]"
                 src={`https://www.youtube.com/embed/${project[0]?.yturl.substring(
                   17
                 )}`}
               ></iframe>
-              <div class="flex">
-                <div className="w-[200px] flex flex-wrap text-xs py-3">
+              <div class="flex ">
+                <div className="w-fit flex text-xs py-3 justify-between gap-1">
                   {project[0]?.hashtags &&
                     project[0].hashtags
                       .split(",") // Split the hashtags by comma
@@ -192,7 +198,10 @@ export default function Page({ params }) {
                         </span>
                       ))}
                 </div>
-                <div className="py-2 ms-[130px]">
+                <div onClick={handleLike} className="flex cursor-pointer text-white gap-2 justify-between place-items-center ps-[150px] pe-[30px]">
+                  {liked? (<BiSolidLike size={30} style={{color:"lightblue"}}/>):(<BiLike size={30}/>)} <span className="text-md">Like</span>
+                </div>
+                <div className="py-2">
                   <Link href={`/roadmap/${params.id}`}>
                     <div className="flex justify-center gap-3 place-items-center border rounded-xl text-white pe-3">
                       <span className="flex flex-wrap ps-3 text-sm">Roadmap</span>
