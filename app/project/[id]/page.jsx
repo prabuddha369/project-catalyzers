@@ -79,8 +79,8 @@ export default function Page({ params }) {
   //console.log(project[0]?.yturl);
   //console.log(OwnerName);
   //console.log(project);
-  console.log(ownerdpurl);
-  console.log(userDp);
+ // console.log(ownerdpurl);
+  //console.log(userDp);
 
   return (
     <div className="h-full w-full bg-[#0b1539]">
