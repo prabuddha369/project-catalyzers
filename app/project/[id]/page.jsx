@@ -1,5 +1,4 @@
 "use client";
-
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiFillMail } from "react-icons/ai";
 import { BiHomeAlt, BiLike, BiSolidLike } from "react-icons/bi";
@@ -24,9 +23,9 @@ export default function Page({ params }) {
   const [liked, setLiked] = useState(false);
   const projectID = params.id;
 
-  const handleLike = () =>{
+  const handleLike = () => {
     setLiked(!liked);
-  }
+  };
 
   useEffect(() => {
     // Fetch project data
@@ -85,7 +84,7 @@ export default function Page({ params }) {
   //console.log(project[0]?.yturl);
   //console.log(OwnerName);
   //console.log(project);
- // console.log(ownerdpurl);
+  // console.log(ownerdpurl);
   //console.log(userDp);
 
   return (
@@ -198,13 +197,23 @@ export default function Page({ params }) {
                         </span>
                       ))}
                 </div>
-                <div onClick={handleLike} className="flex cursor-pointer text-white gap-2 justify-between place-items-center ps-[150px] pe-[30px]">
-                  {liked? (<BiSolidLike size={30} style={{color:"lightblue"}}/>):(<BiLike size={30}/>)} <span className="text-md">Like</span>
+                <div
+                  onClick={handleLike}
+                  className="flex cursor-pointer text-white gap-2 justify-between place-items-center ps-[150px] pe-[30px]"
+                >
+                  {liked ? (
+                    <BiSolidLike size={30} style={{ color: "lightblue" }} />
+                  ) : (
+                    <BiLike size={30} />
+                  )}{" "}
+                  <span className="text-md">Like</span>
                 </div>
                 <div className="py-2">
                   <Link href={`/roadmap/${params.id}`}>
                     <div className="flex justify-center gap-3 place-items-center border rounded-xl text-white pe-3">
-                      <span className="flex flex-wrap ps-3 text-sm">Roadmap</span>
+                      <span className="flex flex-wrap ps-3 text-sm">
+                        Roadmap
+                      </span>
                       <FaRoad size={40} />
                     </div>
                   </Link>

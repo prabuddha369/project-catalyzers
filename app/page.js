@@ -1,20 +1,17 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { UserAuth } from "./context/AuthContext";
 import pcat from "../public/pcat_logo.png";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import Projects from "./components/Projects";
 import { GetUserPhotoUrl, GetUserName } from "./utils/GetData";
 import { convertEmailToDomain } from "./utils/UpdateData";
-import {
-  GetProjectData,
-  GetAllProjectData,
-  GetAllProjectsIdUnderProfile,
-} from "./utils/GetData";
 import { useState, useEffect } from "react";
+import { auth } from "./firebase";
+const project = await fetch("http://localhost:3000/api/projects/");
+
 export default function Home() {
-  const { user, logOut } = UserAuth();
+  const user = auth.currentUser;
   const handleSignOut = async () => {
     try {
       await logOut();
@@ -23,13 +20,21 @@ export default function Home() {
     }
   };
   const [userName, setUserName] = useState("<Anonymous>");
-  const [dpUrl, setDpUrl] = useState("https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png");
-  const [projects, setProjects] = useState([]);
-  useEffect(() => {
-    GetAllProjectData().then((data) => {
-      setProjects([...data]);
-    });
-  }, []);
+  const [dpUrl, setDpUrl] = useState(
+    "https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png"
+  );
+  // handleProj()
+  //   .then((data) => {
+  //     console.log(data); // Handle the data here
+  //   })
+  //   .catch((error) => {
+  //     console.error(error); // Handle errors here
+  //   });
+  // useEffect(() => {
+  //   GetAllProjectData().then((data) => {
+  //     setProjects([...data]);
+  //   });
+  // }, []);
 
   useEffect(() => {
     if (user) {
@@ -49,8 +54,17 @@ export default function Home() {
         <div>
           <div className="flex justify-between">
             <div className="flex gap-4 place-items-center">
-              <Link href="/profile/myprofile" className="flex gap-4 place-items-center">
-                <Image src={dpUrl} alt="Photo" width={50} height={50} className="rounded-full" />
+              <Link
+                href="/profile/myprofile"
+                className="flex gap-4 place-items-center"
+              >
+                <Image
+                  src={dpUrl}
+                  alt="Photo"
+                  width={50}
+                  height={50}
+                  className="rounded-full"
+                />
                 <p>{userName}</p>
               </Link>
               <button onClick={handleSignOut}>Sign Out</button>
@@ -127,7 +141,7 @@ export default function Home() {
           </div>
         </div>
       )}
-      <Projects projects={projects} />
+      {<Projects projects={projects} />}
     </main>
   );
 }
