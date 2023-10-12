@@ -4,7 +4,7 @@ import Link from "next/link";
 import { UserAuth } from "./context/AuthContext";
 import pcat from "../public/pcat_logo.png";
 import { AiOutlineFileSearch } from "react-icons/ai";
-import Projects from "./components/Projects";
+import dynamic from "next/dynamic";
 import { GetUserPhotoUrl, GetUserName } from "./utils/GetData";
 import { convertEmailToDomain } from "./utils/UpdateData";
 import {
@@ -13,6 +13,8 @@ import {
   GetAllProjectsIdUnderProfile,
 } from "./utils/GetData";
 import { useState, useEffect } from "react";
+
+const Projects = dynamic(() => import("./components/Projects"));
 export default function Home() {
   const { user, logOut } = UserAuth();
   const handleSignOut = async () => {
@@ -122,7 +124,13 @@ export default function Home() {
                   nurture Innovation through collaborative learning.
                 </p>
               </div>
-              <Image alt="logo" src={pcat} width={120} height={50} />
+              <Image
+                alt="logo"
+                src={pcat}
+                width={120}
+                height={50}
+                blurDataURL="URL"
+              />
             </div>
           </div>
           <div className="p-10 flex justify-between ">
