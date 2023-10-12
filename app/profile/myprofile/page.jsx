@@ -1,14 +1,11 @@
 "use client";
 import React from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { RxCross1 } from "react-icons/rx";
 import { AiFillMail } from "react-icons/ai";
 import { BiHomeAlt } from "react-icons/bi";
 import Image from "next/image";
 import {
-  GetAllProjectsIdUnderProfile,
-  GetProjectThumbnailurl,
-  GetProjectDescription,
-  GetProjectTittle,
   GetUserName,
   GetUserPhotoUrl,
   GetAllProjectsDataUnderProfile,
@@ -21,12 +18,23 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 const page = () => {
-  const { user } = UserAuth();
+  const { user,logOut} = UserAuth();
   const [userDp, setUserDp] = useState("");
   const [UserName, setUserName] = useState("");
   const [Followers, setFollowers] = useState(0);
   const [Following, setFollowing] = useState(0);
   const [project, setProject] = useState([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+  const handleSignOut = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     // Fetch owner's name asynchronously and update state
     if (user) {
@@ -92,9 +100,31 @@ const page = () => {
   console.log(project);
   return (
     <div className="h-full w-full bg-[#0b1539]">
-      <div className="flex  justify-between py-3 bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black"style={{ zIndex: 50 }}>
+      <div className="flex  justify-between py-3 bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black" style={{ zIndex: 50 }}>
         <div className="text-white flex gap-8 text-xl place-items-center ps-10">
-          <GiHamburgerMenu size={40} />
+          <button onClick={toggleDropdown}>
+            {isDropdownOpen ? <RxCross1 size={40} /> : <GiHamburgerMenu size={40} />}
+          </button>
+          {isDropdownOpen && (
+            <div className="absolute w-fit rounded-lg shadow-lg bg-[#D9D9D9] ring-1 ring-black ring-opacity-5 mt-[230px]">
+              <div className="py-2 px-4" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                <Link href="../" className="block px-4 py-2 text-black" role="menuitem">
+                  Home
+                </Link>
+                <Link href="../upload" className="block px-4 py-2 text-black" role="menuitem">
+                  Add New Project
+                </Link>
+                <Link href="../">
+                <button onClick={handleSignOut} className="block px-4 py-2 text-black" role="menuitem">
+                  Sign Out
+                </button>
+                </Link>
+                <Link href="" className="block px-4 py-2 text-black" role="menuitem">
+                  About Us
+                </Link>
+              </div>
+            </div>
+          )}
           <Image
             src={userDp}
             alt="Current User Photo"

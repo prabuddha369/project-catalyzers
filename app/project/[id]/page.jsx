@@ -1,6 +1,7 @@
 "use client";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiFillMail } from "react-icons/ai";
+import { RxCross1 } from "react-icons/rx";
 import { BiHomeAlt, BiLike, BiSolidLike } from "react-icons/bi";
 import { FaRoad } from "react-icons/fa";
 import Image from "next/image";
@@ -22,6 +23,17 @@ export default function Page({ params }) {
   const [ownerdpurl, setOwnerdpurl] = useState("");
   const [liked, setLiked] = useState(false);
   const projectID = params.id;
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+  const handleSignOut = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleLike = () => {
     setLiked(!liked);
@@ -91,7 +103,30 @@ export default function Page({ params }) {
     <div className="h-full w-full bg-[#0b1539]">
       <div className="flex justify-between  bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black">
         <div className="text-white flex gap-8 text-xl place-items-center ps-5">
-          <GiHamburgerMenu size={30} />
+          <button onClick={toggleDropdown}>
+            {isDropdownOpen ? <RxCross1 size={30} /> : <GiHamburgerMenu size={30} />}
+          </button>
+          {isDropdownOpen && (
+            <div className="absolute w-fit rounded-lg shadow-lg bg-[#D9D9D9] ring-1 ring-black ring-opacity-5 mt-[270px]">
+              <div className="py-2 px-4" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                <Link href="/profile/myprofile" className="block px-4 py-2 text-black" role="menuitem">
+                  My Profile
+                </Link>
+                <Link href="../" className="block px-4 py-2 text-black" role="menuitem">
+                  Home
+                </Link>
+                <Link href="/upload" className="block px-4 py-2 text-black" role="menuitem">
+                  Add New Project
+                </Link>
+                <button onClick={handleSignOut} className="block px-4 py-2 text-black" role="menuitem">
+                  Sign Out
+                </button>
+                <Link href="" className="block px-4 py-2 text-black" role="menuitem">
+                  About Us
+                </Link>
+              </div>
+            </div>
+          )}
           <Link
             href={
               user

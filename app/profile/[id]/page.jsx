@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { RxCross1} from "react-icons/rx";
 import { AiFillMail } from "react-icons/ai";
 import { BiHomeAlt } from "react-icons/bi";
 import Image from "next/image";
@@ -20,13 +21,24 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 export default function Page({ params }) {
   const profileID = params.id;
-  const { user } = UserAuth();
+  const { user, logOut } = UserAuth();
   const [ProfileName, setProfileName] = useState("");
   const [project, setProject] = useState([]);
   const [profiledpurl, setProfiledpurl] = useState("");
   const [userDp, setUserDp] = useState("");
   const [Followers, setFollowers] = useState(0);
   const [Following, setFollowing] = useState(0);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+  const handleSignOut = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     // Fetch project data
@@ -104,7 +116,32 @@ export default function Page({ params }) {
     <div className="h-full w-full bg-[#0b1539]">
       <div className="flex  justify-between py-3 bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black" style={{ zIndex: 50 }}>
         <div className="text-white flex gap-10 text-xl place-items-center ps-10">
-          <GiHamburgerMenu size={40} />
+          <button onClick={toggleDropdown}>
+            {isDropdownOpen ? <RxCross1 size={40} /> : <GiHamburgerMenu size={40} />}
+          </button>
+          {isDropdownOpen && (
+            <div className="absolute w-fit rounded-lg shadow-lg bg-[#D9D9D9] ring-1 ring-black ring-opacity-5 mt-[270px]">
+              <div className="py-2 px-4" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                <Link href="../" className="block px-4 py-2 text-black" role="menuitem">
+                  Home
+                </Link>
+                <Link href="/profile/myprofile" className="block px-4 py-2 text-black" role="menuitem">
+                  My Profile
+                </Link>
+                <Link href="../upload" className="block px-4 py-2 text-black" role="menuitem">
+                  Add New Project
+                </Link>
+                <Link href="../">
+                  <button onClick={handleSignOut} className="block px-4 py-2 text-black" role="menuitem">
+                    Sign Out
+                  </button>
+                </Link>
+                <Link href="" className="block px-4 py-2 text-black" role="menuitem">
+                  About Us
+                </Link>
+              </div>
+            </div>
+          )}
           <Image
             src={profiledpurl}
             alt="Current User Photo"
@@ -144,11 +181,11 @@ export default function Page({ params }) {
       <div className="px-20 mt-8">
         <div className="w-full overflow-hidden h-[50rem] bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl pt-5">
           <span className="ms-8 text-3xl font-bold text-white py-10">
-            Project Library
+           {ProfileName} Project Library
           </span>
           <section>
             {project.map((item, index) => {
-               const truncatedDescription = item.description.slice(0, 100);
+              const truncatedDescription = item.description.slice(0, 100);
               return (
                 <div
                   key={index}
@@ -160,8 +197,8 @@ export default function Page({ params }) {
                         <span className="ms-5 text-2xl font-bold">
                           {item.title}
                         </span>
-                        <div className="mt-2 ms-5 text-xl max-h-20"> 
-                          {truncatedDescription+"..."}
+                        <div className="mt-2 ms-5 text-xl max-h-20">
+                          {truncatedDescription + "..."}
                         </div>
                       </div>
                       <Image

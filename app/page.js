@@ -3,14 +3,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { UserAuth } from "./context/AuthContext";
 import pcat from "../public/pcat_logo.png";
+import { RxCross1} from "react-icons/rx";
+import { GiHamburgerMenu} from "react-icons/gi";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import dynamic from "next/dynamic";
 import { GetUserPhotoUrl, GetUserName } from "./utils/GetData";
 import { convertEmailToDomain } from "./utils/UpdateData";
 import {
-  GetProjectData,
-  GetAllProjectData,
-  GetAllProjectsIdUnderProfile,
+  GetAllProjectData
 } from "./utils/GetData";
 import { useState, useEffect } from "react";
 
@@ -28,6 +28,7 @@ export default function Home() {
   const [dpUrl, setDpUrl] = useState(
     "https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png"
   );
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [projects, setProjects] = useState([]);
   useEffect(() => {
     GetAllProjectData().then((data) => {
@@ -47,12 +48,37 @@ export default function Home() {
   }, [user]);
   console.log(user);
 
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   return (
     <main className=" p-10 w-full h-screen bg-gradient-to-b from-[#0c163a] to-[#ea65dd] text-stone-300 ">
       {user ? (
         <div>
           <div className="flex justify-between">
-            <div className="flex gap-4 place-items-center">
+            <div className="flex gap-4 pb-[6%]">
+            <button onClick={toggleDropdown}>
+                {isDropdownOpen ? <RxCross1 size={30} /> : <GiHamburgerMenu size={30} />}
+              </button>
+              {isDropdownOpen && (
+                <div className="absolute w-fit rounded-lg shadow-lg bg-[#D9D9D9] ring-1 ring-black ring-opacity-5 mt-[60px] ms-[45px] ">
+                  <div className="py-2 px-4" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                    <Link href="/profile/myprofile" className="block px-4 py-2 text-black" role="menuitem">
+                      My Profile
+                    </Link>
+                    <Link href="/upload" className="block px-4 py-2 text-black" role="menuitem">
+                      Add New Project
+                    </Link>
+                    <button onClick={handleSignOut} className="block px-4 py-2 text-black" role="menuitem">
+                      Sign Out
+                    </button>
+                    <Link href="" className="block px-4 py-2 text-black" role="menuitem">
+                      About Us
+                    </Link>
+                  </div>
+                </div>
+              )}
               <Link
                 href="/profile/myprofile"
                 className="flex gap-4 place-items-center"
@@ -66,7 +92,6 @@ export default function Home() {
                 />
                 <p>{userName}</p>
               </Link>
-              <button onClick={handleSignOut}>Sign Out</button>
             </div>
             <div className="w-[2.5] flex gap-4 items-center">
               <div>
