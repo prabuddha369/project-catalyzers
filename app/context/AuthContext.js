@@ -1,6 +1,5 @@
 "use client";
 import { useContext, createContext, useState, useEffect } from "react";
-import {UploadUserData,convertEmailToDomain} from "../utils/UpdateData"
 import {
   signOut,
   onAuthStateChanged,
@@ -16,7 +15,7 @@ const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-   const googleSignIn = async () => {
+   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider);
   };

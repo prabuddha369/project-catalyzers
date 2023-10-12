@@ -2,9 +2,11 @@
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { BsGithub } from "react-icons/bs";
+import { UploadUserData, convertEmailToDomain } from "../utils/UpdateData"
 import { UserAuth } from "../context/AuthContext";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+let flg=false;
 const page = () => {
   const { user, googleSignIn, githubSignIn, signInWithEmailPassword } =
     UserAuth();
@@ -15,6 +17,7 @@ const page = () => {
   const handleGoogleSignIn = async () => {
     try {
       await googleSignIn();
+      flg=true;
     } catch (error) {
       console.log(error);
     }
@@ -23,11 +26,12 @@ const page = () => {
   const handleGitSignIn = async () => {
     try {
       await githubSignIn();
+      flg=true;
     } catch (error) {
       console.log(error);
     }
   };
-  
+
   const handleEmailSignIn = async () => {
     try {
       await signInWithEmailPassword(email, password);
@@ -40,7 +44,12 @@ const page = () => {
   console.log(email);
   console.log(password);
 
-  if (user) redirect("/");
+  if (user)
+  {
+    if(flg){UploadUserData(convertEmailToDomain(user.email), user.displayName, user.photoURL);}
+    redirect("/");
+  }
+
   return (
     <div className="w-full h-screen py-5 bg-[#0b1539] text-stone-200">
       <div className="w-1/3 h-full rounded-3xl bg-gradient-to-b from-[#ea64dc] to-[#0b1539] mx-auto items-center">

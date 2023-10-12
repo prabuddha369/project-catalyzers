@@ -120,21 +120,30 @@ function DecrementFollowing(userEmailId) {
 }
 
 //Call While SIgnUp and First AUthentication
-async function UploadUserData(userEmailId, name, dpurl) {
+function UploadUserData(userEmailId, name, dpurl) {
   const userRef = ref(database, "users/" + userEmailId);
-  
-  try {
-    await set(userRef, {
-      Name: name,
-      Follower: 0,
-      Following: 0,
-      dpUrl: dpurl
-    });
-    return true; // Return a success indicator or other data if needed
-  } catch (error) {
-    throw error; // Throw an error if there's an issue with the database operation
-  }
+  // Check if the user exists
+  get(userRef).then((userSnapshot) => {
+    if (!userSnapshot.exists()) {
+      set(userRef, {
+        Name: name,
+        Follower: 0,
+        Following: 0,
+        dpUrl: dpurl
+      }).then(() => {
+        console.log("User data uploaded successfully.");
+      }).catch((error) => {
+        console.error("Error uploading user data:", error);
+      });
+    } else {
+      console.log("User already exists. No action taken.");
+    }
+  }).catch((error) => {
+    console.error("Error checking user existence:", error);
+  });
 }
+
+
 //UploadUserData calling
 function convertEmailToDomain(email) {
   const sanitizedEmail = email.replace(/[.@]/g, '_');
