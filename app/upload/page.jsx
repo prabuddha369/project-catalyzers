@@ -2,6 +2,7 @@
 import React from 'react'
 import { storage } from "../firebase";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { GrAddCircle } from "react-icons/gr";
 import { RxCross1 } from "react-icons/rx";
 import { AiFillMail } from "react-icons/ai";
 import { BiHomeAlt } from "react-icons/bi";
@@ -18,10 +19,15 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 const page = () => {
+  const [selectedFileImage, setSelectedFileImage] = useState(null);
+  const handleImageFileChange = (e) => {
+    const files = e.target.files;
+    // Update the selectedFiles state when files are chosen
+    setSelectedFileImage(files);
+  };
   const { user } = UserAuth();
   const [userDp, setUserDp] = useState("");
   const [progress, setProgress] = useState(0);
-  const [selectedFiles, setSelectedFiles] = useState([]);
   const folderInputRef = useRef(null);
   const progressBarRef = useRef(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -130,31 +136,34 @@ const page = () => {
       alert('All files uploaded successfully!');
     }
   };
+
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
   const handleFileChange = (e) => {
     const files = e.target.files;
+    // Update the selectedFiles state when files are chosen
     setSelectedFiles(files);
   };
+
   const FolderUpload = () => {
     return (
-      <div>
-        <input type="file"
-          directory
-          multiple
-          ref={folderInputRef}
-          onChange={handleFileChange}
-          className="hidden"
-        />
-        <label
-          htmlFor="folderInput"
-          className="inline-block px-4 py-2 bg-blue-500 text-white rounded cursor-pointer hover:bg-blue-600"
-        >
-          Choose Files
+      <div className='flex gap-4 place-items-center'>
+        <label className="flex gap-2 place-items-center bg-white text-black font-semibold py-2 px-4 rounded-lg cursor-pointer relative">
+          <GrAddCircle size={30} />
+          Choose Project Folder
+          <input
+            type="file"
+            directory=""
+            webkitdirectory=""
+            multiple
+            onChange={handleFileChange}
+            ref={folderInputRef}
+            className="hidden"
+          />
         </label>
-        <span className="ml-2">
-          {selectedFiles.length === 0
-            ? "No file chosen"
-            : `${selectedFiles.length} file(s) selected`}
-        </span>
+        <div className="text-sm">
+          {selectedFiles.length === 0 ? "No files chosen" : `${selectedFiles.length} file(s) selected`}
+        </div>
         <br /><br /><br />
         <progress
           id="progressBar"
@@ -278,7 +287,21 @@ const page = () => {
             <div className='flex flex-wrap p-3 w-1/2'>
               <div className='flex flex-col'>
                 <span>Add Thumbnail</span>
-                <input type='file' className='rounded-lg outline-none' />
+                <div className='flex gap-4 place-items-center'>
+                  <label className="flex gap-2 place-items-center bg-white text-black font-semibold py-2 px-4 rounded-lg cursor-pointer relative">
+                    <GrAddCircle size={30} />
+                    Choose Image File
+                    <input
+                      type='file'
+                      accept="image/*"
+                      className='hidden'
+                      onChange={handleImageFileChange}
+                    />
+                  </label>
+                  <div className="relative text-center text-sm">
+                    {selectedFileImage ? selectedFileImage[0].name : "No file chosen"}
+                  </div>
+                </div>
               </div>
               <div className='flex flex-col w-full'>
                 <span>Objectives</span>
@@ -286,8 +309,6 @@ const page = () => {
               </div>
             </div>
           </div>
-
-
           <div>
             <FolderUpload />
           </div>
