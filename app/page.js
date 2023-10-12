@@ -64,7 +64,7 @@ export default function Home() {
                 {isDropdownOpen ? <RxCross1 size={30} /> : <GiHamburgerMenu size={30} />}
               </button>
               {isDropdownOpen && (
-                <div className="absolute w-fit rounded-lg shadow-lg bg-[#D9D9D9] ring-1 ring-black ring-opacity-5 mt-[60px] ms-[45px] ">
+                <div className="absolute w-[200px] rounded-lg shadow-lg bg-[#D9D9D9] ring-1 ring-black ring-opacity-5 mt-[60px] ms-[35px] ">
                   <div className="py-2 px-4" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                     <Link href="/profile/myprofile" className="block px-4 py-2 text-black" role="menuitem">
                       My Profile
