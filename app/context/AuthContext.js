@@ -1,5 +1,6 @@
 "use client";
 import { useContext, createContext, useState, useEffect } from "react";
+import {UploadUserData,convertEmailToDomain} from "../utils/UpdateData"
 import {
   signOut,
   onAuthStateChanged,
@@ -7,8 +8,7 @@ import {
   GithubAuthProvider,
   signInWithPopup,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  updateProfile
+  signInWithEmailAndPassword
 } from "firebase/auth";
 import { auth } from "../firebase";
 const AuthContext = createContext();
@@ -16,7 +16,7 @@ const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  const googleSignIn = () => {
+   const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider);
   };

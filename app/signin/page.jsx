@@ -11,6 +11,7 @@ const page = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const handleGoogleSignIn = async () => {
     try {
       await googleSignIn();
@@ -18,6 +19,7 @@ const page = () => {
       console.log(error);
     }
   };
+
   const handleGitSignIn = async () => {
     try {
       await githubSignIn();
@@ -25,6 +27,7 @@ const page = () => {
       console.log(error);
     }
   };
+  
   const handleEmailSignIn = async () => {
     try {
       await signInWithEmailPassword(email, password);

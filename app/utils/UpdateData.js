@@ -120,14 +120,20 @@ function DecrementFollowing(userEmailId) {
 }
 
 //Call While SIgnUp and First AUthentication
-function UploadUserData(userEmailId, name, dpurl) {
+async function UploadUserData(userEmailId, name, dpurl) {
   const userRef = ref(database, "users/" + userEmailId);
-  set(userRef, {
-    Name: name,
-    Follower: 0,
-    Following: 0,
-    dpUrl: dpurl
-  });
+  
+  try {
+    await set(userRef, {
+      Name: name,
+      Follower: 0,
+      Following: 0,
+      dpUrl: dpurl
+    });
+    return true; // Return a success indicator or other data if needed
+  } catch (error) {
+    throw error; // Throw an error if there's an issue with the database operation
+  }
 }
 //UploadUserData calling
 function convertEmailToDomain(email) {

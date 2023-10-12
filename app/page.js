@@ -24,10 +24,12 @@ export default function Home() {
       console.log(error);
     }
   };
+
   const [userName, setUserName] = useState("<Anonymous>");
   const [dpUrl, setDpUrl] = useState(
     "https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png"
   );
+  
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [projects, setProjects] = useState([]);
   useEffect(() => {
