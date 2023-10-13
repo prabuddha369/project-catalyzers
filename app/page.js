@@ -72,6 +72,9 @@ export default function Home() {
                     <Link href="/upload" className="block px-4 py-2 text-black" role="menuitem">
                       Add New Project
                     </Link>
+                    <Link href="/message" className="block px-4 py-2 text-black" role="menuitem">
+                      Messages
+                    </Link>
                     <button onClick={handleSignOut} className="block px-4 py-2 text-black" role="menuitem">
                       Sign Out
                     </button>
