@@ -3,8 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { UserAuth } from "./context/AuthContext";
 import pcat from "../public/pcat_logo.png";
-import { RxCross1} from "react-icons/rx";
-import { GiHamburgerMenu} from "react-icons/gi";
+import { RxCross1 } from "react-icons/rx";
+import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import dynamic from "next/dynamic";
 import { GetUserPhotoUrl, GetUserName } from "./utils/GetData";
@@ -29,7 +29,7 @@ export default function Home() {
   const [dpUrl, setDpUrl] = useState(
     "https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png"
   );
-  
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [projects, setProjects] = useState([]);
   useEffect(() => {
@@ -60,7 +60,7 @@ export default function Home() {
         <div>
           <div className="flex justify-between">
             <div className="flex gap-4 pb-[6%]">
-            <button onClick={toggleDropdown}>
+              <button onClick={toggleDropdown}>
                 {isDropdownOpen ? <RxCross1 size={30} /> : <GiHamburgerMenu size={30} />}
               </button>
               {isDropdownOpen && (
@@ -173,7 +173,31 @@ export default function Home() {
           </div>
         </div>
       )}
-      <Projects projects={projects} />
+      <div className="w-full h-[56.5%] overflow-y-auto p-5 custom-scrollbar">
+        <style jsx>
+          {`
+    /* Style for custom scrollbar */
+    .custom-scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color: gray transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: gray;
+      border-radius: 5px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  `}
+        </style>
+        <Projects projects={projects} />
+      </div>
     </main>
   );
 }

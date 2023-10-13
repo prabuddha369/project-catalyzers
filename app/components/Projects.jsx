@@ -13,8 +13,8 @@ const Projects = ({ projects }) => {
   
   const { user } = UserAuth();
   return (
-    <div style={{ overflow: "hidden", padding: "20px" }}>
-      <Stack flexWrap="wrap" justifyContent="start" gap={5} direction="row">
+    <div style={{ overflow: "hidden", padding: "10px" }}>
+      <Stack flexWrap="wrap" justifyContent="start" gap={2} direction="row">
         {projects.map((item, index) => (
           <Box key={index}>
             <Link href={user ? `/project/${item.projectID}` : "/signin"}>
@@ -24,7 +24,7 @@ const Projects = ({ projects }) => {
                   alt={item.title}
                   src={item.thumbnailUrl}
                   sx={{
-                    width: 250,
+                    width: 238,
                     height: 112.5, // 16:9 aspect ratio (9 / 16 = 0.5625)
                   }}
                 />

@@ -64,7 +64,7 @@ const page = () => {
     else if (!files || files.length === 0) {
       alert('Please select a Project folder before uploading.');
     }
-    else if (!projectTitle ||  category === 'Select Category'|| !objectives || !description || !hashtags || !techAndLang || !demonstrationLink) {
+    else if (!projectTitle || category === 'Select Category' || !objectives || !description || !hashtags || !techAndLang || !demonstrationLink) {
       alert('Please fill in all required fields before uploading, and make sure to select a valid category.');
     }
     else {
@@ -73,6 +73,17 @@ const page = () => {
       if (thumbnailurl) {
         await UploadProject(convertEmailToDomain(user.email), projectTitle, objectives, description, category, thumbnailurl, hashtags, techAndLang, demonstrationLink);
       }
+      
+      // Reset all fields to their default values
+      setProjectTitle('');
+      setCategory('Select Category');
+      setObjectives('');
+      setDescription('');
+      setHashtags('');
+      setTechAndLang('');
+      setDemonstrationLink('');
+      setFiles([]); // Reset files to empty
+      setSelectedFileImage(null); // Reset selectedFileImage to null
     }
   };
 
@@ -112,66 +123,70 @@ const page = () => {
   const uploadFolder = async () => {
     setIsUploading(true);
     for (const file of files) {
-      let relativePath = await createProjectId(convertEmailToDomain(user.email)) + file.webkitRelativePath;
-      let metadata = {};
-      // Change the contentType of .c files to .txt
-      if (file.name.endsWith('.c')) {
-        relativePath = relativePath.replace(/\.c$/, '.txt');
-        metadata = {
-          customMetadata: {
-            'extension': '.c',
-          }
-        };
+      const { projectId, projectCount } = await createProjectId(convertEmailToDomain(user.email));
+      if (projectId) {
+        console.log("Hello Look    " + projectId);
+        let relativePath = projectId + "/" + file.webkitRelativePath;
+        let metadata = {};
+        // Change the contentType of .c files to .txt
+        if (file.name.endsWith('.c')) {
+          relativePath = relativePath.replace(/\.c$/, '.txt');
+          metadata = {
+            customMetadata: {
+              'extension': '.c',
+            }
+          };
+        }
+        else if (file.name.endsWith('.js')) {
+          relativePath = relativePath.replace(/\.js$/, '.txt');
+          metadata = {
+            customMetadata: {
+              'extension': '.js',
+            }
+          };
+        }
+        else if (file.name.endsWith('.java')) {
+          relativePath = relativePath.replace(/\.java$/, '.txt');
+          metadata = {
+            customMetadata: {
+              'extension': '.java',
+            }
+          };
+        }
+        else if (file.name.endsWith('.cpp')) {
+          relativePath = relativePath.replace(/\.cpp$/, '.txt');
+          metadata = {
+            customMetadata: {
+              'extension': '.cpp',
+            }
+          };
+        }
+        else if (file.name.endsWith('.py')) {
+          relativePath = relativePath.replace(/\.py$/, '.txt');
+          metadata = {
+            customMetadata: {
+              'extension': '.py',
+            }
+          };
+        }
+        else if (file.name.endsWith('.css')) {
+          relativePath = relativePath.replace(/\.css$/, '.txt');
+          metadata = {
+            customMetadata: {
+              'extension': '.css',
+            }
+          };
+        }
+        else if (file.name.endsWith('.html')) {
+          relativePath = relativePath.replace(/\.html$/, '.txt');
+          metadata = {
+            customMetadata: {
+              'extension': '.html',
+            }
+          };
+        }
+        const task = await uploadBytes(ref(storage, relativePath), file, metadata);
       }
-      else if (file.name.endsWith('.js')) {
-        relativePath = relativePath.replace(/\.js$/, '.txt');
-        metadata = {
-          customMetadata: {
-            'extension': '.js',
-          }
-        };
-      }
-      else if (file.name.endsWith('.java')) {
-        relativePath = relativePath.replace(/\.java$/, '.txt');
-        metadata = {
-          customMetadata: {
-            'extension': '.java',
-          }
-        };
-      }
-      else if (file.name.endsWith('.cpp')) {
-        relativePath = relativePath.replace(/\.cpp$/, '.txt');
-        metadata = {
-          customMetadata: {
-            'extension': '.cpp',
-          }
-        };
-      }
-      else if (file.name.endsWith('.py')) {
-        relativePath = relativePath.replace(/\.py$/, '.txt');
-        metadata = {
-          customMetadata: {
-            'extension': '.py',
-          }
-        };
-      }
-      else if (file.name.endsWith('.css')) {
-        relativePath = relativePath.replace(/\.css$/, '.txt');
-        metadata = {
-          customMetadata: {
-            'extension': '.css',
-          }
-        };
-      }
-      else if (file.name.endsWith('.html')) {
-        relativePath = relativePath.replace(/\.html$/, '.txt');
-        metadata = {
-          customMetadata: {
-            'extension': '.html',
-          }
-        };
-      }
-      const task = await uploadBytes(ref(storage, relativePath), file, metadata);
     }
 
     setIsUploading(false);
@@ -287,9 +302,9 @@ const page = () => {
                     value={projectTitle}
                     onChange={(e) => setProjectTitle(e.target.value)} />
                 </div>
-                <div className='flex flex-col mt-[66px]'>
+                <div className='flex flex-col mt-[66px] ms-[5px]'>
                   <span className='text-white'>Category</span>
-                  <div className='w-[130%]'><select className='text-black rounded-lg p-2.5 w-full'
+                  <div className='w-[100%]'><select className='text-black rounded-lg p-2.5 w-full'
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}>
                     <option value="Select Category">Select Category</option>
