@@ -2,6 +2,7 @@
 import { ChatEngine, getOrCreateChat } from 'react-chat-engine';
 import React from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { Oval } from 'react-loader-spinner';
 import { RxCross1 } from "react-icons/rx";
 import { BiHomeAlt } from "react-icons/bi";
 import Image from "next/image";
@@ -125,7 +126,7 @@ const Message = () => {
 	console.log(UserName);
 
 	return (
-		<div className="h-fit w-full bg-[#0b1539]">
+		<div className="h-full w-full bg-[#0b1539]">
 			<div className="flex  justify-between bg-[#0b1539] sticky top-0 w-full h-[12vh] shadow-md shadow-black" style={{ zIndex: 50 }}>
 				<div className="text-white flex gap-8 text-xl place-items-center ps-10">
 					<button onClick={toggleDropdown}>
@@ -178,7 +179,7 @@ const Message = () => {
 				</div>
 			</div>
 			<div className="px-20 mt-3">
-				<div className="w-full overflow-hidden  bg-[#ea64dc] rounded-2xl pt-5">
+				<div className="w-full h-[86vh] overflow-hidden  bg-[#ea64dc] rounded-2xl pt-5">
 					<div className="ms-8 mb-5 text-3xl font-bold text-white">
 						Messages
 					</div>
@@ -191,7 +192,17 @@ const Message = () => {
 							renderNewChatForm={(creds) => renderChatForm(creds)}
 						/>
 					) : (
-						<p>Loading...</p>
+						<div className="absolute inset-0 flex items-center justify-center">
+							<Oval
+								height={80}
+								width={80}
+								color="#0b1539"
+								ariaLabel='oval-loading'
+								secondaryColor="#777bf2"
+								strokeWidth={2}
+								strokeWidthSecondary={2}
+							/>
+						</div>
 					)}
 				</div>
 			</div>

@@ -1,6 +1,6 @@
 import { database } from "../firebase";
 import { getDatabase, ref, set, child, get, update } from "firebase/database";
-import { GetFollower, GetFollowing } from "./GetData"
+import { GetFollower, GetFollowing, GetFollowingList, GetFollowerList } from "./GetData"
 
 async function UploadProject(
   userEmailId,
@@ -89,35 +89,91 @@ async function createProjectId(userEmailId) {
   }
 }
 
-function IncrementFollower(userEmailId) {
-  const userRef = ref(database, "users/" + userEmailId);
-  const follower = GetFollower(userEmailId) + 1;
-  set(userRef, {
-    Follower: follower
-  });
-}
-function DecrementFollower(userEmailId) {
-  const userRef = ref(database, "users/" + userEmailId);
-  const follower = GetFollower(userEmailId) - 1;
-  set(userRef, {
-    Follower: follower
-  });
+async function IncrementFollower(userEmailId) {
+  const updates = {};
+  updates["users/" + userEmailId + "/Follower"] = await GetFollower(userEmailId) + 1;
+
+  try {
+    await update(ref(database), updates);
+    console.log("Follower count incremented successfully.");
+  } catch (error) {
+    console.error("Error incrementing follower count:", error);
+  }
 }
 
-function IncrementFollowing(userEmailId) {
-  const userRef = ref(database, "users/" + userEmailId);
-  const follower = GetFollowing(userEmailId) + 1;
-  set(userRef, {
-    Following: 0
-  });
+async function DecrementFollower(userEmailId) {
+  const updates = {};
+  updates["users/" + userEmailId + "/Follower"] = await GetFollower(userEmailId) - 1;
+
+  try {
+    await update(ref(database), updates);
+    console.log("Follower count decremented successfully.");
+  } catch (error) {
+    console.error("Error decrementing follower count:", error);
+  }
 }
-function DecrementFollowing(userEmailId) {
-  const userRef = ref(database, "users/" + userEmailId);
-  const follower = GetFollowing(userEmailId) - 1;
-  set(userRef, {
-    Following: 0
-  });
+
+async function IncrementFollowing(userEmailId) {
+  const updates = {};
+  updates["users/" + userEmailId + "/Following"] = await GetFollowing(userEmailId) + 1;
+
+  try {
+    await update(ref(database), updates);
+    console.log("Following count incremented successfully.");
+  } catch (error) {
+    console.error("Error incrementing following count:", error);
+  }
 }
+
+async function DecrementFollowing(userEmailId) {
+  const updates = {};
+  updates["users/" + userEmailId + "/Following"] = await GetFollowing(userEmailId) - 1;
+
+  try {
+    await update(ref(database), updates);
+    console.log("Following count decremented successfully.");
+  } catch (error) {
+    console.error("Error decrementing following count:", error);
+  }
+}
+
+async function IncrementFollowingList(userEmailId, newF) {
+  const followingList = (await GetFollowingList(userEmailId)).split(",");
+  followingList.push(newF); // Add the new following
+  const updatedFollowingList = followingList.join(","); // Convert the array back to a string
+
+  const updates = {};
+  updates["users/" + userEmailId + "/FollowingList"] = updatedFollowingList;
+
+  try {
+    await update(ref(database), updates);
+    console.log("Following list updated successfully.");
+  } catch (error) {
+    console.error("Error updating following list:", error);
+  }
+}
+
+
+async function DecrementFollowingList(userEmailId, newF) {
+  const followingList = (await GetFollowingList(userEmailId)).split(",");
+  const index = followingList.indexOf(newF);
+
+  if (index !== -1) {
+    followingList.splice(index, 1); // Remove the following
+    const updatedFollowingList = followingList.join(","); // Convert the array back to a string
+
+    const updates = {};
+    updates["users/" + userEmailId + "/FollowingList"] = updatedFollowingList;
+
+    try {
+      await update(ref(database), updates);
+      console.log("Following list updated successfully.");
+    } catch (error) {
+      console.error("Error updating following list:", error);
+    }
+  }
+}
+
 
 //Call While SIgnUp and First AUthentication
 function UploadUserData(userEmailId, name, dpurl) {
@@ -128,7 +184,9 @@ function UploadUserData(userEmailId, name, dpurl) {
       set(userRef, {
         Name: name,
         Follower: 0,
+        FollowerList: [],
         Following: 0,
+        FollowingList: [],
         dpUrl: dpurl
       }).then(() => {
         console.log("User data uploaded successfully.");
@@ -177,8 +235,5 @@ function createUser(username, secret, email, first_name) {
     });
 }
 
-// Usage example:
-// createUser("bob_baker", "secret-123-jBj02", "b_baker@mail.com", "Bob", "Baker");
 
-
-export { UploadProject, UploadUserData, convertEmailToDomain, createProjectId,createUser };
+export { UploadProject, UploadUserData, convertEmailToDomain, createProjectId, createUser, IncrementFollower, IncrementFollowing, IncrementFollowingList, DecrementFollower, DecrementFollowing, DecrementFollowingList };

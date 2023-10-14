@@ -1,21 +1,19 @@
 "use client";
 import React from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { RxCross1} from "react-icons/rx";
+import { RxCross1 } from "react-icons/rx";
 import { AiFillMail } from "react-icons/ai";
 import { BiHomeAlt } from "react-icons/bi";
 import Image from "next/image";
 import {
   GetAllProjectsDataUnderProfile,
-  GetProjectThumbnailurl,
-  GetProjectDescription,
-  GetProjectTitle,
   GetUserName,
   GetUserPhotoUrl,
   GetFollower,
   GetFollowing,
+  GetFollowingList,
 } from "../../utils/GetData.js";
-import { convertEmailToDomain } from "../../utils/UpdateData";
+import { convertEmailToDomain, IncrementFollower, IncrementFollowing, DecrementFollower, DecrementFollowing, IncrementFollowingList, DecrementFollowingList } from "../../utils/UpdateData";
 import { UserAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -32,6 +30,55 @@ export default function Page({ params }) {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  const handleFollow = () => {
+  if (isFollowing) {
+    // Unfollow
+    setIsFollowing(false);
+    DecrementFollowing(convertEmailToDomain(user.email));
+    DecrementFollower(profileID)
+      .then(() => {
+        setFollowers((prevFollowers) => prevFollowers - 1);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    DecrementFollowingList(convertEmailToDomain(user.email), profileID);
+  } else {
+    // Follow
+    setIsFollowing(true);
+    IncrementFollowing(convertEmailToDomain(user.email));
+    IncrementFollower(profileID)
+      .then(() => {
+        setFollowers((prevFollowers) => prevFollowers + 1);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    IncrementFollowingList(convertEmailToDomain(user.email), profileID);
+  }
+};
+
+  useEffect(() => {
+    // Function to get the list of users you are following
+    const getFollowingList = async () => {
+      try {
+        const followingList = await GetFollowingList(convertEmailToDomain(user.email));
+        const followingListArray = followingList.split(",");
+        if (followingListArray.includes(profileID)) {
+          setIsFollowing(true);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getFollowingList(); // Call the function on page load
+  }, []);
+
   const handleSignOut = async () => {
     try {
       await logOut();
@@ -113,7 +160,7 @@ export default function Page({ params }) {
   console.log(project);
 
   return (
-    <div className="h-full w-full bg-[#0b1539]">
+    <div className="h-screen w-full bg-[#0b1539]">
       <div className="flex  justify-between py-3 bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black" style={{ zIndex: 50 }}>
         <div className="text-white flex gap-10 text-xl place-items-center ps-10">
           <button onClick={toggleDropdown}>
@@ -158,8 +205,8 @@ export default function Page({ params }) {
               {Following}
             </div>
           </div>
-          <div className="w-fit p-1 bg-lime-500 rounded-full mx-auto">
-            <span className="px-3">follow</span>
+          <div className="w-fit p-1 bg-lime-500 rounded-full mx-auto" onClick={handleFollow} style={{ cursor: "pointer" }}>
+            <span className="px-3">{isFollowing ? "Unfollow" : "Follow"}</span>
           </div>
         </div>
         <div className="flex justify-between gap-4 text-white p-4 pe-10 place-items-center">
@@ -178,20 +225,42 @@ export default function Page({ params }) {
           </Link>
         </div>
       </div>
-      <div className="px-20 mt-8">
-        <div className="w-full overflow-hidden h-[50rem] bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl pt-5">
-          <span className="ms-8 text-3xl font-bold text-white py-10">
-           {ProfileName} Project Library
+      <div className="px-20 pt-8">
+        <div className="w-full overflow-hidden h-[75vh] bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl pt-5">
+          <span className="ms-8 text-3xl font-bold text-white">
+            {ProfileName} Project Library
           </span>
-          <section>
+          <div className="h-[60vh] w-fit px-10 overflow-y-auto custom-scrollbar mt-5">
+            <style jsx>
+              {`
+    /* Style for custom scrollbar */
+    .custom-scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color: #d1d1de transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #d1d1de;
+      border-radius: 5px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  `}
+            </style>
             {project.map((item, index) => {
               const truncatedDescription = item.description.slice(0, 100);
               return (
                 <div
                   key={index}
-                  className="flex flex-row w-full gap-8 items-center m-auto py-8 px-10 hover:scale-105 transform transition duration-150"
+                  className="flex flex-row w-full items-center m-auto py-1 px-5 hover:scale-105 transform transition duration-150"
                 >
-                  <Link href={`/project/${item.owner}_${index}`} className="flex flex-row w-full gap-8 items-center m-auto py-8 px-10 hover:scale-105 transform transition duration-150">
+                  <Link href={`/project/${item.owner}_${index}`} className="flex flex-row w-full gap-8 items-center m-auto py-2 px-10 hover:scale-105 transform transition duration-150">
                     <div className="flex justify-between place-items-center w-full bg-white h-auto rounded-xl">
                       <div className="flex flex-col">
                         <span className="ms-5 text-2xl font-bold">
@@ -213,7 +282,7 @@ export default function Page({ params }) {
                 </div>
               );
             })}
-          </section>
+          </div>
         </div>
       </div>
     </div>

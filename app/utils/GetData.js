@@ -169,6 +169,21 @@ async function GetFollower(userEmailId) {
     throw error; // Throw the error
   }
 }
+async function GetFollowerList(userEmailId) {
+  try {
+    const dbRef = ref(database);
+    const snapshot = await get(child(dbRef, "users/" + userEmailId + "/FollowerList"));
+
+    if (snapshot.exists()) {
+      const Follower = snapshot.val();
+      return Follower; // Return the data
+    } else {
+      throw new Error("No data available");
+    }
+  } catch (error) {
+    throw error; // Throw the error
+  }
+}
 
 async function GetFollowing(userEmailId) {
   try {
@@ -185,11 +200,26 @@ async function GetFollowing(userEmailId) {
     throw error; // Throw the error
   }
 }
+async function GetFollowingList(userEmailId) {
+  try {
+    const dbRef = ref(database);
+    const snapshot = await get(child(dbRef, "users/" + userEmailId + "/FollowingList"));
+
+    if (snapshot.exists()) {
+      const Following = snapshot.val();
+      return Following; // Return the data
+    } else {
+      return "";
+    }
+  } catch (error) {
+    throw error; // Throw the error
+  }
+}
 
 export {
   GetProjectData,
   GetAllProjectData,
   GetAllProjectsDataUnderProfile,
   GetUserName,
-  GetUserPhotoUrl,GetFollower,GetFollowing,GetProjectThumbnailUrl,GetProjectTitle,GetProjectDescription
+  GetUserPhotoUrl,GetFollower,GetFollowing,GetFollowingList,GetFollowerList,GetProjectThumbnailUrl,GetProjectTitle,GetProjectDescription
 };

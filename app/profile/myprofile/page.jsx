@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 const page = () => {
-  const { user,logOut} = UserAuth();
+  const { user, logOut } = UserAuth();
   const [userDp, setUserDp] = useState("");
   const [UserName, setUserName] = useState("");
   const [Followers, setFollowers] = useState(0);
@@ -99,7 +99,7 @@ const page = () => {
   }, [Followers, Following]);
   console.log(project);
   return (
-    <div className="h-full w-full bg-[#0b1539]">
+    <div className="h-screen w-full bg-[#0b1539]">
       <div className="flex  justify-between py-3 bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black" style={{ zIndex: 50 }}>
         <div className="text-white flex gap-8 text-xl place-items-center ps-10">
           <button onClick={toggleDropdown}>
@@ -115,9 +115,9 @@ const page = () => {
                   Add New Project
                 </Link>
                 <Link href="../">
-                <button onClick={handleSignOut} className="block px-4 py-2 text-black" role="menuitem">
-                  Sign Out
-                </button>
+                  <button onClick={handleSignOut} className="block px-4 py-2 text-black" role="menuitem">
+                    Sign Out
+                  </button>
                 </Link>
                 <Link href="" className="block px-4 py-2 text-black" role="menuitem">
                   About Us
@@ -143,24 +143,47 @@ const page = () => {
           </div>
         </div>
         <div className="flex justify-between gap-4 text-white p-4 pe-10 place-items-center">
-        <Link href="../message"><AiFillMail size={30} /></Link>
+          <Link href="../message"><AiFillMail size={30} /></Link>
           <Link href="/">
             <BiHomeAlt size={30} />
           </Link>
         </div>
       </div>
-      <div className="px-20 mt-8">
-        <div className="w-full overflow-hidden h-[50rem] bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl pt-5">
-          <span className="ms-8 text-3xl font-bold text-white mb-5">
+      <div className="px-20 pt-8">
+        <div className="w-full overflow-hidden h-[75vh] bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl pt-5">
+          <span className="ms-8 text-3xl font-bold text-white">
             Your Project Library
           </span>
-          <section>
+          <div className="h-[60vh] w-fit px-10 overflow-y-auto custom-scrollbar mt-5">
+            <style jsx>
+              {`
+    /* Style for custom scrollbar */
+    .custom-scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color: #d1d1de transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #d1d1de;
+      border-radius: 5px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  `}
+            </style>
+
             {project.map((item, index) => {
               const truncatedDescription = item.description.slice(0, 100);
               return (
                 <div
                   key={index}
-                  className="flex flex-row w-full gap-8 items-center m-auto py-1 px-10 hover:scale-105 transform transition duration-150"
+                  className="flex flex-row w-full items-center m-auto px-5 py-1 hover:scale-105 transform transition duration-150"
                 >
                   <Link href={`/project/${item.owner}_${index}`} className="flex flex-row w-full gap-8 items-center m-auto py-2 px-10 hover:scale-105 transform transition duration-150">
                     <div className="flex justify-between place-items-center w-full bg-white h-auto rounded-xl">
@@ -184,7 +207,7 @@ const page = () => {
                 </div>
               );
             })}
-          </section>
+          </div>
         </div>
       </div>
     </div>

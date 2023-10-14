@@ -5,7 +5,6 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { GrAddCircle } from "react-icons/gr";
 import { RxCross1 } from "react-icons/rx";
 import { Oval } from 'react-loader-spinner';
-import { AiFillMail } from "react-icons/ai";
 import { BiHomeAlt } from "react-icons/bi";
 import { ref, uploadBytes } from 'firebase/storage';
 import Image from "next/image";
@@ -73,7 +72,7 @@ const page = () => {
       if (thumbnailurl) {
         await UploadProject(convertEmailToDomain(user.email), projectTitle, objectives, description, category, thumbnailurl, hashtags, techAndLang, demonstrationLink);
       }
-      
+
       // Reset all fields to their default values
       setProjectTitle('');
       setCategory('Select Category');
@@ -389,9 +388,9 @@ const page = () => {
                   <Oval
                     height={80}
                     width={80}
-                    color="#4fa94d"
+                    color="#0b1539"
                     ariaLabel='oval-loading'
-                    secondaryColor="#4fa94d"
+                    secondaryColor="#777bf2"
                     strokeWidth={2}
                     strokeWidthSecondary={2}
                   />
