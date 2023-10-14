@@ -37,7 +37,7 @@ const page = () => {
      signUpWithEmailAndPassword(email, password);
     // After successful signup, update the user's profile
       UploadUserData(convertEmailToDomain(email), userName, "https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png");
-      createUser(userName,email,email,userName);
+      createUser(userName,email.toLowerCase(),email,userName);
   } catch (error) {
     if (error == "auth/invalid-login-credentials") {
       console.log("Invalid Creds");

@@ -33,6 +33,9 @@ const Message = () => {
 			console.log(error);
 		}
 	};
+
+	const [isUsernameLoaded, setIsUsernameLoaded] = useState(false);
+
 	useEffect(() => {
 		// Fetch owner's name asynchronously and update state
 		if (user) {
@@ -53,6 +56,7 @@ const Message = () => {
 			GetUserName(convertEmailToDomain(user.email))
 				.then((name) => {
 					setUserName(name);
+					setIsUsernameLoaded(true);
 				})
 				.catch((error) => {
 					// Handle errors if needed
@@ -118,6 +122,7 @@ const Message = () => {
 			</div>
 		);
 	}
+	console.log(UserName);
 
 	return (
 		<div className="h-fit w-full bg-[#0b1539]">
@@ -177,13 +182,17 @@ const Message = () => {
 					<div className="ms-8 mb-5 text-3xl font-bold text-white">
 						Messages
 					</div>
-					<ChatEngine
-						height='73.3vh'
-						userName={user?.displayName}
-						userSecret={user?.email}
-						projectID='ae8bcf07-cc70-40a3-9a12-3e70be74c505'
-						renderNewChatForm={(creds) => renderChatForm(creds)}
-					/>
+					{isUsernameLoaded ? (
+						<ChatEngine
+							height='73.3vh'
+							userName={UserName}
+							userSecret={user.email}
+							projectID='ae8bcf07-cc70-40a3-9a12-3e70be74c505'
+							renderNewChatForm={(creds) => renderChatForm(creds)}
+						/>
+					) : (
+						<p>Loading...</p>
+					)}
 				</div>
 			</div>
 		</div>
