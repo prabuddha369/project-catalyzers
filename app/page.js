@@ -38,6 +38,33 @@ export default function Home() {
     });
   }, []);
 
+
+  const [searchInput, setSearchInput] = useState(''); // State for search input
+
+  useEffect(() => {
+    GetAllProjectData().then((data) => {
+      setProjects([...data]);
+    });
+  }, []);
+
+  // Filter projects based on the search input
+  const filteredProjects = projects.filter((project) => {
+    // If the search input is empty, don't filter
+    if (searchInput.trim() === '') {
+      return true;
+    }
+
+    const searchTerm = searchInput.toLowerCase();
+
+    // Check if the title, hashtags, category, or tech language contains the search term
+    return (
+      project.title.toLowerCase().includes(searchTerm) ||
+      project.Hastags.toLowerCase().includes(searchTerm) ||
+      project.Category.toLowerCase().includes(searchTerm) ||
+      project.TechLang.toLowerCase().includes(searchTerm)
+    );
+  });
+
   useEffect(() => {
     if (user) {
       GetUserName(convertEmailToDomain(user.email)).then((name) => {
@@ -49,6 +76,7 @@ export default function Home() {
     }
   }, [user]);
   console.log(user);
+  console.log(projects);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -113,7 +141,8 @@ export default function Home() {
                   nurture Innovation through collaborative learning.
                 </p>
               </div>
-              <Image alt="Logo" src={pcat} width={120} />
+              <Image alt="Logo" src={pcat} width={120} onClick={() => window.location.reload()}
+                style={{ cursor: 'pointer' }} />
             </div>
           </div>
           <div className="p-10 flex justify-between ">
@@ -124,6 +153,8 @@ export default function Home() {
                 type="text"
                 className="mx-auto bg-transparent border-none outline-none text-white placeholder-white"
                 placeholder="Search"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
               />
             </div>
           </div>
@@ -157,6 +188,8 @@ export default function Home() {
               <Image
                 alt="logo"
                 src={pcat}
+                onClick={() => window.location.reload()}
+                style={{ cursor: 'pointer' }}
                 width={120}
                 height={50}
                 blurDataURL="URL"
@@ -168,9 +201,11 @@ export default function Home() {
             <div className="bg-[#9f74ac] w-1/4 rounded-xl h-fit p-2 flex items-center">
               <AiOutlineFileSearch size={20} />
               <input
-                type="text"
-                className="mx-auto bg-transparent border-none outline-none text-white placeholder-white"
-                placeholder="Search"
+               type="text"
+               className="mx-auto bg-transparent border-none outline-none text-white placeholder-white"
+               placeholder="Search"
+               value={searchInput}
+               onChange={(e) => setSearchInput(e.target.value)}
               />
             </div>
           </div>
@@ -199,7 +234,7 @@ export default function Home() {
     }
   `}
         </style>
-        <Projects projects={projects} />
+        <Projects projects={filteredProjects} />
       </div>
     </main>
   );

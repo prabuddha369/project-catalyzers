@@ -78,6 +78,9 @@ function GetAllProjectData() {
               const projectInfo = {
                 projectID: projectId,
                 Owner: project.owner,
+                Category: project.category,
+                Hastags:project.hashtags,
+                TechLang:project.techlang,
                 title: project.title,
                 thumbnailUrl: project.thumbnailurl,
               };
