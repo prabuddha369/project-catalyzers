@@ -158,7 +158,7 @@ export default function Page({ params }) {
             />
           </Link>
 
-          <AiFillMail size={30} />
+          <Link href="../../message"><AiFillMail size={30} /></Link>
           <Link href="/">
             <BiHomeAlt size={30} />
           </Link>

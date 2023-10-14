@@ -1,6 +1,6 @@
 import { database } from "../firebase";
 import { getDatabase, ref, set, child, get, update } from "firebase/database";
-import {GetFollower,GetFollowing} from "./GetData"
+import { GetFollower, GetFollowing } from "./GetData"
 
 async function UploadProject(
   userEmailId,
@@ -91,14 +91,14 @@ async function createProjectId(userEmailId) {
 
 function IncrementFollower(userEmailId) {
   const userRef = ref(database, "users/" + userEmailId);
-  const follower=GetFollower(userEmailId)+1;
+  const follower = GetFollower(userEmailId) + 1;
   set(userRef, {
     Follower: follower
   });
 }
 function DecrementFollower(userEmailId) {
   const userRef = ref(database, "users/" + userEmailId);
-  const follower=GetFollower(userEmailId)-1;
+  const follower = GetFollower(userEmailId) - 1;
   set(userRef, {
     Follower: follower
   });
@@ -106,14 +106,14 @@ function DecrementFollower(userEmailId) {
 
 function IncrementFollowing(userEmailId) {
   const userRef = ref(database, "users/" + userEmailId);
-  const follower=GetFollowing(userEmailId)+1;
+  const follower = GetFollowing(userEmailId) + 1;
   set(userRef, {
     Following: 0
   });
 }
 function DecrementFollowing(userEmailId) {
   const userRef = ref(database, "users/" + userEmailId);
-  const follower=GetFollowing(userEmailId)-1;
+  const follower = GetFollowing(userEmailId) - 1;
   set(userRef, {
     Following: 0
   });
@@ -146,9 +146,39 @@ function UploadUserData(userEmailId, name, dpurl) {
 
 //UploadUserData calling
 function convertEmailToDomain(email) {
-  const sanitizedEmail = email.replace(/[.@]/g, '_');
+  const sanitizedEmail = email.replace(/[.@]/g, '_').toLowerCase();
   return sanitizedEmail;
 }
 
+const axios = require('axios');
+function createUser(username, secret, email, first_name) {
+  const data = {
+    "username": username,
+    "secret": secret,
+    "email": email,
+    "first_name": first_name,
+  };
 
-export { UploadProject, UploadUserData,convertEmailToDomain,createProjectId};
+  const config = {
+    method: 'post',
+    url: 'https://api.chatengine.io/users/',
+    headers: {
+      'PRIVATE-KEY': '{{b1bd2c53-25cc-4529-b64e-838512f38766}}'
+    },
+    data: data
+  };
+
+  axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}
+
+// Usage example:
+// createUser("bob_baker", "secret-123-jBj02", "b_baker@mail.com", "Bob", "Baker");
+
+
+export { UploadProject, UploadUserData, convertEmailToDomain, createProjectId,createUser };

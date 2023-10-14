@@ -278,7 +278,6 @@ const page = () => {
           <Link href="../profile/myprofile">
             <Image src={userDp} alt="Current User Photo" height={40} width={40} className="rounded-full" />
           </Link>
-          <AiFillMail size={30} />
           <Link href="/">
             <BiHomeAlt size={30} />
           </Link>

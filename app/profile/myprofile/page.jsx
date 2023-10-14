@@ -143,7 +143,7 @@ const page = () => {
           </div>
         </div>
         <div className="flex justify-between gap-4 text-white p-4 pe-10 place-items-center">
-          <AiFillMail size={30} />
+        <Link href="../message"><AiFillMail size={30} /></Link>
           <Link href="/">
             <BiHomeAlt size={30} />
           </Link>

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { BsGithub } from "react-icons/bs";
-import { UploadUserData, convertEmailToDomain } from "../utils/UpdateData"
+import { UploadUserData, convertEmailToDomain,createUser } from "../utils/UpdateData"
 import { UserAuth } from "../context/AuthContext";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -46,7 +46,10 @@ const page = () => {
 
   if (user)
   {
-    if(flg){UploadUserData(convertEmailToDomain(user.email), user.displayName, user.photoURL);}
+    if(flg){
+      UploadUserData(convertEmailToDomain(user.email), user.displayName, user.photoURL);
+      createUser(user.displayName,user.email, user.email, user.displayName);
+    }
     redirect("/");
   }
 

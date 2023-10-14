@@ -172,7 +172,7 @@ export default function Page({ params }) {
               className="rounded-full cursor-pointer"
             />
           </Link>
-          <AiFillMail size={30} />
+          <Link href="../../message"><AiFillMail size={30} /></Link>
           <Link href="/">
             <BiHomeAlt size={30} />
           </Link>
