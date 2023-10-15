@@ -107,7 +107,7 @@ const StyledTreeItem = React.forwardRef(function StyledTreeItem(props, ref) {
 });
 
 const FolderTreeView = ({ storageRef }) => {
-    const [folderdata, setFolderData] = useState({});
+    const [folderdata, setFolderData] = useState(null);
     const [expandedItems, setExpandedItems] = useState([]);
     const [fileContent, setFileContent] = useState("");
     const [langDetect, setLangDetect] = useState('html');
@@ -131,6 +131,10 @@ const FolderTreeView = ({ storageRef }) => {
         }
     };
 
+    if (folderdata === null) {
+        return <div>Loading...</div>;
+    }
+    
     const renderTree = (nodes) => (
         <div>
             <StyledTreeItem
