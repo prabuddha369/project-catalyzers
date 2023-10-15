@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+"use client";
+import * as React from 'react';
 import { storage } from '../firebase';
 import {
     ref,
@@ -6,6 +7,12 @@ import {
     getMetadata,
     getDownloadURL,
 } from 'firebase/storage';
+import { useState, useEffect, useRef } from "react";
+import { styled, useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import FolderIcon from '@mui/icons-material/Folder';
+import FileIcon from '@mui/icons-material/InsertDriveFile';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-c.min.js';
 import 'prismjs/components/prism-cpp.min.js';
@@ -13,125 +20,164 @@ import 'prismjs/components/prism-java.min.js';
 import 'prismjs/components/prism-javascript.min.js';
 import 'prismjs/components/prism-python.min.js';
 import 'prismjs/themes/prism.css';
-import 'font-awesome/css/font-awesome.min.css';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import { generateFolderData, getCodeContent } from '../utils/GetData'
+import { TreeView } from '@mui/x-tree-view/TreeView';
+import { TreeItem, treeItemClasses } from '@mui/x-tree-view/TreeItem';
+// const folderdata = await generateFolderData(storageRef);
+// console.log(folderdata);
 
-const Hierarchy = ({ storagePath }) => {
-    const [hierarchy, setHierarchy] = useState(null);
+const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
+    color: theme.palette.text.secondary,
+    [`& .${treeItemClasses.content}`]: {
+        color: theme.palette.text.secondary,
+        borderTopRightRadius: theme.spacing(2),
+        borderBottomRightRadius: theme.spacing(2),
+        paddingRight: theme.spacing(1),
+        fontWeight: theme.typography.fontWeightMedium,
+        '&.Mui-expanded': {
+            fontWeight: theme.typography.fontWeightRegular,
+        },
+        '&:hover': {
+            backgroundColor: theme.palette.action.hover,
+        },
+        '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
+            backgroundColor: `var(--tree-view-bg-color, ${theme.palette.action.selected})`,
+            color: 'var(--tree-view-color)',
+        },
+        [`& .${treeItemClasses.label}`]: {
+            fontWeight: 'inherit',
+            color: 'inherit',
+        },
+    },
+    [`& .${treeItemClasses.group}`]: {
+        marginLeft: 0,
+        [`& .${treeItemClasses.content}`]: {
+            paddingLeft: theme.spacing(2),
+        },
+    },
+}));
 
-    const handleItemClick = (event) => {
-        // Handle item click if needed
+const StyledTreeItem = React.forwardRef(function StyledTreeItem(props, ref) {
+    const theme = useTheme();
+    const {
+        bgColor,
+        color,
+        labelIcon: LabelIcon,
+        labelInfo,
+        labelText,
+        colorForDarkMode,
+        bgColorForDarkMode,
+        ...other
+    } = props;
+
+    const styleProps = {
+        '--tree-view-color': theme.palette.mode !== 'dark' ? color : colorForDarkMode,
+        '--tree-view-bg-color':
+            theme.palette.mode !== 'dark' ? bgColor : bgColorForDarkMode,
     };
 
-    const displayFilesAndFolders = async (storagePath, parentElement = hierarchy) => {
-        const storageRef = ref(storage, storagePath);
 
-        try {
-            const listResult = await listAll(storageRef);
-
-            const folderList = (
-                <div>
-                    {listResult.prefixes.map((folder) => (
-                        <div key={folder.name}>
-                            <span>{folder.name}</span>
-                            {displayFilesAndFolders(folder.fullPath)}
-                        </div>
-                    ))}
-                </div>
-            );
-
-            const fileItems = await Promise.all(
-                listResult.items.map(async (item) => {
-                    const metadata = await getMetadata(ref(storage, item.fullPath));
-
-                    let newName = item.name;
-                    if (item.name.endsWith('.txt') && metadata.customMetadata.extension) {
-                        newName = item.name.replace('.txt', metadata.customMetadata.extension);
-                    }
-
-                    let langdetect = '';
-
-                    if (metadata.customMetadata.extension === '.c') {
-                        langdetect = 'language-c';
-                        console.log(langdetect);
-                    } else if (metadata.customMetadata.extension === '.cpp') {
-                        langdetect = 'language-cpp';
-                    } else if (metadata.customMetadata.extension === '.py') {
-                        langdetect = 'language-python';
-                    } else if (metadata.customMetadata.extension === '.java') {
-                        langdetect = 'language-java';
-                    } else if (metadata.customMetadata.extension === '.js') {
-                        langdetect = 'language-javascript';
-                    } else if (metadata.customMetadata.extension === '.css') {
-                        langdetect = 'language-css';
-                    } else if (metadata.customMetadata.extension === '.html') {
-                        langdetect = 'language-html';
-                    }
-
-                    const downloadURL = await getDownloadURL(item);
-                    const response = await fetch(downloadURL);
-                    const codeContent = await response.text();
-
-                    return (
-                        <div key={item.name}>
-                            <a href={downloadURL} target="_blank" rel="noopener noreferrer ">
-                                {newName}
-                            </a>
-                            <pre className={`${langdetect}`}>
-                                <code>{codeContent}</code>
-                            </pre>
-                        </div>
-                    );
-                })
-            );
-
-            const hierarchyElement = (
-                <div>
-                    {folderList}
-                    {fileItems}
-                </div>
-            );
-
-            if (parentElement) {
-                // Do not manipulate the DOM directly
-                // Instead, update the state using setHierarchy
-                setHierarchy(hierarchyElement);
-            } else {
-                // If parentElement is not provided, assume it's the top-level hierarchy
-                setHierarchy(hierarchyElement);
+    return (
+        <StyledTreeItemRoot
+            label={
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        p: 0.5,
+                        pr: 0,
+                    }}
+                >
+                    <Box component={LabelIcon} color="inherit" sx={{ mr: 1 }} />
+                    <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+                        {labelText}
+                    </Typography>
+                    <Typography variant="caption" color="inherit">
+                        {labelInfo}
+                    </Typography>
+                </Box>
             }
-        } catch (error) {
-            console.error('Error fetching metadata:', error);
+            style={styleProps}
+            {...other}
+            ref={ref}
+        />
+    );
+});
+
+const FolderTreeView = ({ storageRef }) => {
+    const [folderdata, setFolderData] = useState({});
+    const [expandedItems, setExpandedItems] = useState([]);
+    const [fileContent, setFileContent] = useState("");
+    const [langDetect, setLangDetect] = useState('html');
+
+    useEffect(() => {
+            console.log(storageRef);
+            generateFolderData(storageRef, false).then((data) => {
+                console.log(data);
+                setFolderData(data);
+            });
+    }, []);
+
+
+    const handleItemClick = (nodeId) => {
+        if (expandedItems.includes(nodeId)) {
+            setFileContent("");
+            setExpandedItems(expandedItems.filter((item) => item !== nodeId));
+        } else {
+            setExpandedItems([...expandedItems, nodeId]);
         }
     };
 
-    useEffect(() => {
-        const hierarchyElement = document.getElementById('hierarchy');
-        hierarchyElement.addEventListener('click', handleItemClick);
-
-        displayFilesAndFolders(storagePath);
-
-        // Cleanup function or any other logic
-        return () => {
-            hierarchyElement.removeEventListener('click', handleItemClick);
-        };
-    }, [storagePath]);
-
-    useEffect(() => {
-        Prism.highlightAll();
-    }, [hierarchy]);
+    const renderTree = (nodes) => (
+        <div>
+            <StyledTreeItem
+                nodeId={nodes.id}
+                labelText={nodes.label}
+                labelIcon={nodes.type === 'folder' ? FolderIcon : FileIcon}
+                onClick={async () => {
+                    if (nodes.type === 'file') {
+                        // Fetch and display codeContent for the file
+                        try {
+                            const result = await getCodeContent(nodes.id);
+                            const { langdetect, codeContent } = result;
+                            setFileContent(codeContent);
+                            setLangDetect(langdetect);
+                        } catch (error) {
+                            // Handle errors, e.g., network request failed
+                            console.error("Error fetching file content:", error);
+                        }
+                    }
+                    else {
+                        handleItemClick(nodes.id);
+                    }
+                }}
+            >
+                {Array.isArray(nodes.children)
+                    ? nodes.children.map((node) => renderTree(node))
+                    : null}
+            </StyledTreeItem>
+        </div>
+    );
 
     return (
-        <div id="hierarchy" className="overflow-y-auto max-h-[200px]">
-            <style>
-                {`
-      .overflow-y-auto::-webkit-scrollbar {
-         width: 0;
-                                    }
-    `}
-            </style>
-            {hierarchy}
-        </div>
+        <TreeView
+            aria-label="folder"
+            defaultCollapseIcon={<ArrowDropDownIcon />}
+            defaultExpandIcon={<ArrowRightIcon />}
+            defaultEndIcon={<div style={{ width: 24 }} />}
+            expanded={expandedItems}
+        >
+            <div className='flex '>
+                {renderTree(folderdata)}
+                <div className="h-[30vh]" style={{ marginLeft: 20 }}>
+                    <p className='pb-[5px]'>File Content</p>
+                    <pre style={{ border: '1px solid black' }} className='h-[30vh] w-[60vh] ps-[5px] overflow-y-auto' dangerouslySetInnerHTML={{ __html: Prism.highlight(fileContent, Prism.languages[langDetect], langDetect) }} />
+                </div>
+            </div>
+        </TreeView>
     );
 };
 
-export default Hierarchy;
+export default FolderTreeView;

@@ -2,10 +2,12 @@
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiFillMail } from "react-icons/ai";
 import { RxCross1 } from "react-icons/rx";
+import { storage } from '../../firebase';
+import { ref } from 'firebase/storage';
 import { BiHomeAlt, BiLike, BiSolidLike } from "react-icons/bi";
 import { FaRoad } from "react-icons/fa";
 import Image from "next/image";
-import Hierarchy from "../../hierarchy/hierarchy";
+import FolderTreeView from "../../hierarchy/hierarchy";
 import {
   GetProjectData,
   GetUserName,
@@ -92,7 +94,7 @@ export default function Page({ params }) {
     }
   }, [user]);
 
-  const customStoragePath = projectID + "/";
+  const customStoragePath = ref(storage,projectID + "/");
   //console.log(project[0]?.yturl);
   //console.log(OwnerName);
   //console.log(project);
@@ -264,9 +266,8 @@ export default function Page({ params }) {
                                                       }
                       `}
                   </style>
-                  <Hierarchy
-                    className="text-white"
-                    storagePath={customStoragePath}
+                  <FolderTreeView
+                    storageRef={customStoragePath}
                   />
                 </div>
               </div>

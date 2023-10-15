@@ -1,5 +1,12 @@
 import { database } from "../firebase";
 import { ref, child, get } from "firebase/database";
+import { storage } from '../firebase';
+import { ref as sRef } from 'firebase/storage';
+import{
+  listAll,
+  getMetadata,
+  getDownloadURL,
+} from 'firebase/storage';
 
 async function GetProjectData(projectId) {
   const dbRef = ref(database);
@@ -79,8 +86,8 @@ function GetAllProjectData() {
                 projectID: projectId,
                 Owner: project.owner,
                 Category: project.category,
-                Hastags:project.hashtags,
-                TechLang:project.techlang,
+                Hastags: project.hashtags,
+                TechLang: project.techlang,
                 title: project.title,
                 thumbnailUrl: project.thumbnailurl,
               };
@@ -216,10 +223,81 @@ async function GetFollowingList(userEmailId) {
   }
 }
 
+let flg = false;
+
+async function generateFolderData(storageRef, flg) {
+  const listResult = await listAll(storageRef);
+  console.log(listResult);
+  let data = {
+    id: storageRef.fullPath,
+    label: 'Project Folder',
+    type: 'folder',
+    children: [],
+  }
+  if (flg) {
+    data = {
+      id: storageRef.fullPath,
+      label: storageRef.name,
+      type: 'folder',
+      children: [],
+    };
+  }
+
+  // Recursively generate folder data for all subfolders
+  for (const folderRef of listResult.prefixes) {
+    const subFolderData = await generateFolderData(folderRef, true);
+    data.children.push(subFolderData);
+  }
+
+  // Add file data to the data object
+  for (const itemRef of listResult.items) {
+    const metadata = await getMetadata(sRef(storage, itemRef.fullPath));
+    let newName = itemRef.name;
+    if (itemRef.name.endsWith('.txt') && metadata.customMetadata.extension) {
+      newName = itemRef.name.replace('.txt', metadata.customMetadata.extension);
+    }
+    data.children.push({
+      id: itemRef.fullPath,
+      label: newName,
+      type: 'file',
+    });
+  }
+
+  return data;
+}
+async function getCodeContent(itemPath) {
+  const metadata = await getMetadata(sRef(storage, itemPath));
+  let langdetect = '';
+
+  if (metadata.customMetadata.extension === '.c') {
+    langdetect = 'c';
+  } else if (metadata.customMetadata.extension === '.cpp') {
+    langdetect = 'cpp';
+  } else if (metadata.customMetadata.extension === '.py') {
+    langdetect = 'python';
+  } else if (metadata.customMetadata.extension === '.java') {
+    langdetect = 'java';
+  } else if (metadata.customMetadata.extension === '.js') {
+    langdetect = 'javascript';
+  } else if (metadata.customMetadata.extension === '.css') {
+    langdetect = 'css';
+  } else if (metadata.customMetadata.extension === '.html') {
+    langdetect = 'html';
+  }
+
+  const downloadURL = await getDownloadURL(sRef(storage, itemPath));
+  const response = await fetch(downloadURL);
+  const codeContent = await response.text();
+
+  return { langdetect, codeContent };
+}
+
+
+
 export {
   GetProjectData,
   GetAllProjectData,
   GetAllProjectsDataUnderProfile,
-  GetUserName,
-  GetUserPhotoUrl,GetFollower,GetFollowing,GetFollowingList,GetFollowerList,GetProjectThumbnailUrl,GetProjectTitle,GetProjectDescription
+  GetUserName, generateFolderData,getCodeContent,
+  GetUserPhotoUrl, GetFollower, GetFollowing, GetFollowingList, GetFollowerList, GetProjectThumbnailUrl, GetProjectTitle, GetProjectDescription
 };
