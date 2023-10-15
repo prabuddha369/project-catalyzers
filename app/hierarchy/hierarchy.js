@@ -111,13 +111,14 @@ const FolderTreeView = ({ storageRef }) => {
     const [expandedItems, setExpandedItems] = useState([]);
     const [fileContent, setFileContent] = useState("");
     const [langDetect, setLangDetect] = useState('html');
+    const [flg, setFlg] = useState(true);
 
     useEffect(() => {
-            console.log(storageRef);
-            generateFolderData(storageRef, false).then((data) => {
-                console.log(data);
-                setFolderData(data);
-            });
+        console.log(storageRef);
+        generateFolderData(storageRef, false).then((data) => {
+            console.log(data);
+            setFolderData(data);
+        });
     }, []);
 
 
@@ -138,6 +139,7 @@ const FolderTreeView = ({ storageRef }) => {
                 labelIcon={nodes.type === 'folder' ? FolderIcon : FileIcon}
                 onClick={async () => {
                     if (nodes.type === 'file') {
+                        setFlg(false);
                         // Fetch and display codeContent for the file
                         try {
                             const result = await getCodeContent(nodes.id);
@@ -169,13 +171,12 @@ const FolderTreeView = ({ storageRef }) => {
             defaultEndIcon={<div style={{ width: 24 }} />}
             expanded={expandedItems}
         >
-            <div className='flex '>
-                {renderTree(folderdata)}
-                <div className="h-[30vh]" style={{ marginLeft: 20 }}>
-                    <p className='pb-[5px]'>File Content</p>
-                    <pre style={{ border: '1px solid black' }} className='h-[30vh] w-[60vh] ps-[5px] overflow-y-auto' dangerouslySetInnerHTML={{ __html: Prism.highlight(fileContent, Prism.languages[langDetect], langDetect) }} />
-                </div>
-            </div>
+            {flg ?  renderTree(folderdata)  :
+             <div className="h-[30vh]" style={{ marginLeft: 20 }}>
+               <button onClick={() => setFlg(true)}>Back</button>
+                <p className='pb-[5px]'>File Content</p>
+                <pre style={{ border: '1px solid black' }} className='h-[30vh] w-[60vh] ps-[5px] overflow-y-auto' dangerouslySetInnerHTML={{ __html: Prism.highlight(fileContent, Prism.languages[langDetect], langDetect) }} />
+            </div>}
         </TreeView>
     );
 };
