@@ -2,7 +2,7 @@ import { database } from "../firebase";
 import { ref, child, get } from "firebase/database";
 import { storage } from '../firebase';
 import { ref as sRef } from 'firebase/storage';
-import{
+import {
   listAll,
   getMetadata,
   getDownloadURL,
@@ -227,67 +227,86 @@ let flg = false;
 
 async function generateFolderData(storageRef, flg) {
   const listResult = await listAll(storageRef);
-  console.log(listResult);
+  const dataPromises = [];
+  const items = [];
+
+  for (const folderRef of listResult.prefixes) {
+    dataPromises.push(generateFolderData(folderRef, true));
+  }
+
+  for (const itemRef of listResult.items) {
+    dataPromises.push(handleItem(itemRef));
+  }
+
+  const resolvedData = await Promise.all(dataPromises);
+  resolvedData.forEach((item) => {
+    if (item.type === 'folder') {
+      items.push(item);
+    } else {
+      const metadata = item.metadata;
+      let newName = item.name;
+      if (metadata && metadata.customMetadata) {
+        if (item.name.endsWith('.txt') && metadata.customMetadata.extension) {
+          newName = item.name.replace('.txt', metadata.customMetadata.extension);
+        }
+      }
+      items.push({
+        id: item.id,
+        label: newName,
+        type: 'file',
+      });
+    }
+  });
+
   let data = {
     id: storageRef.fullPath,
-    label: 'Project Folder',
+    label: flg ? storageRef.name : 'Project Folder',
     type: 'folder',
-    children: [],
-  }
-  if (flg) {
-    data = {
-      id: storageRef.fullPath,
-      label: storageRef.name,
-      type: 'folder',
-      children: [],
-    };
-  }
-
-  // Recursively generate folder data for all subfolders
-  for (const folderRef of listResult.prefixes) {
-    const subFolderData = await generateFolderData(folderRef, true);
-    data.children.push(subFolderData);
-  }
-
-  // Add file data to the data object
-  for (const itemRef of listResult.items) {
-    const metadata = await getMetadata(sRef(storage, itemRef.fullPath));
-    let newName = itemRef.name;
-    if (itemRef.name.endsWith('.txt') && metadata.customMetadata.extension) {
-      newName = itemRef.name.replace('.txt', metadata.customMetadata.extension);
-    }
-    data.children.push({
-      id: itemRef.fullPath,
-      label: newName,
-      type: 'file',
-    });
-  }
+    children: items,
+  };
 
   return data;
 }
+
+async function handleItem(itemRef) {
+  const metadata = await getMetadata(sRef(storage, itemRef.fullPath));
+  return { id: itemRef.fullPath, name: itemRef.name, type: 'file', metadata };
+}
+
 async function getCodeContent(itemPath) {
   const metadata = await getMetadata(sRef(storage, itemPath));
   let langdetect = '';
 
-  if (metadata.customMetadata.extension === '.c') {
-    langdetect = 'c';
-  } else if (metadata.customMetadata.extension === '.cpp') {
-    langdetect = 'cpp';
-  } else if (metadata.customMetadata.extension === '.py') {
-    langdetect = 'python';
-  } else if (metadata.customMetadata.extension === '.java') {
-    langdetect = 'java';
-  } else if (metadata.customMetadata.extension === '.js') {
-    langdetect = 'javascript';
-  } else if (metadata.customMetadata.extension === '.css') {
-    langdetect = 'css';
-  } else if (metadata.customMetadata.extension === '.html') {
-    langdetect = 'html';
+  if (metadata.customMetadata && metadata.customMetadata.extension) {
+    if (metadata.customMetadata.extension === '.c') {
+      langdetect = 'c';
+    } else if (metadata.customMetadata.extension === '.cpp') {
+      langdetect = 'cpp';
+    } else if (metadata.customMetadata.extension === '.py') {
+      langdetect = 'python';
+    } else if (metadata.customMetadata.extension === '.java') {
+      langdetect = 'java';
+    } else if (metadata.customMetadata.extension === '.js') {
+      langdetect = 'javascript';
+    } else if (metadata.customMetadata.extension === '.css') {
+      langdetect = 'css';
+    } else if (metadata.customMetadata.extension === '.html') {
+      langdetect = 'html';
+    }
   }
 
   const downloadURL = await getDownloadURL(sRef(storage, itemPath));
   const response = await fetch(downloadURL);
-  const codeContent = await response.text();
+
+  if (!langdetect) {
+    langdetect = 'plaintext';
+  }
+
+  let codeContent = await response.text();
+
+  if (!codeContent) {
+    codeContent = `This File is not viewable. Click [here](${downloadURL}) to download.`;
+  }
 
   return { langdetect, codeContent };
 }
@@ -298,6 +317,6 @@ export {
   GetProjectData,
   GetAllProjectData,
   GetAllProjectsDataUnderProfile,
-  GetUserName, generateFolderData,getCodeContent,
+  GetUserName, generateFolderData, getCodeContent,
   GetUserPhotoUrl, GetFollower, GetFollowing, GetFollowingList, GetFollowerList, GetProjectThumbnailUrl, GetProjectTitle, GetProjectDescription
 };
