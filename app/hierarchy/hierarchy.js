@@ -176,10 +176,10 @@ const FolderTreeView = ({ storageRef }) => {
             expanded={expandedItems}
         >
             {flg ?  renderTree(folderdata)  :
-             <div className="h-[30vh]" style={{ marginLeft: 20 }}>
+             <div className="h-full w-full" style={{ marginLeft: 20 }}>
                <button onClick={() => setFlg(true)}>Back</button>
                 <p className='pb-[5px]'>File Content</p>
-                <pre style={{ border: '1px solid black' }} className='h-[30vh] w-[60vh] ps-[5px] overflow-y-auto' dangerouslySetInnerHTML={{ __html: Prism.highlight(fileContent, Prism.languages[langDetect], langDetect) }} />
+                <pre style={{ border: '1px solid black' }} className='h-full w-full ps-[5px] pe-[5px] overflow-y-auto' dangerouslySetInnerHTML={{ __html: Prism.highlight(fileContent, Prism.languages[langDetect], langDetect) }} />
             </div>}
         </TreeView>
     );

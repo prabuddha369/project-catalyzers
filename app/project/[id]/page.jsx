@@ -213,7 +213,7 @@ export default function Page({ params }) {
             </div>
             <div className="w-1/2">
               <iframe
-                className="h-[373px] w-[660px]"
+                className="h-[50.7%] w-full pe-[25px]"
                 src={`https://www.youtube.com/embed/${project[0]?.yturl.substring(
                   17
                 )}`}
@@ -236,7 +236,7 @@ export default function Page({ params }) {
                 </div>
                 <div
                   onClick={handleLike}
-                  className="flex cursor-pointer text-white gap-2 justify-between place-items-center ps-[150px] pe-[30px]"
+                  className="flex cursor-pointer text-white gap-2 justify-between place-items-center ms-[18vh] pe-[2vh]"
                 >
                   {liked ? (
                     <BiSolidLike size={30} style={{ color: "lightblue" }} />
@@ -256,9 +256,9 @@ export default function Page({ params }) {
                   </Link>
                 </div>
               </div>
-              <div className="p-4 bg-[#0b1539] me-10 rounded-2xl">
+              <div className="p-4 bg-[#0b1539] rounded-2xl w-[92vh]">
                 <p className="text-2xl text-white pb-4">Folders</p>
-                <div className="ps-5 overflow-y-auto max-h-[550px] w-100%">
+                <div className="ps-5 overflow-y-auto max-h-[40vh] w-full">
                   <style>
                     {`
                         .overflow-y-auto::-webkit-scrollbar {
