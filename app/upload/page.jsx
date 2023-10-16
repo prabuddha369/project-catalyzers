@@ -89,7 +89,7 @@ const page = () => {
   const uploadThumbnail = async () => {
     // Prepare the form data for the ImgBB API request
     const formData = new FormData();
-    formData.append('key', 'd5e6b6b78006c15dfd8229c34e028917'); // Replace with your ImgBB API key
+    formData.append('key', process.env.NEXT_PUBLIC_IMBB_API_KEY); // Replace with your ImgBB API key
     formData.append('image', selectedFileImage[0]);
 
     // Perform the image upload

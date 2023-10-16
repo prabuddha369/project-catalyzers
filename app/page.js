@@ -152,7 +152,7 @@ export default function Home() {
               <input
                 type="text"
                 className="mx-auto bg-transparent border-none outline-none text-white placeholder-white"
-                placeholder="Search"
+                placeholder="Search Projects"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
               />
@@ -203,7 +203,7 @@ export default function Home() {
               <input
                type="text"
                className="mx-auto bg-transparent border-none outline-none text-white placeholder-white"
-               placeholder="Search"
+               placeholder="Search Projects"
                value={searchInput}
                onChange={(e) => setSearchInput(e.target.value)}
               />
