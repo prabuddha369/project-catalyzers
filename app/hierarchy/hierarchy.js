@@ -13,6 +13,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import FolderIcon from '@mui/icons-material/Folder';
 import FileIcon from '@mui/icons-material/InsertDriveFile';
+import { BsBackspace } from 'react-icons/bs'
 import Prism from 'prismjs';
 import 'prismjs/components/prism-c.min.js';
 import 'prismjs/components/prism-cpp.min.js';
@@ -25,6 +26,7 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { generateFolderData, getCodeContent } from '../utils/GetData'
 import { TreeView } from '@mui/x-tree-view/TreeView';
 import { TreeItem, treeItemClasses } from '@mui/x-tree-view/TreeItem';
+import { Backspace } from '@mui/icons-material';
 // const folderdata = await generateFolderData(storageRef);
 // console.log(folderdata);
 
@@ -76,6 +78,10 @@ const StyledTreeItem = React.forwardRef(function StyledTreeItem(props, ref) {
         '--tree-view-color': theme.palette.mode !== 'dark' ? color : colorForDarkMode,
         '--tree-view-bg-color':
             theme.palette.mode !== 'dark' ? bgColor : bgColorForDarkMode,
+    }
+    const customStyles = {
+        color: theme.palette.mode !== 'dark' ? color : colorForDarkMode,
+        fill: '#ea65dd', // Set the folder icon to pink and the file icon to white
     };
 
 
@@ -90,8 +96,8 @@ const StyledTreeItem = React.forwardRef(function StyledTreeItem(props, ref) {
                         pr: 0,
                     }}
                 >
-                    <Box component={LabelIcon} color="inherit" sx={{ mr: 1 }} />
-                    <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+                    <Box component={LabelIcon} color="inherit" sx={{ mr: 1 }} style={customStyles} />
+                    <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1, color: 'white' }}>
                         {labelText}
                     </Typography>
                     <Typography variant="caption" color="inherit">
@@ -134,7 +140,7 @@ const FolderTreeView = ({ storageRef }) => {
     if (folderdata === null) {
         return <div>Loading...</div>;
     }
-    
+
     const renderTree = (nodes) => (
         <div>
             <StyledTreeItem
@@ -175,12 +181,14 @@ const FolderTreeView = ({ storageRef }) => {
             defaultEndIcon={<div style={{ width: 24 }} />}
             expanded={expandedItems}
         >
-            {flg ?  renderTree(folderdata)  :
-             <div className="h-full w-full" style={{ marginLeft: 20 }}>
-               <button onClick={() => setFlg(true)}>Back</button>
-                <p className='pb-[5px]'>File Content</p>
-                <pre style={{ border: '1px solid black' }} className='h-full w-full ps-[5px] pe-[5px] overflow-y-auto' dangerouslySetInnerHTML={{ __html: Prism.highlight(fileContent, Prism.languages[langDetect], langDetect) }} />
-            </div>}
+            {flg ? renderTree(folderdata) :
+                <div className="h-full w-full" style={{ marginLeft: 20 }}>
+                    <div className='flex'>
+                        <button onClick={() => setFlg(true)} className='text-[#ea65dd]'><BsBackspace size={20} /></button>
+                        <p className='ms-[10px] text-white'>File Content</p>
+                    </div>
+                    <pre style={{ border: '1px solid black' }} className='h-full ms-[25px] w-full ps-[5px] pe-[5px] overflow-y-auto text-white' dangerouslySetInnerHTML={{ __html: Prism.highlight(fileContent, Prism.languages[langDetect], langDetect) }} />
+                </div>}
         </TreeView>
     );
 };

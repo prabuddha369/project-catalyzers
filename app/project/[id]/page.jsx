@@ -2,6 +2,8 @@
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiFillMail } from "react-icons/ai";
 import { RxCross1 } from "react-icons/rx";
+import { BsFullscreen } from "react-icons/bs";
+import { BsFullscreenExit } from "react-icons/bs";
 import { storage } from '../../firebase';
 import { ref } from 'firebase/storage';
 import { BiHomeAlt, BiLike, BiSolidLike } from "react-icons/bi";
@@ -15,14 +17,16 @@ import {
 } from "../../utils/GetData.js";
 import { convertEmailToDomain } from "../../utils/UpdateData";
 import { UserAuth } from "../../context/AuthContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 export default function Page({ params }) {
   const { user } = UserAuth();
   const [project, setProject] = useState([]);
+  const topOfScreenRef = useRef(null);
   const [userDp, setUserDp] = useState("");
   const [OwnerName, setOwnerName] = useState("");
   const [ownerdpurl, setOwnerdpurl] = useState("");
+  const [isFullScreen, setIsFullScreen] = useState(false);
   const [liked, setLiked] = useState(false);
   const projectID = params.id;
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -94,7 +98,15 @@ export default function Page({ params }) {
     }
   }, [user]);
 
-  const customStoragePath = ref(storage,projectID + "/");
+  const toggleFullScreen = () => {
+    if (!isFullScreen) {
+      // Scroll to the top of the screen when entering full screen
+      topOfScreenRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+    setIsFullScreen(!isFullScreen);
+  };
+
+  const customStoragePath = ref(storage, projectID + "/");
   //console.log(project[0]?.yturl);
   //console.log(OwnerName);
   //console.log(project);
@@ -102,8 +114,8 @@ export default function Page({ params }) {
   //console.log(userDp);
 
   return (
-    <div className="h-full w-full bg-[#0b1539]">
-      <div className="flex justify-between  bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black">
+    <div ref={topOfScreenRef} className="h-full w-full bg-[#0b1539]">
+      <div className="flex justify-between  bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black" style={{ zIndex: 5 }}>
         <div className="text-white flex gap-8 text-xl place-items-center ps-5">
           <button onClick={toggleDropdown}>
             {isDropdownOpen ? <RxCross1 size={30} /> : <GiHamburgerMenu size={30} />}
@@ -256,19 +268,21 @@ export default function Page({ params }) {
                   </Link>
                 </div>
               </div>
-              <div className="p-4 bg-[#0b1539] rounded-2xl w-[92vh]">
-                <p className="text-2xl text-white pb-4">Folders</p>
-                <div className="ps-5 overflow-y-auto max-h-[40vh] w-full">
+              <div className="p-4 bg-[#0b1539] rounded-2xl" style={{ position: isFullScreen ? 'absolute' : 'static', top: 60, left: 0, right: 0, bottom: 0, zIndex: isFullScreen ? 2 : 0, height: isFullScreen ? '140vh' : 'auto', width: isFullScreen ? 'auto' : '96%' }}>
+                <div className="flex justify-between">
+                  <p className="text-2xl text-white pb-4" style={{ paddingTop: isFullScreen ? 10 : 0 }}>Folders</p>
+                  <button onClick={toggleFullScreen} className="pe-5 text-white">
+                    {isFullScreen ? <BsFullscreenExit size={30} /> : <BsFullscreen size={20} />}
+                  </button>
+                </div>
+                <div className="overflow-y-auto" style={{ maxHeight: isFullScreen ? '80vh' : '30vh' }}>
                   <style>
                     {`
-                        .overflow-y-auto::-webkit-scrollbar {
-                           width: 0;
-                                                      }
-                      `}
+        .overflow-y-auto::-webkit-scrollbar {
+          width: 0;
+        `}
                   </style>
-                  <FolderTreeView
-                    storageRef={customStoragePath}
-                  />
+                  <FolderTreeView storageRef={customStoragePath} />
                 </div>
               </div>
             </div>
