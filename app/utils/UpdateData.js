@@ -1,6 +1,6 @@
 import { database } from "../firebase";
 import { getDatabase, ref, set, child, get, update } from "firebase/database";
-import { GetFollower, GetFollowing, GetFollowingList, GetFollowerList } from "./GetData"
+import { GetFollower, GetFollowing, GetFollowingList,GetLikes,GetLikedList } from "./GetData"
 
 async function UploadProject(
   userEmailId,
@@ -174,6 +174,68 @@ async function DecrementFollowingList(userEmailId, newF) {
   }
 }
 
+async function IncrementLikes(projectId) {
+  const updates = {};
+  updates["projects/" + projectId + "/Likes"] = await GetLikes(projectId) + 1;
+
+  try {
+    await update(ref(database), updates);
+    console.log("Likes count incremented successfully.");
+  } catch (error) {
+    console.error("Error incrementing following count:", error);
+  }
+}
+
+async function DecrementLikes(projectId) {
+  const updates = {};
+  updates["projects/" + projectId + "/Likes"] = await GetLikes(projectId) - 1;
+
+  try {
+    await update(ref(database), updates);
+    console.log("Likes count decremented successfully.");
+  } catch (error) {
+    console.error("Error incrementing following count:", error);
+  }
+}
+
+async function IncrementLikedList(userEmailId, newF) {
+  const followingList = (await GetLikedList(userEmailId)).split(",");
+  followingList.push(newF); // Add the new following
+  const updatedFollowingList = followingList.join(","); // Convert the array back to a string
+
+  const updates = {};
+  updates["users/" + userEmailId + "/LikedList"] = updatedFollowingList;
+
+  try {
+    await update(ref(database), updates);
+    console.log("Liked list updated successfully.");
+  } catch (error) {
+    console.error("Error updating following list:", error);
+  }
+}
+
+async function DecrementLikedList(userEmailId, newF) {
+  const LikedList = (await GetLikedList(userEmailId)).split(",");
+  const index = LikedList.indexOf(newF);
+
+  if (index !== -1) {
+    LikedList.splice(index, 1); // Remove the following
+    const updatedLikedList = LikedList.join(","); // Convert the array back to a string
+
+    const updates = {};
+    updates["users/" + userEmailId + "/LikedList"] = updatedLikedList;
+
+    try {
+      await update(ref(database), updates);
+      console.log("Liked list updated successfully.");
+    } catch (error) {
+      console.error("Error updating following list:", error);
+    }
+  }
+}
+
+
+
 
 //Call While SIgnUp and First AUthentication
 function UploadUserData(userEmailId, name, dpurl) {
@@ -236,4 +298,4 @@ function createUser(username, secret, email, first_name) {
 }
 
 
-export { UploadProject, UploadUserData, convertEmailToDomain, createProjectId, createUser, IncrementFollower, IncrementFollowing, IncrementFollowingList, DecrementFollower, DecrementFollowing, DecrementFollowingList };
+export { UploadProject, UploadUserData, convertEmailToDomain, createProjectId, createUser, IncrementFollower, IncrementFollowing, IncrementFollowingList, DecrementFollower, DecrementFollowing, DecrementFollowingList ,IncrementLikes,DecrementLikes,IncrementLikedList,DecrementLikedList};

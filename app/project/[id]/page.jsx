@@ -14,8 +14,10 @@ import {
   GetProjectData,
   GetUserName,
   GetUserPhotoUrl,
+  GetLikes,
+  GetLikedList
 } from "../../utils/GetData.js";
-import { convertEmailToDomain } from "../../utils/UpdateData";
+import { convertEmailToDomain ,IncrementLikes,IncrementLikedList,DecrementLikes,DecrementLikedList} from "../../utils/UpdateData";
 import { UserAuth } from "../../context/AuthContext";
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
@@ -28,6 +30,7 @@ export default function Page({ params }) {
   const [ownerdpurl, setOwnerdpurl] = useState("");
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
   const projectID = params.id;
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const toggleDropdown = () => {
@@ -41,9 +44,53 @@ export default function Page({ params }) {
     }
   };
 
-  const handleLike = () => {
-    setLiked(!liked);
+  useEffect(() => {
+    if (user) {
+      const userEmailDomain = convertEmailToDomain(user.email);
+      GetLikedList(userEmailDomain)
+        .then((likedList) => {
+          // Check if the projectID is in the liked list
+          const likedProjects = likedList.split(",");
+          setLiked(likedProjects.includes(projectID));
+        })
+        .catch((error) => {
+          // Handle errors if needed
+          console.error(error);
+        });
+    }
+  }, [user, projectID]);
+
+ const handleLike = async () => {
+    if (user) {
+      const userEmailDomain = convertEmailToDomain(user.email);
+
+      if (liked) {
+        // User wants to remove the like
+        await DecrementLikes(projectID);
+        await DecrementLikedList(userEmailDomain, projectID);
+        setLiked(false);
+        setLikeCount((prevCount) => prevCount - 1); 
+      } else {
+        // User wants to like the project
+        await IncrementLikes(projectID);
+        await IncrementLikedList(userEmailDomain, projectID);
+        setLiked(true);
+        setLikeCount((prevCount) => prevCount + 1);
+      }
+    }
   };
+
+  useEffect(() => {
+    // Load the number of likes for the project
+    GetLikes(projectID)
+      .then((likes) => {
+        setLikeCount(likes);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [projectID]);
+
 
   useEffect(() => {
     // Fetch project data
@@ -254,8 +301,8 @@ export default function Page({ params }) {
                     <BiSolidLike size={30} style={{ color: "lightblue" }} />
                   ) : (
                     <BiLike size={30} />
-                  )}{" "}
-                  <span className="text-md">Like</span>
+                  )}
+                <span className="text-md">Like ({likeCount})</span>
                 </div>
                 <div className="py-2">
                   <Link href={`/roadmap/${params.id}`}>

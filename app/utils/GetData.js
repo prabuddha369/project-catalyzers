@@ -176,21 +176,6 @@ async function GetFollower(userEmailId) {
     throw error; // Throw the error
   }
 }
-async function GetFollowerList(userEmailId) {
-  try {
-    const dbRef = ref(database);
-    const snapshot = await get(child(dbRef, "users/" + userEmailId + "/FollowerList"));
-
-    if (snapshot.exists()) {
-      const Follower = snapshot.val();
-      return Follower; // Return the data
-    } else {
-      throw new Error("No data available");
-    }
-  } catch (error) {
-    throw error; // Throw the error
-  }
-}
 
 async function GetFollowing(userEmailId) {
   try {
@@ -222,6 +207,41 @@ async function GetFollowingList(userEmailId) {
     throw error; // Throw the error
   }
 }
+
+async function GetLikes(projectId) {
+  try {
+    const dbRef = ref(database);
+    const snapshot = await get(child(dbRef, "projects/" + projectId + "/Likes"));
+
+    if (snapshot.exists()) {
+      const Likes = snapshot.val();
+      return Likes; // Return the data
+    } else {
+      return 0; // Return 0 as the default value
+    }
+  } catch (error) {
+    throw error; // Throw the error
+  }
+}
+
+async function GetLikedList(userEmailId) {
+  try {
+    const dbRef = ref(database);
+    const snapshot = await get(child(dbRef, "users/" + userEmailId + "/LikedList"));
+
+    if (snapshot.exists()) {
+      const Liked = snapshot.val();
+      return Liked; // Return the data
+    } else {
+      return ""; // Return an empty string as the default value
+    }
+  } catch (error) {
+    throw error; // Throw the error
+  }
+}
+
+
+
 
 let flg = false;
 
@@ -317,6 +337,6 @@ export {
   GetProjectData,
   GetAllProjectData,
   GetAllProjectsDataUnderProfile,
-  GetUserName, generateFolderData, getCodeContent,
-  GetUserPhotoUrl, GetFollower, GetFollowing, GetFollowingList, GetFollowerList, GetProjectThumbnailUrl, GetProjectTitle, GetProjectDescription
+  GetUserName, generateFolderData, getCodeContent,GetLikes,GetLikedList,
+  GetUserPhotoUrl, GetFollower, GetFollowing, GetFollowingList, GetProjectThumbnailUrl, GetProjectTitle, GetProjectDescription
 };
