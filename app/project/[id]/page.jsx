@@ -17,7 +17,7 @@ import {
   GetLikes,
   GetLikedList
 } from "../../utils/GetData.js";
-import { convertEmailToDomain ,IncrementLikes,IncrementLikedList,DecrementLikes,DecrementLikedList} from "../../utils/UpdateData";
+import { convertEmailToDomain, IncrementLikes, IncrementLikedList, DecrementLikes, DecrementLikedList } from "../../utils/UpdateData";
 import { UserAuth } from "../../context/AuthContext";
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
@@ -60,7 +60,7 @@ export default function Page({ params }) {
     }
   }, [user, projectID]);
 
- const handleLike = async () => {
+  const handleLike = async () => {
     if (user) {
       const userEmailDomain = convertEmailToDomain(user.email);
 
@@ -69,7 +69,7 @@ export default function Page({ params }) {
         await DecrementLikes(projectID);
         await DecrementLikedList(userEmailDomain, projectID);
         setLiked(false);
-        setLikeCount((prevCount) => prevCount - 1); 
+        setLikeCount((prevCount) => prevCount - 1);
       } else {
         // User wants to like the project
         await IncrementLikes(projectID);
@@ -295,14 +295,16 @@ export default function Page({ params }) {
                 </div>
                 <div
                   onClick={handleLike}
-                  className="flex cursor-pointer text-white gap-2 justify-between place-items-center ms-[18vh] pe-[2vh]"
+                  className="flex cursor-pointer text-white gap-2 justify-between place-items-center ms-[16vh] pe-[2vh]"
                 >
                   {liked ? (
                     <BiSolidLike size={30} style={{ color: "lightblue" }} />
                   ) : (
                     <BiLike size={30} />
                   )}
-                <span className="text-md">Like ({likeCount})</span>
+                  <span className="text-md">
+                    {liked ? "Liked" : "Like"} ({likeCount})
+                  </span>
                 </div>
                 <div className="py-2">
                   <Link href={`/roadmap/${params.id}`}>
