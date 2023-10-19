@@ -59,15 +59,15 @@ const page = () => {
   }
   return (
     <div className="w-full h-screen py-5 bg-[#0b1539] text-stone-200">
-      <div className="w-1/3 h-full rounded-3xl bg-gradient-to-b from-[#ea64dc] to-[#0b1539] mx-auto items-center">
-        <div className="pt-7 pb-3 m-auto w-full  text-center font-bold text-5xl text-white font-space-mono">
+      <div className="w-[40%] h-full rounded-3xl bg-gradient-to-b from-[#ea64dc] to-[#0b1539] mx-auto items-center lg:w-1/3 min-w-fit">
+        <div className="pt-7 pb-3 m-auto w-full  text-center font-bold text-5xl text-white font-space-mono md:text-3xl">
           Sign Up
         </div>
         <div className="pt-5 items-center flex flex-col  m-auto w-full  font-space-mono">
           <div className="pb-2 flex flex-col gap-1">
             <span className="text-2xl">Name</span>
             <input
-              className="w-[19rem]  h-10 rounded-xl p-3 text-sm bg-[#0b1539] text-stone-200 "
+              className="w-[19rem] h-10 rounded-xl p-3 text-sm bg-[#0b1539] text-stone-200 min-w-[1rem]"
               type="text"
               onChange={(e) => setUserName(e.target.value)}
             />
@@ -83,9 +83,9 @@ const page = () => {
             />
           </div>
         </div>
-        <div className="p-1 items-center flex flex-col  m-auto w-full text-2xl font-space-mono">
+        <div className="p-1 items-center flex flex-col  m-auto w-full  font-space-mono">
           <div className="pb-5 flex flex-col gap-1">
-            Password
+            <span className="text-2xl">Password</span>
             <input
               className="w-[19rem] h-10 rounded-xl p-3 bg-[#0b1539] text-stone-200"
               type="password"

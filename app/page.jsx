@@ -166,7 +166,7 @@ export default function Home() {
               <button className="w-36 h-12 bg-fuchsia-400 rounded-xl text-2xl font-bold text-white">
                 <Link href="/signup">Sign Up</Link>
               </button>
-              <button class="ps-4 text-fuchsia-400 text-2xl font-bold">
+              <button className="ps-4 text-fuchsia-400 text-2xl font-bold">
                 <Link href="/signin">Log In</Link>
               </button>
             </div>

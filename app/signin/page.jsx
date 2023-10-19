@@ -55,7 +55,7 @@ const page = () => {
 
   return (
     <div className="w-full h-screen py-5 bg-[#0b1539] text-stone-200">
-      <div className="w-1/3 h-full rounded-3xl bg-gradient-to-b from-[#ea64dc] to-[#0b1539] mx-auto items-center">
+      <div className="w-[40%] h-full rounded-3xl bg-gradient-to-b from-[#ea64dc] to-[#0b1539] mx-auto items-center min-w-fit">
         <div className="pt-8 pb-8 m-auto w-full text-center text-4xl font-bold font-space-mono">
           Welcome Back!
         </div>
