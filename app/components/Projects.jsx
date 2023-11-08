@@ -10,11 +10,10 @@ import {
 import Link from "next/link";
 import { UserAuth } from "../context/AuthContext";
 const Projects = ({ projects }) => {
-  
   const { user } = UserAuth();
   return (
     <div style={{ overflow: "hidden", padding: "10px" }}>
-      <Stack flexWrap="wrap" justifyContent="start" gap={2} direction="row">
+      <Stack flexWrap="wrap" justifyContent="center" gap={2} direction="row">
         {projects.map((item, index) => (
           <Box key={index}>
             <Link href={user ? `/project/${item.projectID}` : "/signin"}>

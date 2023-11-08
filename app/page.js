@@ -9,9 +9,7 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 import dynamic from "next/dynamic";
 import { GetUserPhotoUrl, GetUserName } from "./utils/GetData";
 import { convertEmailToDomain } from "./utils/UpdateData";
-import {
-  GetAllProjectData
-} from "./utils/GetData";
+import { GetAllProjectData } from "./utils/GetData";
 import { useState, useEffect } from "react";
 
 const Projects = dynamic(() => import("./components/Projects"));
@@ -38,8 +36,7 @@ export default function Home() {
     });
   }, []);
 
-
-  const [searchInput, setSearchInput] = useState(''); // State for search input
+  const [searchInput, setSearchInput] = useState(""); // State for search input
 
   useEffect(() => {
     GetAllProjectData().then((data) => {
@@ -50,7 +47,7 @@ export default function Home() {
   // Filter projects based on the search input
   const filteredProjects = projects.filter((project) => {
     // If the search input is empty, don't filter
-    if (searchInput.trim() === '') {
+    if (searchInput.trim() === "") {
       return true;
     }
 
@@ -83,159 +80,174 @@ export default function Home() {
   };
 
   return (
-    <main className=" p-10 w-full h-screen bg-gradient-to-b from-[#0c163a] to-[#ea65dd] text-stone-300 ">
-      {user ? (
-        <div>
-          <div className="flex justify-between">
-            <div className="flex gap-4 pb-[6%]">
-              <button onClick={toggleDropdown}>
-                {isDropdownOpen ? <RxCross1 size={30} /> : <GiHamburgerMenu size={30} />}
-              </button>
-              {isDropdownOpen && (
-                <div className="absolute w-[200px] rounded-lg shadow-lg bg-[#D9D9D9] ring-1 ring-black ring-opacity-5 mt-[60px] ms-[35px] ">
-                  <div className="py-2 px-4" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                    <Link href="/profile/myprofile" className="block px-4 py-2 text-black" role="menuitem">
-                      My Profile
-                    </Link>
-                    <Link href="/upload" className="block px-4 py-2 text-black" role="menuitem">
-                      Add New Project
-                    </Link>
-                    <Link href="/message" className="block px-4 py-2 text-black" role="menuitem">
-                      Messages
-                    </Link>
-                    <button onClick={handleSignOut} className="block px-4 py-2 text-black" role="menuitem">
-                      Sign Out
-                    </button>
-                    <Link href="" className="block px-4 py-2 text-black" role="menuitem">
-                      About Us
-                    </Link>
+    <main>
+      <div className=" p-10 w-full h-full bg-gradient-to-b from-[#0c163a] to-[#ea65dd] text-stone-300 ">
+        {user ? (
+          <div>
+            <div className="flex justify-between">
+              <div className="flex gap-4 pb-[6%]">
+                <button onClick={toggleDropdown}>
+                  {isDropdownOpen ? (
+                    <RxCross1 size={30} />
+                  ) : (
+                    <GiHamburgerMenu size={30} />
+                  )}
+                </button>
+                {isDropdownOpen && (
+                  <div className="absolute w-[200px] rounded-lg shadow-lg bg-[#D9D9D9] ring-1 ring-black ring-opacity-5 mt-[60px] ms-[35px] ">
+                    <div
+                      className="py-2 px-4"
+                      role="menu"
+                      aria-orientation="vertical"
+                      aria-labelledby="options-menu"
+                    >
+                      <Link
+                        href="/profile/myprofile"
+                        className="block px-4 py-2 text-black"
+                        role="menuitem"
+                      >
+                        My Profile
+                      </Link>
+                      <Link
+                        href="/upload"
+                        className="block px-4 py-2 text-black"
+                        role="menuitem"
+                      >
+                        Add New Project
+                      </Link>
+                      <Link
+                        href="/message"
+                        className="block px-4 py-2 text-black"
+                        role="menuitem"
+                      >
+                        Messages
+                      </Link>
+                      <button
+                        onClick={handleSignOut}
+                        className="block px-4 py-2 text-black"
+                        role="menuitem"
+                      >
+                        Sign Out
+                      </button>
+                      <Link
+                        href=""
+                        className="block px-4 py-2 text-black"
+                        role="menuitem"
+                      >
+                        About Us
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              )}
-              <Link
-                href="/profile/myprofile"
-                className="flex gap-4 place-items-center"
-              >
-                <Image
-                  src={dpUrl}
-                  alt="Photo"
-                  width={50}
-                  height={50}
-                  className="rounded-full"
-                />
-                <p>{userName}</p>
-              </Link>
-            </div>
-            <div className="w-[2.5] flex gap-4 items-center">
-              <div>
-                <p className="text-4xl font-bold text-white pb-4 font-['Krona One'] tracking-[.2rem]">
-                  PROJECT
-                  <br />
-                  CATALYZERS
-                </p>
-                <p className="text-xs ps-2">
-                  Welcome to
-                  <br />
-                  Project Catalyzer,where we
-                  <br />
-                  nurture Innovation through collaborative learning.
-                </p>
+                )}
+                <Link
+                  href="/profile/myprofile"
+                  className="flex gap-4 place-items-center"
+                >
+                  <Image
+                    src={dpUrl}
+                    alt="Photo"
+                    width={50}
+                    height={50}
+                    className="rounded-full"
+                  />
+                  <p>{userName}</p>
+                </Link>
               </div>
-              <Image alt="Logo" src={pcat} width={120} onClick={() => window.location.reload()}
-                style={{ cursor: 'pointer' }} />
+              <div className="w-[2.5] flex gap-4 items-center">
+                <div>
+                  <p className="text-4xl font-bold text-white pb-4 font-['Krona One'] tracking-[.2rem]">
+                    PROJECT
+                    <br />
+                    CATALYZERS
+                  </p>
+                  <p className="text-xs ps-2">
+                    Welcome to
+                    <br />
+                    Project Catalyzer,where we
+                    <br />
+                    nurture Innovation through collaborative learning.
+                  </p>
+                </div>
+                <Image
+                  alt="Logo"
+                  src={pcat}
+                  width={120}
+                  onClick={() => window.location.reload()}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+            </div>
+            <div className="p-10 flex justify-between ">
+              <p className="text-2xl">Look In to Library</p>
+              <div className="bg-[#9f74ac] w-1/4 rounded-xl h-fit p-2 flex items-center">
+                <AiOutlineFileSearch size={20} />
+                <input
+                  type="text"
+                  className="mx-auto bg-transparent border-none outline-none text-white placeholder-white"
+                  placeholder="Search Projects"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                />
+              </div>
             </div>
           </div>
-          <div className="p-10 flex justify-between ">
-            <p className="text-2xl">Look In to Library</p>
-            <div className="bg-[#9f74ac] w-1/4 rounded-xl h-fit p-2 flex items-center">
+        ) : (
+          <div>
+            <div className="flex items-center gap-4 py-2 pb-4">
+              <div className="rounded-full overflow-clip w-fit">
+                <Image
+                  alt="logo"
+                  src={pcat}
+                  onClick={() => window.location.reload()}
+                  style={{ cursor: "pointer" }}
+                  width={60}
+                  height={50}
+                  blurDataURL="URL"
+                  className=""
+                />
+              </div>
+              <span className="text-2xl uppercase">Project Catalyzer</span>
+            </div>
+            <span className="text-2xl p-2 mb-8">Look into Library</span>
+            <div className="bg-[#9f74ac] w-full rounded-3xl h-fit p-2 flex items-center justify-between mt-2">
               <AiOutlineFileSearch size={20} />
               <input
                 type="text"
-                className="mx-auto bg-transparent border-none outline-none text-white placeholder-white"
+                className="mx-auto bg-transparent border-none outline-none text-white placeholder-white text-center"
                 placeholder="Search Projects"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
               />
             </div>
           </div>
+        )}
+        <div className="w-full h-screen overflow-y-auto p-5 custom-scrollbar">
+          <style jsx>
+            {`
+              /* Style for custom scrollbar */
+              .custom-scrollbar {
+                scrollbar-width: thin;
+                scrollbar-color: gray transparent;
+              }
+
+              .custom-scrollbar::-webkit-scrollbar {
+                width: 8px;
+              }
+
+              .custom-scrollbar::-webkit-scrollbar-thumb {
+                background-color: gray;
+                border-radius: 5px;
+              }
+
+              .custom-scrollbar::-webkit-scrollbar-track {
+                background: transparent;
+              }
+            `}
+          </style>
+          <Projects projects={filteredProjects} />
         </div>
-      ) : (
-        <div>
-          <div className="flex justify-between">
-            <div className="ps-14 flex gap-4 place-items-center">
-              <button className="w-36 h-12 bg-fuchsia-400 rounded-xl text-2xl font-bold text-white">
-                <Link href="/signup">Sign Up</Link>
-              </button>
-              <button class="ps-4 text-fuchsia-400 text-2xl font-bold">
-                <Link href="/signin">Log In</Link>
-              </button>
-            </div>
-            <div className="w-[2.5] flex gap-4 items-center">
-              <div>
-                <p className="text-4xl font-bold text-white pb-4 font-['Krona One'] tracking-[.2rem]">
-                  PROJECT
-                  <br />
-                  CATALYZERS
-                </p>
-                <p className="text-xs ps-2">
-                  Welcome to
-                  <br />
-                  Project Catalyzer,where we
-                  <br />
-                  nurture Innovation through collaborative learning.
-                </p>
-              </div>
-              <Image
-                alt="logo"
-                src={pcat}
-                onClick={() => window.location.reload()}
-                style={{ cursor: 'pointer' }}
-                width={120}
-                height={50}
-                blurDataURL="URL"
-              />
-            </div>
-          </div>
-          <div className="p-10 flex justify-between ">
-            <p className="text-2xl">Look In to Library</p>
-            <div className="bg-[#9f74ac] w-1/4 rounded-xl h-fit p-2 flex items-center">
-              <AiOutlineFileSearch size={20} />
-              <input
-               type="text"
-               className="mx-auto bg-transparent border-none outline-none text-white placeholder-white"
-               placeholder="Search Projects"
-               value={searchInput}
-               onChange={(e) => setSearchInput(e.target.value)}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-      <div className="w-full h-[56.5%] overflow-y-auto p-5 custom-scrollbar">
-        <style jsx>
-          {`
-    /* Style for custom scrollbar */
-    .custom-scrollbar {
-      scrollbar-width: thin;
-      scrollbar-color: gray transparent;
-    }
-
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background-color: gray;
-      border-radius: 5px;
-    }
-
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: transparent;
-    }
-  `}
-        </style>
-        <Projects projects={filteredProjects} />
       </div>
+      <div className="bg-[#A4279B] h-4 z-20 w-full sticky"></div>
     </main>
   );
 }

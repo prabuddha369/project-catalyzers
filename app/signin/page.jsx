@@ -2,11 +2,15 @@
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { BsGithub } from "react-icons/bs";
-import { UploadUserData, convertEmailToDomain,createUser } from "../utils/UpdateData"
+import {
+  UploadUserData,
+  convertEmailToDomain,
+  createUser,
+} from "../utils/UpdateData";
 import { UserAuth } from "../context/AuthContext";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-let flg=false;
+let flg = false;
 const page = () => {
   const { user, googleSignIn, githubSignIn, signInWithEmailPassword } =
     UserAuth();
@@ -17,7 +21,7 @@ const page = () => {
   const handleGoogleSignIn = async () => {
     try {
       await googleSignIn();
-      flg=true;
+      flg = true;
     } catch (error) {
       console.log(error);
     }
@@ -26,7 +30,7 @@ const page = () => {
   const handleGitSignIn = async () => {
     try {
       await githubSignIn();
-      flg=true;
+      flg = true;
     } catch (error) {
       console.log(error);
     }
@@ -44,11 +48,14 @@ const page = () => {
   console.log(email);
   console.log(password);
 
-  if (user)
-  {
-    if(flg){
-      UploadUserData(convertEmailToDomain(user.email), user.displayName, user.photoURL);
-      createUser(user.displayName,user.email, user.email, user.displayName);
+  if (user) {
+    if (flg) {
+      UploadUserData(
+        convertEmailToDomain(user.email),
+        user.displayName,
+        user.photoURL
+      );
+      createUser(user.displayName, user.email, user.email, user.displayName);
     }
     redirect("/");
   }
@@ -79,7 +86,7 @@ const page = () => {
             />
           </div>
           <div className="pt-2 w-[17rem] h-8 text-left text-blue-400 text-base font-normal font-['Krona One']">
-            <p class="cursor-pointer">forgot password?</p>
+            <p className="cursor-pointer">forgot password?</p>
           </div>
         </div>
         <div className="w-36 h-[3 rem] m-auto text-center pt-2 pb-2 text-2xl font-bold bg-[#cc5ac6] rounded-full">
