@@ -246,7 +246,7 @@ export default function Home() {
           </style>
           <Projects projects={filteredProjects} />
         </div>
-      ) : (
+        : (
         <div>
           <div className="flex justify-between">
             <div className="ps-14 flex gap-4 place-items-center">
@@ -276,7 +276,7 @@ export default function Home() {
                 alt="logo"
                 src={pcat}
                 onClick={() => window.location.reload()}
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: "pointer" }}
                 width={120}
                 height={50}
                 blurDataURL="URL"
@@ -288,43 +288,43 @@ export default function Home() {
             <div className="bg-[#9f74ac] w-1/4 rounded-xl h-fit p-2 flex items-center">
               <AiOutlineFileSearch size={20} />
               <input
-               type="text"
-               className="mx-auto bg-transparent border-none outline-none text-white placeholder-white"
-               placeholder="Search Projects"
-               value={searchInput}
-               onChange={(e) => setSearchInput(e.target.value)}
+                type="text"
+                className="mx-auto bg-transparent border-none outline-none text-white placeholder-white"
+                placeholder="Search Projects"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
               />
             </div>
           </div>
         </div>
-      )}
-      <div className="w-full h-[56.5%] overflow-y-auto p-5 custom-scrollbar">
-        <style jsx>
-          {`
-    /* Style for custom scrollbar */
-    .custom-scrollbar {
-      scrollbar-width: thin;
-      scrollbar-color: gray transparent;
-    }
+        )
+        <div className="w-full h-[56.5%] overflow-y-auto p-5 custom-scrollbar">
+          <style jsx>
+            {`
+              /* Style for custom scrollbar */
+              .custom-scrollbar {
+                scrollbar-width: thin;
+                scrollbar-color: gray transparent;
+              }
 
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 8px;
-    }
+              .custom-scrollbar::-webkit-scrollbar {
+                width: 8px;
+              }
 
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background-color: gray;
-      border-radius: 5px;
-    }
+              .custom-scrollbar::-webkit-scrollbar-thumb {
+                background-color: gray;
+                border-radius: 5px;
+              }
 
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: transparent;
-    }
-  `}
-        </style>
-        <Projects projects={filteredProjects} />
->>>>>>> 00fff228696e5c5d6ebec2a11638353ad62bd7dc:app/page.jsx
+              .custom-scrollbar::-webkit-scrollbar-track {
+                background: transparent;
+              }
+            `}
+          </style>
+          <Projects projects={filteredProjects} />
+        </div>
+        <div className="bg-[#A4279B] h-4 z-20 w-full sticky"></div>
       </div>
-      <div className="bg-[#A4279B] h-4 z-20 w-full sticky"></div>
     </main>
   );
 }
