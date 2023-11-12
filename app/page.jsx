@@ -12,10 +12,8 @@ import { convertEmailToDomain } from "./utils/UpdateData";
 import { GetAllProjectData } from "./utils/GetData";
 import { useState, useEffect } from "react";
 
-import { usePathname } from "next/navigation";
 const Projects = dynamic(() => import("./components/Projects"));
 export default function Home() {
-  const pathname = usePathname();
   const { user, logOut } = UserAuth();
   const handleSignOut = async () => {
     try {
@@ -74,8 +72,8 @@ export default function Home() {
       });
     }
   }, [user]);
-  console.log(user);
-  console.log(projects);
+  // console.log(user);
+  // console.log(projects);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -83,10 +81,10 @@ export default function Home() {
 
   return (
     <main>
-      <div className=" p-10 w-full h-full bg-gradient-to-b from-[#0c163a] to-[#ea65dd] text-stone-300 ">
+      <div className=" p-10 w-full sm:h-[100%] bg-gradient-to-b from-[#0c163a] to-[#ea65dd] text-stone-300 ">
         {user ? (
           <div>
-            <div className=" sm: hidden md:hidden lg:block">
+            <div className="h-full sm: hidden md:hidden lg:block">
               <div className="flex justify-between">
                 <div className="flex gap-4 pb-[6%]">
                   <button onClick={toggleDropdown}>
@@ -193,6 +191,32 @@ export default function Home() {
                   />
                 </div>
               </div>
+            </div>
+            <div className="flex flex-col lg:hidden">
+              <div className="flex place-items-center justify-center gap-4">
+                <Image
+                    alt="Logo"
+                    src={pcat}
+                    width={120}
+                    onClick={() => window.location.reload()}
+                    style={{ cursor: "pointer" }}
+                    className="rounded-full w-[3rem]"
+                  />
+
+                  <span className="text-md font-bold text-white  font-['Krona One'] tracking-[.2rem] capitalize">
+                      PROJECT CATALYZERS
+                    </span>
+              </div>
+              <div className="bg-[#9f74ac] w-full rounded-xl h-fit p-2 flex items-center mt-6">
+                  <AiOutlineFileSearch size={20} />
+                  <input
+                    type="text"
+                    className="text-center mx-auto bg-transparent border-none outline-none text-white placeholder-white placeholder:text-center"
+                    placeholder="Search Projects"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                  />
+                </div>
             </div>
           </div>
         ) : (
