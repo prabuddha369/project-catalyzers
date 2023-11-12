@@ -23,8 +23,18 @@ const Projects = ({ projects }) => {
                   alt={item.title}
                   src={item.thumbnailUrl}
                   sx={{
-                    width: 238,
-                    height: 112.5, // 16:9 aspect ratio (9 / 16 = 0.5625)
+                    width: {
+                      xs: "300px",
+                      sm: "358px",
+                      md: "320px",
+                      lg: "238px",
+                    },
+                    height: {
+                      xs: "169px",
+                      sm: "201px",
+                      md: "180px",
+                      lg: "134px",
+                    },
                   }}
                 />
                 <CardContent className="bg-[#0b1539] w-auto h-10 flex items-center justify-center transform transition duration-150 ease-in ">
