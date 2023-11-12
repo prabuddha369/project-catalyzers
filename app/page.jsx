@@ -221,7 +221,7 @@ export default function Home() {
             </div>
           </div>
         )}
-        <div className="w-full h-screen overflow-y-auto p-5 custom-scrollbar">
+        <div className="w-full h-fit overflow-y-auto p-5 custom-scrollbar">
           <style jsx>
             {`
               /* Style for custom scrollbar */
@@ -246,84 +246,6 @@ export default function Home() {
           </style>
           <Projects projects={filteredProjects} />
         </div>
-        : (
-        <div>
-          <div className="flex justify-between">
-            <div className="ps-14 flex gap-4 place-items-center">
-              <button className="w-36 h-12 bg-fuchsia-400 rounded-xl text-2xl font-bold text-white">
-                <Link href="/signup">Sign Up</Link>
-              </button>
-              <button className="ps-4 text-fuchsia-400 text-2xl font-bold">
-                <Link href="/signin">Log In</Link>
-              </button>
-            </div>
-            <div className="w-[2.5] flex gap-4 items-center">
-              <div>
-                <p className="text-4xl font-bold text-white pb-4 font-['Krona One'] tracking-[.2rem]">
-                  PROJECT
-                  <br />
-                  CATALYZERS
-                </p>
-                <p className="text-xs ps-2">
-                  Welcome to
-                  <br />
-                  Project Catalyzer,where we
-                  <br />
-                  nurture Innovation through collaborative learning.
-                </p>
-              </div>
-              <Image
-                alt="logo"
-                src={pcat}
-                onClick={() => window.location.reload()}
-                style={{ cursor: "pointer" }}
-                width={120}
-                height={50}
-                blurDataURL="URL"
-              />
-            </div>
-          </div>
-          <div className="p-10 flex justify-between ">
-            <p className="text-2xl">Look In to Library</p>
-            <div className="bg-[#9f74ac] w-1/4 rounded-xl h-fit p-2 flex items-center">
-              <AiOutlineFileSearch size={20} />
-              <input
-                type="text"
-                className="mx-auto bg-transparent border-none outline-none text-white placeholder-white"
-                placeholder="Search Projects"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-              />
-            </div>
-          </div>
-        </div>
-        )
-        <div className="w-full h-[56.5%] overflow-y-auto p-5 custom-scrollbar">
-          <style jsx>
-            {`
-              /* Style for custom scrollbar */
-              .custom-scrollbar {
-                scrollbar-width: thin;
-                scrollbar-color: gray transparent;
-              }
-
-              .custom-scrollbar::-webkit-scrollbar {
-                width: 8px;
-              }
-
-              .custom-scrollbar::-webkit-scrollbar-thumb {
-                background-color: gray;
-                border-radius: 5px;
-              }
-
-              .custom-scrollbar::-webkit-scrollbar-track {
-                background: transparent;
-              }
-            `}
-          </style>
-          <Projects projects={filteredProjects} />
-        </div>
-        <div className="bg-[#A4279B] h-4 z-20 w-full sticky"></div>
       </div>
     </main>
   );
