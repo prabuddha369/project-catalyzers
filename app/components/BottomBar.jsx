@@ -3,7 +3,6 @@ import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { GoHome, GoHomeFill } from "react-icons/go";
 import { IoIosAddCircleOutline, IoIosAddCircle } from "react-icons/io";
-import { BiUserCircle, BiSolidUserCircle } from "react-icons/bi";
 import Link from "next/link";
 import { UserAuth } from "../context/AuthContext";
 import Image from "next/image";

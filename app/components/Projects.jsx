@@ -17,7 +17,7 @@ const Projects = ({ projects }) => {
         {projects.map((item, index) => (
           <Box key={index}>
             <Link href={user ? `/project/${item.projectID}` : "/signin"}>
-              <Card className="h-auto transform transition duration-150 ease-in rounded-[1.5rem] hover:scale-105">
+              <Card className="h-auto transform transition duration-150 ease-in md:hover:scale-105">
                 <CardMedia
                   component="img"
                   alt={item.title}
@@ -27,12 +27,12 @@ const Projects = ({ projects }) => {
                       xs: "300px",
                       sm: "358px",
                       md: "320px",
-                      lg: "238px",
+                      lg: "138px",
                     },
                     height: {
-                      xs: "169px",
+                      xs: "140px",
                       sm: "201px",
-                      md: "180px",
+                      md: "150px",
                       lg: "134px",
                     },
                   }}

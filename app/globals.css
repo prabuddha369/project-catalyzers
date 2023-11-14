@@ -14,35 +14,3 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400&display=swap");
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
-/* 
-@layer utilities
-  .fileData {
-    @apply border border-gray-300 p-4 mt-4;
-  }
-  
-  .foldercontainer,
-  .file,
-  .noitems {
-    @apply block p-4 pl-16; /* Adjust padding as needed */
-  
-  /*
-  .folder {
-    @apply text-blue-500 cursor-pointer;
-  }
-  
-  .file {
-    @apply text-black cursor-pointer;
-  }
-  
-  .noitems {
-    @apply hidden pointer-events-none;
-  }
-  
-  .folder:hover,
-  .file:hover {
-    @apply bg-yellow-200;
-  }
-  
-  .folder:before,
-  .file:before {
-    @apply pr-4; /* Adjust padding as needed */
