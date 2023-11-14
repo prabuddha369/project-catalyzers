@@ -1,13 +1,12 @@
-"use client";
-
-import React, { useState } from "react";
+'use client';
+import { useState,useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { BsGithub } from "react-icons/bs";
 import { UserAuth } from "../context/AuthContext";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { UploadUserData ,convertEmailToDomain,createUser} from "../utils/UpdateData";
-let flg=false;
+import { UploadUserData, convertEmailToDomain, createUser } from "../utils/UpdateData";
+let flg = false;
 const page = () => {
   const { user, googleSignIn, githubSignIn, signUpWithEmailAndPassword } =
     UserAuth();
@@ -18,7 +17,7 @@ const page = () => {
   const handleGoogleSignIn = async () => {
     try {
       await googleSignIn();
-      flg=true;
+      flg = true;
     } catch (error) {
       console.log(error);
     }
@@ -26,40 +25,56 @@ const page = () => {
   const handleGitSignIn = async () => {
     try {
       await githubSignIn();
-      flg=true;
+      flg = true;
     } catch (error) {
       console.log(error);
     }
   };
   const handleEmailSignUp = () => {
-  try {
-    // Sign up the user with email and password
-     signUpWithEmailAndPassword(email, password);
-    // After successful signup, update the user's profile
+    try {
+      // Sign up the user with email and password
+      signUpWithEmailAndPassword(email, password);
+      // After successful signup, update the user's profile
       UploadUserData(convertEmailToDomain(email), userName, "https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png");
-      createUser(userName,email.toLowerCase(),email,userName);
-  } catch (error) {
-    if (error == "auth/invalid-login-credentials") {
-      console.log("Invalid Creds");
+      createUser(userName, email.toLowerCase(), email, userName);
+    } catch (error) {
+      if (error == "auth/invalid-login-credentials") {
+        console.log("Invalid Creds");
+      }
     }
-  }
-};
+  };
 
   console.log(userName);
   // console.log(email);
   // console.log(password);
 
-  if (user)
-  {
-    if(flg){
+  if (user) {
+    if (flg) {
       UploadUserData(convertEmailToDomain(user.email), user.displayName, user.photoURL);
-      createUser(user.displayName,user.email, user.email, user.displayName);
+      createUser(user.displayName, user.email, user.email, user.displayName);
     }
     redirect("/");
   }
+
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+    const marginTopStyle = windowWidth < 768 ? 100 : undefined;
+
   return (
     <div className="w-full h-screen py-5 bg-[#0b1539] text-stone-200">
-      <div className="w-[40%] h-full rounded-3xl bg-gradient-to-b from-[#ea64dc] to-[#0b1539] mx-auto items-center lg:w-1/3 min-w-fit">
+      <div className="w-fit px-10 rounded-3xl bg-gradient-to-b from-[#ea64dc] to-[#0b1539] m-auto" style={{ marginTop: marginTopStyle }}>
         <div className="pt-7 pb-3 m-auto w-full  text-center font-bold text-5xl text-white font-space-mono md:text-3xl">
           Sign Up
         </div>
@@ -67,7 +82,7 @@ const page = () => {
           <div className="pb-2 flex flex-col gap-1">
             <span className="text-2xl">Name</span>
             <input
-              className="w-[19rem] h-10 rounded-xl p-3 text-sm bg-[#0b1539] text-stone-200 min-w-[1rem]"
+              className="md:w-[50vh] sm:w-[10vh] h-10 rounded-xl p-3 text-sm bg-[#0b1539] text-stone-200 min-w-[1rem]"
               type="text"
               onChange={(e) => setUserName(e.target.value)}
             />
@@ -77,7 +92,7 @@ const page = () => {
           <div className="pb-2 flex flex-col gap-1">
             <span className="text-2xl">Email</span>
             <input
-              className="w-[19rem] h-10 text-sm rounded-xl p-3 bg-[#0b1539] text-stone-200"
+              className="md:w-[50vh] sm:w-[10vh] h-10 text-sm rounded-xl p-3 bg-[#0b1539] text-stone-200"
               type="email"
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -87,7 +102,7 @@ const page = () => {
           <div className="pb-5 flex flex-col gap-1">
             <span className="text-2xl">Password</span>
             <input
-              className="w-[19rem] h-10 rounded-xl p-3 bg-[#0b1539] text-stone-200"
+              className="md:w-[50vh] sm:w-[10vh] h-10 rounded-xl bg-[#0b1539] text-stone-200"
               type="password"
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -116,7 +131,7 @@ const page = () => {
             />
           </div>
         </div>
-        <div className="p-1 items-center flex flex-col  m-auto w-full text-md font-space-mono">
+        <div className="p-1 items-center flex flex-col pb-7  m-auto w-full text-md font-space-mono">
           <p className="p-1">
             Alredy a User?{" "}
             <Link href="/signin">

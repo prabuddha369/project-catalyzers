@@ -22,7 +22,7 @@ const BottomBar = () => {
     }
   }, [user]);
   return (
-    <div className={(pathname === '/signin' || pathname === '/signup')?`fixed bottom-0 left-0 z-50 w-full h-16 bg-fuchsia-800 rounded-xl text-white lg:hidden font-light hidden`:`fixed bottom-0 left-0 z-50 w-full h-16 bg-fuchsia-800 rounded-xl text-white lg:hidden font-light`}>
+    <div className={(pathname === '/signin' || pathname === '/signup')?`fixed bottom-0 left-0 z-50 w-full h-16 bg-fuchsia-800 rounded-t-xl text-white lg:hidden font-light hidden`:`fixed bottom-0 left-0 z-50 w-full h-16 bg-fuchsia-800 rounded-t-xl text-white lg:hidden font-light`}>
       <div className="flex space-between justify-between px-10 py-2">
         <Link href="/">
           {pathname === "/" ? (<GoHomeFill size={40} />) : (<GoHome size={40} />)}

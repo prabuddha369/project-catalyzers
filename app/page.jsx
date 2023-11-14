@@ -81,18 +81,19 @@ export default function Home() {
 
 
 
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [windowWidth, setWindowWidth] = useState(0);
 
   useEffect(() => {
-    const updateWindowWidth = () => {
+    const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
-    window.addEventListener('resize', updateWindowWidth);
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
     return () => {
-      window.removeEventListener('resize', updateWindowWidth);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
-
 
   return (
     (windowWidth >= 768 ? (
@@ -209,30 +210,6 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex flex-col">
-                <div className="flex place-items-center justify-center gap-4">
-                  <Image
-                    alt="Logo"
-                    src={pcat}
-                    width={120}
-                    onClick={() => window.location.reload()}
-                    style={{ cursor: "pointer" }}
-                    className="rounded-full w-[3rem]"
-                  />
-
-                  <span className="text-md font-bold text-white  font-['Krona One'] tracking-[.2rem] capitalize">
-                    PROJECT CATALYZERS
-                  </span>
-                </div>
-                <div className="bg-[#9f74ac] w-full rounded-xl h-fit p-2 flex items-center mt-6">
-                  <AiOutlineFileSearch size={20} />
-                  <input
-                    type="text"
-                    className="text-center mx-auto bg-transparent border-none outline-none text-white placeholder-white placeholder:text-center"
-                    placeholder="Search Projects"
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                  />
-                </div>
               </div>
             </div>
           ) : (
@@ -328,82 +305,14 @@ export default function Home() {
             <div>
               <div className="h-full">
                 <div className="flex justify-between">
-                  <div className="flex gap-4 pb-[6%]">
-                    <button onClick={toggleDropdown}>
-                      {isDropdownOpen ? (
-                        <RxCross1 size={30} />
-                      ) : (
-                        <GiHamburgerMenu size={30} />
-                      )}
-                    </button>
-                    {isDropdownOpen && (
-                      <div className="absolute w-[200px] rounded-lg shadow-lg bg-[#D9D9D9] ring-1 ring-black ring-opacity-5 mt-[60px] ms-[35px] ">
-                        <div
-                          className="py-2 px-4"
-                          role="menu"
-                          aria-orientation="vertical"
-                          aria-labelledby="options-menu"
-                        >
-                          <Link
-                            href="/profile/myprofile"
-                            className="block px-4 py-2 text-black"
-                            role="menuitem"
-                          >
-                            My Profile
-                          </Link>
-                          <Link
-                            href="/upload"
-                            className="block px-4 py-2 text-black"
-                            role="menuitem"
-                          >
-                            Add New Project
-                          </Link>
-                          <Link
-                            href="/message"
-                            className="block px-4 py-2 text-black"
-                            role="menuitem"
-                          >
-                            Messages
-                          </Link>
-                          <button
-                            onClick={handleSignOut}
-                            className="block px-4 py-2 text-black"
-                            role="menuitem"
-                          >
-                            Sign Out
-                          </button>
-                          <Link
-                            href=""
-                            className="block px-4 py-2 text-black"
-                            role="menuitem"
-                          >
-                            About Us
-                          </Link>
-                        </div>
-                      </div>
-                    )}
-                    <Link
-                      href="/profile/myprofile"
-                      className="flex gap-4 place-items-center"
-                    >
-                      <Image
-                        src={dpUrl}
-                        alt="Photo"
-                        width={50}
-                        height={50}
-                        className="rounded-full"
-                      />
-                      <p>{userName}</p>
-                    </Link>
-                  </div>
                   <div className="w-[2.5] flex gap-4 items-center">
                     <div>
-                      <p className="text-4xl font-bold text-white pb-4 font-['Krona One'] tracking-[.2rem]">
+                      <p className="text-xl font-bold text-white pb-4 font-['Krona One'] tracking-[.2rem]">
                         PROJECT
                         <br />
                         CATALYZERS
                       </p>
-                      <p className="text-xs ps-2">
+                      <p className="text-[10px]">
                         Welcome to
                         <br />
                         Project Catalyzer,where we
@@ -414,51 +323,25 @@ export default function Home() {
                     <Image
                       alt="Logo"
                       src={pcat}
-                      width={120}
+                      width={100}
                       onClick={() => window.location.reload()}
                       style={{ cursor: "pointer" }}
                     />
                   </div>
                 </div>
-                <div className="p-10 flex justify-between ">
-                  <p className="text-2xl">Look In to Library</p>
-                  <div className="bg-[#9f74ac] w-1/4 rounded-xl h-fit p-2 flex items-center">
-                    <AiOutlineFileSearch size={20} />
-                    <input
-                      type="text"
-                      className="mx-auto bg-transparent border-none outline-none text-white placeholder-white"
-                      placeholder="Search Projects"
-                      value={searchInput}
-                      onChange={(e) => setSearchInput(e.target.value)}
-                    />
-                  </div>
-                </div>
               </div>
               <div className="flex flex-col">
-                <div className="flex place-items-center justify-center gap-4">
-                  <Image
-                    alt="Logo"
-                    src={pcat}
-                    width={120}
-                    onClick={() => window.location.reload()}
-                    style={{ cursor: "pointer" }}
-                    className="rounded-full w-[3rem]"
-                  />
-
-                  <span className="text-md font-bold text-white  font-['Krona One'] tracking-[.2rem] capitalize">
-                    PROJECT CATALYZERS
-                  </span>
-                </div>
-                <div className="bg-[#9f74ac] w-full rounded-xl h-fit p-2 flex items-center mt-6">
+                <div className="bg-[#9f74ac] my-10 w-full rounded-xl h-fit p-2 flex items-center">
                   <AiOutlineFileSearch size={20} />
                   <input
                     type="text"
-                    className="text-center mx-auto bg-transparent border-none outline-none text-white placeholder-white placeholder:text-center"
+                    className="ms-5 w-fit bg-transparent border-none outline-none text-white placeholder-white"
                     placeholder="Search Projects"
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
                   />
                 </div>
+                <p className=" mb-2 text-xl">Look In to Library</p>
               </div>
             </div>
           ) : (
@@ -503,7 +386,7 @@ export default function Home() {
               <p className=" mb-2 text-xl">Look In to Library</p>
             </div>
           )}
-          <div className="w-full h-[58vh] overflow-y-auto py-5 custom-scrollbar">
+          <div className="w-full h-[59vh] overflow-y-auto py-5 custom-scrollbar">
             <style jsx>
               {`
               .custom-scrollbar {

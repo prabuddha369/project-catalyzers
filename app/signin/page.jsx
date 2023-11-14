@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { BsGithub } from "react-icons/bs";
 import {
@@ -60,9 +60,25 @@ const page = () => {
     redirect("/");
   }
 
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const marginTopStyle = windowWidth < 768 ? 100 : undefined;
+
   return (
     <div className="w-full h-screen py-5 bg-[#0b1539] text-stone-200">
-      <div className="w-[40%] h-full rounded-3xl bg-gradient-to-b from-[#ea64dc] to-[#0b1539] mx-auto items-center min-w-fit">
+      <div className="w-fit h-fit rounded-3xl bg-gradient-to-b from-[#ea64dc] to-[#0b1539] mx-auto items-center min-w-fit" style={{ marginTop: marginTopStyle }}>
         <div className="pt-8 pb-8 m-auto w-full text-center text-4xl font-bold font-space-mono">
           Welcome Back!
         </div>
@@ -106,7 +122,7 @@ const page = () => {
           </span>
         </div>
         <div className="text-xs text-center p-3">OR</div>
-        <div className="p-1 items-center flex flex-col m-auto w-full text-2xl font-space-mono">
+        <div className="p-1 pb-7 items-center flex flex-col m-auto w-full text-2xl font-space-mono">
           <div className="flex gap-6">
             <FcGoogle
               className="cursor-pointer"
