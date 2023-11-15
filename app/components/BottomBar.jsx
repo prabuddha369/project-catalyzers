@@ -25,11 +25,9 @@ const BottomBar = () => {
     }
   }, [user]);
 
-  const handleIconClick = () => {
-    toast('Messages coming soon...', { icon: '🚀' });
-  }
+  const handleIconClick = () => toast('Messages coming soon...', { icon: '🚀', duration: 2000  });
 
-  const notify = () => toast('Uploads only on laptops and desktops.', { icon: '💻' });
+  const notify = () => toast('Uploads only on laptops and desktops.', { icon: '💻', duration: 2000  });
 
   return (
     <div className={(pathname === '/signin' || pathname === '/signup') ? `fixed bottom-0 left-0 z-50 w-full h-16 bg-fuchsia-800 rounded-t-xl text-white lg:hidden font-light hidden` : `fixed bottom-0 left-0 z-50 w-full h-16 bg-fuchsia-800 rounded-t-xl text-white lg:hidden font-light`}>
