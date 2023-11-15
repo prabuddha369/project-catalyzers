@@ -25,6 +25,10 @@ const BottomBar = () => {
     }
   }, [user]);
 
+  const handleIconClick = () => {
+    toast('Messages coming soon...', { icon: '🚀' });
+  }
+
   const notify = () => toast('Uploads only on laptops and desktops.', { icon: '💻' });
 
   return (
@@ -42,7 +46,7 @@ const BottomBar = () => {
         ) : (
           <IoIosAddCircleOutline size={40} onClick={notify} />
         )}
-        <AiFillMail size={40} onClick={toast('Messages comming soon...', { icon: '🚀' })}/>
+        <AiFillMail size={40} onClick={handleIconClick} />
         <Link
           href={user ? `/profile/myprofile` : `/signup`}
         >
