@@ -417,110 +417,133 @@ export default function Page({ params }) {
         </div>
       </div>
     ) : (
-      <div ref={topOfScreenRef} className="h-full w-full bg-[#0b1539]">
-        <div className="px-[60px]">
-          <div className="w-full overflow-hidden h-[50rem] bg-gradient-to-b from-[#ea64dc] to-[#0b1539] rounded-2xl mt-5">
-            <div className=" w-screen flex flex-wrap items-center gap-6 pt-3 pb-5">
-              <div className="ps-5 text-3xl text-white font-space-mono font-bold p-2 pe-10">
-                {project[0]?.title}
+      <div ref={topOfScreenRef} className="w-full overflow-hidden h-screen bg-gradient-to-b from-[#ea64dc] to-[#0b1539]">
+        <div className=" w-screen flex flex-wrap items-center pb-5">
+          <div className="w-full flex flex-row justify-left items-center bg-[#0b1539]">
+            <Link
+              href={
+                user
+                  ? convertEmailToDomain(user.email) == project[0]?.owner
+                    ? `../../profile/myprofile`
+                    : `../../profile/${project[0]?.owner}`
+                  : "/signin"
+              }
+              className="my-3 text-white flex gap-4 text-xl place-items-center"
+            >
+              <Image
+                src={ownerdpurl}
+                alt="photo"
+                height={30}
+                width={30}
+                className="rounded-full ms-5"
+              />
+              <span className="text-sm">{OwnerName}</span>
+            </Link>
+          </div>
+          <div className="ps-5 text-3xl text-white font-space-mono font-bold p-2 pe-10">
+            {project[0]?.title}
+          </div>
+          <div className="px-10 rounded-full bg-[#9e4495] text-center">
+            {project[0]?.category}
+          </div>
+        </div>
+        <div className="flex ">
+          <div className="w-full">
+            <iframe
+              className="h-[25vh] w-full px-3"
+              src={`https://www.youtube.com/embed/${project[0]?.yturl.substring(
+                17
+              )}`}
+            ></iframe>
+            <div className="flex flex-row">
+              <div className="w-full text-xs py-3 ms-5">
+                {project[0]?.hashtags &&
+                  project[0].hashtags
+                    .split(",") // Split the hashtags by comma
+                    .slice(0, 3) // Take the first three hashtags
+                    .map((hashtag, index) => (
+                      <span
+                        key={index}
+                        className="p-1 m-auto ms-2 ps-2 pe-2 rounded-full border-[0.1rem] border-white text-center text-white placeholder-white"
+                      >
+                        {index > 0}
+                        {hashtag}
+                      </span>
+                    ))}
               </div>
-              <div className="px-10 rounded-full bg-[#9e4495] text-center">
-                {project[0]?.category}
+              <div
+                onClick={handleLike}
+                className="flex w-[20vh] cursor-pointer text-white gap-2 items-center"
+              >
+                {liked ? (
+                  <BiSolidLike size={30} style={{ color: "lightblue" }} />
+                ) : (
+                  <BiLike size={30} />
+                )}
+                <span className="text-md">
+                  {liked ? "Liked" : "Like"} ({likeCount})
+                </span>
               </div>
             </div>
-            <div className="flex ">
-              <div className="w-1/2">
-                <div className="px-10 flex flex-wrap justify-center items-center">
+            <div className="px-10">
+              <input
+                type="text"
+                className="w-full px-5 bg-[#0b1539] border-[0.1rem] border-white py-0.5 text-white placeholder-white"
+                placeholder="Add comment ..."
+              />
+            </div>
+            <div className="py-2 mt-2 px-4">
+              <Link href={`/roadmap/${params.id}`}>
+                <div className="flex justify-center gap-3 place-items-center border rounded-xl text-white pe-3">
+                  <span className="flex flex-wrap ps-3 text-sm">
+                    Roadmap
+                  </span>
+                  <FaRoad size={40} />
+                </div>
+              </Link>
+            </div>
+            <div className="w-full">
+              <div className="px-10 flex flex-wrap justify-center items-center">
+                <div className="text-white font-space-mono font-bold">
                   <div className="text-white font-space-mono font-bold">
-                    <div className="text-white font-space-mono font-bold">
-                      <div className="overflow-y-auto max-h-[550px] mb-6">
-                        <style>
-                          {`
+                    <div className="overflow-y-auto max-h-[20vh] mb-6">
+                      <style>
+                        {`
                         .overflow-y-auto::-webkit-scrollbar {
                            width: 0;
                                                       }
                       `}
-                        </style>
-                        <p className="text-2xl">Objectives</p>
-                        <p className="py-2 font-normal pb-5">
-                          {project[0]?.objective}
-                        </p>
-                        <p className="text-2xl">Technology Used</p>
-                        <p className="py-2 font-normal pb-5">
-                          {project[0]?.techlang}
-                        </p>
-                        <p className="text-2xl">Description</p>
-                        <p className="py-2 font-normal">
-                          {project[0]?.description}
-                        </p>
-                      </div>
-                      <input
-                        type="text"
-                        className="w-[300px] px-4 rounded-[0.6rem] bg-[#0b1539] border-[0.1rem] border-white py-0.5 ms-10 text-white placeholder-white"
-                        placeholder="Add comment ..."
-                      />
+                      </style>
+                      <p className="text-2xl">Objectives</p>
+                      <p className="py-2 font-normal pb-5">
+                        {project[0]?.objective}
+                      </p>
+                      <p className="text-2xl">Technology Used</p>
+                      <p className="py-2 font-normal pb-5">
+                        {project[0]?.techlang}
+                      </p>
+                      <p className="text-2xl">Description</p>
+                      <p className="py-2 font-normal">
+                        {project[0]?.description}
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="w-1/2">
-                <iframe
-                  className="h-[50.7%] w-full pe-[25px]"
-                  src={`https://www.youtube.com/embed/${project[0]?.yturl.substring(
-                    17
-                  )}`}
-                ></iframe>
-                <div className="flex">
-                  <div className="w-fit flex text-xs py-3 justify-between gap-1">
-                    {project[0]?.hashtags &&
-                      project[0].hashtags
-                        .split(",") // Split the hashtags by comma
-                        .slice(0, 3) // Take the first three hashtags
-                        .map((hashtag, index) => (
-                          <span
-                            key={index}
-                            className="p-1 m-auto ps-2 pe-2 rounded-full border-[0.1rem] border-white text-center text-white placeholder-white"
-                          >
-                            {index > 0}
-                            {hashtag}
-                          </span>
-                        ))}
-                  </div>
-                  <div
-                    onClick={handleLike}
-                    className="flex cursor-pointer text-white gap-2 justify-between place-items-center ms-[16vh] pe-[2vh]"
-                  >
-                    {liked ? (
-                      <BiSolidLike size={30} style={{ color: "lightblue" }} />
-                    ) : (
-                      <BiLike size={30} />
-                    )}
-                    <span className="text-md">
-                      {liked ? "Liked" : "Like"} ({likeCount})
-                    </span>
-                  </div>
-                  <div className="py-2">
-                    <Link href={`/roadmap/${params.id}`}>
-                      <div className="flex justify-center gap-3 place-items-center border rounded-xl text-white pe-3">
-                        <span className="flex flex-wrap ps-3 text-sm">
-                          Roadmap
-                        </span>
-                        <FaRoad size={40} />
-                      </div>
-                    </Link>
-                  </div>
-                </div>
+            </div>
+            <div>
+              <div className="px-5">
                 <div
                   className="p-4 bg-[#0b1539] rounded-2xl"
                   style={{
                     position: isFullScreen ? "absolute" : "static",
-                    top: 60,
+                    top: 285,
                     left: 0,
                     right: 0,
                     bottom: 0,
                     zIndex: isFullScreen ? 2 : 0,
-                    height: isFullScreen ? "140vh" : "auto",
-                    width: isFullScreen ? "auto" : "96%",
+                    height: isFullScreen ? "60vh" : "auto",
+                    width: isFullScreen ? "auto" : "full",
                   }}
                 >
                   <div className="flex justify-between">
@@ -543,7 +566,7 @@ export default function Page({ params }) {
                   </div>
                   <div
                     className="overflow-y-auto"
-                    style={{ maxHeight: isFullScreen ? "80vh" : "30vh" }}
+                    style={{ maxHeight: isFullScreen ? "80vh" : "10vh" }}
                   >
                     <style>
                       {`

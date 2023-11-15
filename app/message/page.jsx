@@ -123,7 +123,6 @@ const Message = () => {
 			</div>
 		);
 	}
-	console.log(UserName);
 
 	return (
 		<div className="h-full w-full bg-[#0b1539]">

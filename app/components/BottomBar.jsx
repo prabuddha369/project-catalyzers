@@ -8,8 +8,11 @@ import { UserAuth } from "../context/AuthContext";
 import Image from "next/image";
 import { GetUserPhotoUrl } from "../utils/GetData";
 import { convertEmailToDomain } from "../utils/UpdateData";
+import toast, { Toaster } from 'react-hot-toast';
+import { AiFillMail } from "react-icons/ai";
+
 const BottomBar = () => {
-  const {user} = UserAuth()
+  const { user } = UserAuth()
   const pathname = usePathname();
   const [dpUrl, setDpUrl] = useState(
     "https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png"
@@ -21,24 +24,28 @@ const BottomBar = () => {
       });
     }
   }, [user]);
+
+  const notify = () => toast('Uploads only on laptops and desktops.', { icon: '💻' });
+
   return (
-    <div className={(pathname === '/signin' || pathname === '/signup')?`fixed bottom-0 left-0 z-50 w-full h-16 bg-fuchsia-800 rounded-t-xl text-white lg:hidden font-light hidden`:`fixed bottom-0 left-0 z-50 w-full h-16 bg-fuchsia-800 rounded-t-xl text-white lg:hidden font-light`}>
+    <div className={(pathname === '/signin' || pathname === '/signup') ? `fixed bottom-0 left-0 z-50 w-full h-16 bg-fuchsia-800 rounded-t-xl text-white lg:hidden font-light hidden` : `fixed bottom-0 left-0 z-50 w-full h-16 bg-fuchsia-800 rounded-t-xl text-white lg:hidden font-light`}>
+      <Toaster
+        position="bottom-center"
+        reverseOrder={false}
+      />
       <div className="flex space-between justify-between px-10 py-2">
         <Link href="/">
           {pathname === "/" ? (<GoHomeFill size={40} />) : (<GoHome size={40} />)}
         </Link>
-
-        <Link href='/upload'>
-        
         {pathname === "/upload" ? (
-          <IoIosAddCircle size={40} />
+          <IoIosAddCircle size={40} onClick={notify} />
         ) : (
-          <IoIosAddCircleOutline size={40} />
+          <IoIosAddCircleOutline size={40} onClick={notify} />
         )}
-        </Link>
+        <AiFillMail size={40} onClick={toast('Messages comming soon...', { icon: '🚀' })}/>
         <Link
-          href={user?`/profile/myprofile`:`/signup`}
-          >
+          href={user ? `/profile/myprofile` : `/signup`}
+        >
           <Image
             src={dpUrl}
             alt="Photo"

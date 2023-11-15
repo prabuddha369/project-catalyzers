@@ -247,6 +247,11 @@ const page = () => {
               {Following}
             </div>
           </div>
+          <Link href="../">
+            <button onClick={handleSignOut} className="block px-4 py-2 text-white" role="menuitem">
+              Sign Out
+            </button>
+          </Link>
         </div>
         <div className="ms-8 pt-5 text-3xl font-bold text-white">
           Your Project Library
@@ -283,17 +288,17 @@ const page = () => {
                 className="flex flex-row w-full items-center m-auto py-1"
               >
                 <Link href={`/project/${item.owner}_${index}`} className="flex flex-row w-full gap-8 items-center m-auto py-2">
-                  <div className="flex justify-between place-items-center w-full bg-white h-[10vh] rounded-xl">
+                  <div className="flex justify-between place-items-center w-full bg-white h-[15vh] rounded-xl">
                     <div className="flex flex-col">
-                      <span className="ms-5 text-md font-bold">
+                      <span className="ms-5 text-lg font-bold">
                         {item.title}
                       </span>
-                      <div className="mt-1 ms-5 text-[8px] max-h-20">
+                      <div className="mt-1 ms-5 text-[10px] max-h-20">
                         {truncatedDescription + "..."}
                       </div>
                     </div>
                     <Image
-                      className="rounded-xl ms-5 h-[10vh] w-[35vh] overflow-hidden"
+                      className="rounded-xl ms-5 h-[15vh] w-[55vh] overflow-hidden"
                       src={item.thumbnailurl}
                       alt="project thumbnail"
                       height={200}
