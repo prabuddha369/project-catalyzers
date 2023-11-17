@@ -357,10 +357,57 @@ async function getEmailsByUserName(userNameToSearch) {
   }
 }
 
+async function getAllMessages(email, email2) {
+  const messagesRef = ref(database, `messages/${email}-${email2}`);
+
+  try {
+    const snapshot = await get(messagesRef);
+
+    if (snapshot.exists()) {
+      // Return the snapshot value in JSON format
+      return snapshot.val();
+    } else {
+      // If the reference doesn't exist, return null or handle it as needed
+      return null;
+    }
+  } catch (error) {
+    console.error('Error getting all messages: ' + error);
+    throw error;
+  }
+}
+
+async function getMessagedUsers(email) {
+  const messagesRef = ref(database, `users/${email}/messages`);
+
+  try {
+    const snapshot = await get(messagesRef);
+
+    if (snapshot.exists()) {
+      // Get the string value from the snapshot
+      const usersString = snapshot.val() || '';
+
+      // Split the string into an array using commas as separators
+      const usersArray = usersString.split(',');
+
+      // Filter out empty strings from the array
+      const filteredUsersArray = usersArray.filter((user) => user.trim() !== '');
+
+      return filteredUsersArray;
+    } else {
+      // If the reference doesn't exist, return an empty array or handle it as needed
+      return [];
+    }
+  } catch (error) {
+    console.error('Error getting message users: ' + error);
+    throw error;
+  }
+}
+
+
 export {
   GetProjectData,
-  GetAllProjectData,
-  GetAllProjectsDataUnderProfile, getEmailsByUserName,
+  GetAllProjectData, getMessagedUsers,
+  GetAllProjectsDataUnderProfile, getEmailsByUserName, getAllMessages,
   GetUserName, generateFolderData, getCodeContent, GetLikes, GetLikedList,
   GetUserPhotoUrl, GetFollower, GetFollowing, GetFollowingList, GetProjectThumbnailUrl, GetProjectTitle, GetProjectDescription
 };

@@ -274,24 +274,27 @@ async function updateUsersMessages(email, email2) {
   const userRef2 = ref(database, `users/${email2}/messages`);
 
   try {
-    // Update or initialize the messages array for email
-    const user1Messages = (await get(userRef1)).val() || [];
-    if (!user1Messages.includes(email2)) {
-      user1Messages.push(email2);
-      await set(userRef1, user1Messages.join(','));
-    }
+    // Get the existing messages for email and update or initialize
+    const user1Messages = (await get(userRef1)).val() || '';
+    const updatedUser1Messages = user1Messages.includes(email2)
+      ? user1Messages
+      : user1Messages + (user1Messages ? ',' : '') + email2;
 
-    // Update or initialize the messages array for email2
-    const user2Messages = (await get(userRef2)).val() || [];
-    if (!user2Messages.includes(email)) {
-      user2Messages.push(email);
-      await set(userRef2, user2Messages.join(','));
-    }
+    await set(userRef1, updatedUser1Messages);
+
+    // Get the existing messages for email2 and update or initialize
+    const user2Messages = (await get(userRef2)).val() || '';
+    const updatedUser2Messages = user2Messages.includes(email)
+      ? user2Messages
+      : user2Messages + (user2Messages ? ',' : '') + email;
+
+    await set(userRef2, updatedUser2Messages);
   } catch (error) {
     console.error('Error updating users messages: ' + error);
     throw error;
   }
 }
+
 
 async function addMessage(email, email2, message, sender) {
   const messagesRef = ref(database, `messages/${email}-${email2}`);
@@ -325,4 +328,4 @@ async function addMessage(email, email2, message, sender) {
   }
 }
 
-export { UploadProject, UploadUserData, convertEmailToDomain, createProjectId, addMessage , IncrementFollower, IncrementFollowing, IncrementFollowingList, DecrementFollower, DecrementFollowing, DecrementFollowingList, IncrementLikes, DecrementLikes, IncrementLikedList, DecrementLikedList };
+export { UploadProject, UploadUserData, convertEmailToDomain, createProjectId, addMessage, IncrementFollower, IncrementFollowing, IncrementFollowingList, DecrementFollower, DecrementFollowing, DecrementFollowingList, IncrementLikes, DecrementLikes, IncrementLikedList, DecrementLikedList };

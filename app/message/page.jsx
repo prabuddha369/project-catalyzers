@@ -9,6 +9,7 @@ import {
 	GetUserPhotoUrl,
 	GetFollower,
 	GetFollowing,
+	getMessagedUsers,
 } from "../utils/GetData.js";
 import { convertEmailToDomain } from "../utils/UpdateData";
 import { UserAuth } from "../context/AuthContext";
@@ -19,14 +20,19 @@ const Message = () => {
 	const { user, logOut } = UserAuth();
 	const [userDp, setUserDp] = useState("");
 	const [UserName, setUserName] = useState("");
-	const [messagedUserDps, setMessagedUsersDps]= useState([]);
-	const [messagedUserNames, setMessagedUsersNames]= useState([]);
+	const [messagedUsers, setMessagedUsers] = useState([]);
+	const [messagedUserDps, setMessagedUsersDps] = useState([]);
+	const [messagedUserNames, setMessagedUsersNames] = useState([]);
+	const [currentMessagingUser, setcurrentMessagingUser] = useState("");
 	const [Followers, setFollowers] = useState(0);
 	const [Following, setFollowing] = useState(0);
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+
 	const toggleDropdown = () => {
 		setIsDropdownOpen(!isDropdownOpen);
 	};
+
 	const handleSignOut = async () => {
 		try {
 			await logOut();
@@ -36,7 +42,6 @@ const Message = () => {
 	};
 
 	useEffect(() => {
-		// Fetch owner's name asynchronously and update state
 		if (user) {
 			GetUserPhotoUrl(convertEmailToDomain(user.email))
 				.then((link) => {
@@ -46,12 +51,15 @@ const Message = () => {
 					// Handle errors if needed
 					console.error(error);
 				});
-		}
-	}, [user]);
 
-	useEffect(() => {
-		// Fetch owner's name asynchronously and update state
-		if (user) {
+			getMessagedUsers(convertEmailToDomain(user.email))
+				.then((usersArray) => {
+					setMessagedUsers(usersArray);
+				})
+				.catch((error) => {
+					console.error('Error getting message users: ' + error);
+				});
+
 			GetUserName(convertEmailToDomain(user.email))
 				.then((name) => {
 					setUserName(name);
@@ -141,8 +149,32 @@ const Message = () => {
 			</div>
 			<div className="px-20 mt-3">
 				<div className="w-full h-[86vh] overflow-hidden  bg-[#ea64dc] rounded-2xl pt-5">
-					<div className="ms-8 mb-5 text-3xl font-bold text-white">
+					<div className="px-8 mb-5 text-3xl font-bold text-white">
 						Messages
+						<div className="w-full h-[70vh] bg-white rounded-3xl flex flex-row overflow-hidden">
+							<div className="w-1/3 h-full flex flex-col text-sm bg-[#0b1539] rounded-s-3xl">
+								<input className="ms-8 px-2 mt-6 w-[35vh] text-black rounded-full" type="text" placeholder="Search Users...." />
+								<div className="h-[85%] text-white w-full p-5">
+									<ul>
+										{messagedUsers.map((user, index) => (
+											<li key={index}>{user}</li>
+										))}
+									</ul>
+								</div>
+							</div>
+							<div class="flex flex-col  bg-[#D9D9D9] relative w-full rounded-e-3xl">
+								<div className="h-[10%] w-full bg-[#0b1539]">
+								</div>
+								<div className="mt-3 ms-10 w-[90%] h-[75%] border border-black rounded-xl">
+								</div>
+								<div className="ms-10 absolute bottom-3 w-fit text-center border border-black text-lg rounded-full">
+									<input type="text" placeholder="Type your message...." className="rounded-full text-black px-5 w-[93vh]" />
+									<button className="w-fit h-fit px-5 bg-black text-white rounded-full">
+										Send
+									</button>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
