@@ -154,6 +154,29 @@ const Message = () => {
 	return (
 		(windowWidth >= 768 ?
 			<div className="h-full w-full bg-[#0b1539]">
+				<style>
+					{`
+			  .message-container {
+				padding: 10px;
+				margin-bottom: 10px;
+				border: 1px solid #ccc;
+				border-radius: 5px;
+			  }
+			
+			  .sender-message {
+				display: flex;
+				justify-content: flex-end;
+				background-color: #4caf50;
+				color: white;
+			  }					
+			
+			  .receiver-message {
+				background-color: #f1f1f1;
+				color: black; 
+				float: left;
+			  }
+			  `}
+				</style>
 				<div className="flex  justify-between bg-[#0b1539] sticky top-0 w-full h-[12vh] shadow-md shadow-black" style={{ zIndex: 50 }}>
 					<div className="text-white flex gap-8 text-xl place-items-center ps-10">
 						<button onClick={toggleDropdown}>
@@ -243,8 +266,10 @@ const Message = () => {
 												{currentMessages.map((message, index) => (
 													<div
 														key={index}
-														className={`w-[50%] text-sm h-fit ${message.Sender === user.email ? 'bg-white' : 'bg-blue'}`}>
-														<p>{message.Message}</p>
+														className={`w-full h-fit flex flex-row ${message.Sender === convertEmailToDomain(user.email) ? 'justify-end' : 'justify-start'}`}>
+														<p className={`w-fit text-sm message-container ${message.Sender === convertEmailToDomain(user.email) ? 'sender-message' : 'receiver-message'}`}>
+															{message.Message}
+														</p>
 														{/* <span className="time">{message.Time}</span> */}
 													</div>
 												))}
@@ -300,7 +325,7 @@ const Message = () => {
 			  }
 			  `}
 				</style>
-				<div className="w-full h-screen overflow-hidden  bg-[#ea64dc] rounded-2xl pt-5">
+				<div className="w-full h-screen overflow-hidden  bg-[#ea64dc] pt-5">
 					<div className="px-8">
 						<div className="text-3xl font-bold text-white pb-5">Messages</div>
 						{currentMessagingUser ?
@@ -316,8 +341,10 @@ const Message = () => {
 											{currentMessages.map((message, index) => (
 												<div
 													key={index}
-													className={`w-[50%] text-sm message-container ${message.Sender === user.email ? 'sender-message' : 'receiver-message'}`}>
-													<p>{message.Message}</p>
+													className={`w-full h-fit flex flex-row ${message.Sender === convertEmailToDomain(user.email) ? 'justify-end' : 'justify-start'}`}>
+													<p className={`w-fit text-sm message-container ${message.Sender === convertEmailToDomain(user.email) ? 'sender-message' : 'receiver-message'}`}>
+														{message.Message}
+													</p>
 													{/* <span className="time">{message.Time}</span> */}
 												</div>
 											))}
