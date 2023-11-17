@@ -1,5 +1,5 @@
 import { database } from "../firebase";
-import { ref, child, get, push, set } from "firebase/database";
+import { ref, child, get} from "firebase/database";
 import { storage } from '../firebase';
 import { ref as sRef } from 'firebase/storage';
 import {
@@ -358,17 +358,41 @@ async function getEmailsByUserName(userNameToSearch) {
 }
 
 async function getAllMessages(email, email2) {
-  const messagesRef = ref(database, `messages/${email}-${email2}`);
+  const messagesRef1 = ref(database, `messages/${email}-${email2}`);
+  const messagesRef2 = ref(database, `messages/${email2}-${email}`);
 
   try {
-    const snapshot = await get(messagesRef);
+    const snapshot1 = await get(messagesRef1);
+    const snapshot2 = await get(messagesRef2);
 
-    if (snapshot.exists()) {
-      // Return the snapshot value in JSON format
-      return snapshot.val();
+    if (snapshot1.exists() || snapshot2.exists()) {
+      let messages = [];
+
+      if (snapshot1.exists()) {
+        snapshot1.forEach((childSnapshot) => {
+          const messageData = {
+            Sender: childSnapshot.child('Sender').val(),
+            Message: childSnapshot.child('message').val(),
+            Time: childSnapshot.child('time').val(),
+          };
+          messages.push(messageData);
+        });
+      }
+
+      if (snapshot2.exists()) {
+        snapshot2.forEach((childSnapshot) => {
+          const messageData = {
+            Sender: childSnapshot.child('Sender').val(),
+            Message: childSnapshot.child('message').val(),
+            Time: childSnapshot.child('time').val(),
+          };
+          messages.push(messageData);
+        });
+      }
+
+      return messages;
     } else {
-      // If the reference doesn't exist, return null or handle it as needed
-      return null;
+      return [];
     }
   } catch (error) {
     console.error('Error getting all messages: ' + error);

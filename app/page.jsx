@@ -72,9 +72,7 @@ export default function Home() {
       });
     }
   }, [user]);
-  // console.log(user);
-  // console.log(projects);
-
+  
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };

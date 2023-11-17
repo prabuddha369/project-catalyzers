@@ -1,5 +1,5 @@
 import { database } from "../firebase";
-import { ref, set, child, get, update } from "firebase/database";
+import { ref, set, child, get, update, push} from "firebase/database";
 import { GetFollower, GetFollowing, GetFollowingList, GetLikes, GetLikedList } from "./GetData"
 
 async function UploadProject(
@@ -296,36 +296,65 @@ async function updateUsersMessages(email, email2) {
 }
 
 
-async function addMessage(email, email2, message, sender) {
-  const messagesRef = ref(database, `messages/${email}-${email2}`);
+async function addMessage(email, email2, message) {
+  const messagesRef1 = ref(database, `messages/${email}-${email2}`);
+  const messagesRef2 = ref(database, `messages/${email2}-${email}`);
 
   try {
-    // Check if messagesRef exists
-    const messagesSnapshot = await get(messagesRef);
+    // Check if messagesRef snapshots exist
+    const messagesSnapshot1 = await get(messagesRef1);
+    const messagesSnapshot2 = await get(messagesRef2);
 
-    if (!messagesSnapshot.exists()) {
+    if (!messagesSnapshot1.exists() && !messagesSnapshot2.exists()) {
       // Call updateUsersMessages if messagesRef does not exist
       await updateUsersMessages(email, email2);
+      const newMessageRef = push(messagesRef1);
+
+      const messageData = {
+        Sender: email,
+        time: new Date().toISOString(), // or use your preferred timestamp format
+        message: message,
+      };
+
+      // Set the data for the new message under the generated key
+      await set(newMessageRef, messageData);
+
+      console.log("message sent!");
     }
 
-    // Use push to generate a unique key for the new message
-    const newMessageRef = push(messagesRef);
-    const messageId = newMessageRef.key;
+    if (messagesSnapshot1.exists()) {
+      // Use push to generate a unique key for the new message
+      const newMessageRef = push(messagesRef1);
 
-    const messageData = {
-      Sender: sender,
-      time: new Date().toISOString(), // or use your preferred timestamp format
-      message: message,
-    };
+      const messageData = {
+        Sender: email,
+        time: new Date().toISOString(), // or use your preferred timestamp format
+        message: message,
+      };
 
-    // Set the data for the new message under the generated key
-    await set(newMessageRef, messageData);
+      // Set the data for the new message under the generated key
+      await set(newMessageRef, messageData);
 
-    return messageId;
+      console.log("message sent!");
+    } else if (messagesSnapshot2.exists()) {
+      // Use push to generate a unique key for the new message
+      const newMessageRef = push(messagesRef2);
+
+      const messageData = {
+        Sender: email,
+        time: new Date().toISOString(), // or use your preferred timestamp format
+        message: message,
+      };
+
+      // Set the data for the new message under the generated key
+      await set(newMessageRef, messageData);
+
+      console.log("message sent!");
+    }
   } catch (error) {
     console.error('Error adding message: ' + error);
-    throw error;
   }
 }
+
 
 export { UploadProject, UploadUserData, convertEmailToDomain, createProjectId, addMessage, IncrementFollower, IncrementFollowing, IncrementFollowingList, DecrementFollower, DecrementFollowing, DecrementFollowingList, IncrementLikes, DecrementLikes, IncrementLikedList, DecrementLikedList };
