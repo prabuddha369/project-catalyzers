@@ -1,6 +1,6 @@
 import { database } from "../firebase";
 import { ref, set, child, get, update } from "firebase/database";
-import { GetFollower, GetFollowing, GetFollowingList,GetLikes,GetLikedList } from "./GetData"
+import { GetFollower, GetFollowing, GetFollowingList, GetLikes, GetLikedList } from "./GetData"
 
 async function UploadProject(
   userEmailId,
@@ -269,5 +269,60 @@ function convertEmailToDomain(email) {
   return sanitizedEmail;
 }
 
+async function updateUsersMessages(email, email2) {
+  const userRef1 = ref(database, `users/${email}/messages`);
+  const userRef2 = ref(database, `users/${email2}/messages`);
 
-export { UploadProject, UploadUserData, convertEmailToDomain, createProjectId, createUser, IncrementFollower, IncrementFollowing, IncrementFollowingList, DecrementFollower, DecrementFollowing, DecrementFollowingList ,IncrementLikes,DecrementLikes,IncrementLikedList,DecrementLikedList};
+  try {
+    // Update or initialize the messages array for email
+    const user1Messages = (await get(userRef1)).val() || [];
+    if (!user1Messages.includes(email2)) {
+      user1Messages.push(email2);
+      await set(userRef1, user1Messages.join(','));
+    }
+
+    // Update or initialize the messages array for email2
+    const user2Messages = (await get(userRef2)).val() || [];
+    if (!user2Messages.includes(email)) {
+      user2Messages.push(email);
+      await set(userRef2, user2Messages.join(','));
+    }
+  } catch (error) {
+    console.error('Error updating users messages: ' + error);
+    throw error;
+  }
+}
+
+async function addMessage(email, email2, message, sender) {
+  const messagesRef = ref(database, `messages/${email}-${email2}`);
+
+  try {
+    // Check if messagesRef exists
+    const messagesSnapshot = await get(messagesRef);
+
+    if (!messagesSnapshot.exists()) {
+      // Call updateUsersMessages if messagesRef does not exist
+      await updateUsersMessages(email, email2);
+    }
+
+    // Use push to generate a unique key for the new message
+    const newMessageRef = push(messagesRef);
+    const messageId = newMessageRef.key;
+
+    const messageData = {
+      Sender: sender,
+      time: new Date().toISOString(), // or use your preferred timestamp format
+      message: message,
+    };
+
+    // Set the data for the new message under the generated key
+    await set(newMessageRef, messageData);
+
+    return messageId;
+  } catch (error) {
+    console.error('Error adding message: ' + error);
+    throw error;
+  }
+}
+
+export { UploadProject, UploadUserData, convertEmailToDomain, createProjectId, addMessage , IncrementFollower, IncrementFollowing, IncrementFollowingList, DecrementFollower, DecrementFollowing, DecrementFollowingList, IncrementLikes, DecrementLikes, IncrementLikedList, DecrementLikedList };
