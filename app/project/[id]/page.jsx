@@ -492,7 +492,7 @@ export default function Page({ params }) {
                 placeholder="Add comment ..."
               />
             </div>
-            <div className="py-2 mt-2 px-4">
+            <div className="py-5 mt-2 px-4">
               <Link href={`/roadmap/${params.id}`}>
                 <div className="flex justify-center gap-3 place-items-center border rounded-xl text-white pe-3">
                   <span className="flex flex-wrap ps-3 text-sm">

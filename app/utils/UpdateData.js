@@ -1,5 +1,5 @@
 import { database } from "../firebase";
-import { getDatabase, ref, set, child, get, update } from "firebase/database";
+import { ref, set, child, get, update } from "firebase/database";
 import { GetFollower, GetFollowing, GetFollowingList,GetLikes,GetLikedList } from "./GetData"
 
 async function UploadProject(
@@ -263,38 +263,10 @@ function UploadUserData(userEmailId, name, dpurl) {
   });
 }
 
-
 //UploadUserData calling
 function convertEmailToDomain(email) {
   const sanitizedEmail = email.replace(/[.@]/g, '_').toLowerCase();
   return sanitizedEmail;
-}
-
-const axios = require('axios');
-function createUser(username, secret, email, first_name) {
-  const data = {
-    "username": username,
-    "secret": secret,
-    "email": email,
-    "first_name": first_name,
-  };
-
-  const config = {
-    method: 'post',
-    url: 'https://api.chatengine.io/users/',
-    headers: {
-      'PRIVATE-KEY': '{{b1bd2c53-25cc-4529-b64e-838512f38766}}'
-    },
-    data: data
-  };
-
-  axios(config)
-    .then(function (response) {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
 }
 
 

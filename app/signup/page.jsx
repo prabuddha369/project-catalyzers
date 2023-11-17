@@ -5,7 +5,7 @@ import { BsGithub } from "react-icons/bs";
 import { UserAuth } from "../context/AuthContext";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { UploadUserData, convertEmailToDomain, createUser } from "../utils/UpdateData";
+import { UploadUserData, convertEmailToDomain } from "../utils/UpdateData";
 let flg = false;
 const page = () => {
   const { user, googleSignIn, githubSignIn, signUpWithEmailAndPassword } =
@@ -36,7 +36,6 @@ const page = () => {
       signUpWithEmailAndPassword(email, password);
       // After successful signup, update the user's profile
       UploadUserData(convertEmailToDomain(email), userName, "https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png");
-      createUser(userName, email.toLowerCase(), email, userName);
     } catch (error) {
       if (error == "auth/invalid-login-credentials") {
         console.log("Invalid Creds");
@@ -51,7 +50,6 @@ const page = () => {
   if (user) {
     if (flg) {
       UploadUserData(convertEmailToDomain(user.email), user.displayName, user.photoURL);
-      createUser(user.displayName, user.email, user.email, user.displayName);
     }
     redirect("/");
   }

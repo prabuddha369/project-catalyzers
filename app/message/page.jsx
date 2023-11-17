@@ -1,6 +1,4 @@
 "use client";
-import { ChatEngine, getOrCreateChat } from 'react-chat-engine';
-import React from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Oval } from 'react-loader-spinner';
 import { RxCross1 } from "react-icons/rx";
@@ -21,6 +19,8 @@ const Message = () => {
 	const { user, logOut } = UserAuth();
 	const [userDp, setUserDp] = useState("");
 	const [UserName, setUserName] = useState("");
+	const [messagedUserDps, setMessagedUsersDps]= useState([]);
+	const [messagedUserNames, setMessagedUsersNames]= useState([]);
 	const [Followers, setFollowers] = useState(0);
 	const [Following, setFollowing] = useState(0);
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -34,8 +34,6 @@ const Message = () => {
 			console.log(error);
 		}
 	};
-
-	const [isUsernameLoaded, setIsUsernameLoaded] = useState(false);
 
 	useEffect(() => {
 		// Fetch owner's name asynchronously and update state
@@ -87,42 +85,6 @@ const Message = () => {
 				});
 		}
 	}, [Followers, Following]);
-
-	const [username, setUsername] = useState('')
-	const [isCreatingChat, setIsCreatingChat] = useState(false);
-
-	function createDirectChat(creds) {
-		setIsCreatingChat(true);
-
-		getOrCreateChat(
-			creds,
-			{ is_direct_chat: true, usernames: [username] },
-			() => {
-				setUsername('');
-				setIsCreatingChat(false);
-				window.location.reload();
-			}
-		);
-	}
-
-	function renderChatForm(creds) {
-		if (isCreatingChat) {
-			return <p>Creating chat...</p>;
-		}
-
-		return (
-			<div>
-				<input
-					placeholder="Username"
-					value={username}
-					onChange={(e) => setUsername(e.target.value)}
-				/>
-				<button onClick={() => createDirectChat(creds)}>
-					Search
-				</button>
-			</div>
-		);
-	}
 
 	return (
 		<div className="h-full w-full bg-[#0b1539]">
@@ -182,27 +144,6 @@ const Message = () => {
 					<div className="ms-8 mb-5 text-3xl font-bold text-white">
 						Messages
 					</div>
-					{isUsernameLoaded ? (
-						<ChatEngine
-							height='73.3vh'
-							userName={UserName}
-							userSecret={user.email}
-							projectID='ae8bcf07-cc70-40a3-9a12-3e70be74c505'
-							renderNewChatForm={(creds) => renderChatForm(creds)}
-						/>
-					) : (
-						<div className="absolute inset-0 flex items-center justify-center">
-							<Oval
-								height={80}
-								width={80}
-								color="#0b1539"
-								ariaLabel='oval-loading'
-								secondaryColor="#777bf2"
-								strokeWidth={2}
-								strokeWidthSecondary={2}
-							/>
-						</div>
-					)}
 				</div>
 			</div>
 		</div>

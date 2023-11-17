@@ -5,7 +5,6 @@ import { BsGithub } from "react-icons/bs";
 import {
   UploadUserData,
   convertEmailToDomain,
-  createUser,
 } from "../utils/UpdateData";
 import { UserAuth } from "../context/AuthContext";
 import { redirect } from "next/navigation";
@@ -55,7 +54,6 @@ const page = () => {
         user.displayName,
         user.photoURL
       );
-      createUser(user.displayName, user.email, user.email, user.displayName);
     }
     redirect("/");
   }

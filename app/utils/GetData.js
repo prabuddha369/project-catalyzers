@@ -1,5 +1,5 @@
 import { database } from "../firebase";
-import { ref, child, get } from "firebase/database";
+import { ref, child, get, push, set } from "firebase/database";
 import { storage } from '../firebase';
 import { ref as sRef } from 'firebase/storage';
 import {
@@ -331,12 +331,92 @@ async function getCodeContent(itemPath) {
   return { langdetect, codeContent };
 }
 
+async function getEmailsByUserName(userNameToSearch) {
+  const usersRef = ref(database, 'users');
+  const normalizedSearchName = userNameToSearch.toLowerCase().replace(/\s+/g, '');
 
+  try {
+    const snapshot = await get(usersRef.orderByChild('Name'));
+    const emailIDs = [];
+
+    snapshot.forEach((childSnapshot) => {
+      const name = childSnapshot.child('Name').val();
+
+      if (name) {
+        const normalizedDBName = name.toLowerCase().replace(/\s+/g, '');
+        if (normalizedDBName.includes(normalizedSearchName)) {
+          emailIDs.push(childSnapshot.key);
+        }
+      }
+    });
+
+    return emailIDs;
+  } catch (error) {
+    console.error('Error getting data: ' + error);
+    return null;
+  }
+}
+
+async function updateUsersMessages(email, email2) {
+  const userRef1 = ref(database, `users/${email}/messages`);
+  const userRef2 = ref(database, `users/${email2}/messages`);
+
+  try {
+    // Update or initialize the messages array for email
+    const user1Messages = (await get(userRef1)).val() || [];
+    if (!user1Messages.includes(email2)) {
+      user1Messages.push(email2);
+      await set(userRef1, user1Messages.join(','));
+    }
+
+    // Update or initialize the messages array for email2
+    const user2Messages = (await get(userRef2)).val() || [];
+    if (!user2Messages.includes(email)) {
+      user2Messages.push(email);
+      await set(userRef2, user2Messages.join(','));
+    }
+  } catch (error) {
+    console.error('Error updating users messages: ' + error);
+    throw error;
+  }
+}
+
+async function addMessage(email, email2, message, sender) {
+  const messagesRef = ref(database, `messages/${email}-${email2}`);
+
+  try {
+    // Check if messagesRef exists
+    const messagesSnapshot = await get(messagesRef);
+
+    if (!messagesSnapshot.exists()) {
+      // Call updateUsersMessages if messagesRef does not exist
+      await updateUsersMessages(email, email2);
+    }
+
+    // Use push to generate a unique key for the new message
+    const newMessageRef = push(messagesRef);
+    const messageId = newMessageRef.key;
+
+    const messageData = {
+      Sender: sender,
+      time: new Date().toISOString(), // or use your preferred timestamp format
+      message: message,
+    };
+
+    // Set the data for the new message under the generated key
+    await set(newMessageRef, messageData);
+
+    return messageId;
+  } catch (error) {
+    console.error('Error adding message: ' + error);
+    throw error;
+  }
+}
 
 export {
   GetProjectData,
   GetAllProjectData,
-  GetAllProjectsDataUnderProfile,
-  GetUserName, generateFolderData, getCodeContent,GetLikes,GetLikedList,
+  GetAllProjectsDataUnderProfile, getEmailsByUserName,addMessage,
+  GetUserName, generateFolderData, getCodeContent, GetLikes, GetLikedList,
   GetUserPhotoUrl, GetFollower, GetFollowing, GetFollowingList, GetProjectThumbnailUrl, GetProjectTitle, GetProjectDescription
 };
