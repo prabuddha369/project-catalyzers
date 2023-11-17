@@ -14,7 +14,7 @@ import {
 } from "../utils/GetData.js";
 import { convertEmailToDomain, addMessage } from "../utils/UpdateData";
 import { UserAuth } from "../context/AuthContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 
 const Message = () => {
@@ -26,10 +26,14 @@ const Message = () => {
 	const [currentMessagingUserDp, setcurrentMessagingUserDp] = useState("");
 	const [currentMessagingUser, setcurrentMessagingUser] = useState("");
 	const [currentMessages, setcurrentMessages] = useState([]);
-	const [message, setmessage] = useState("");
 	const [Followers, setFollowers] = useState(0);
 	const [Following, setFollowing] = useState(0);
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+	const [isCurrentUserClicked, setisCurrentUserClicked] = useState(false);
+	const [isSendClicked, setisSendClicked] = useState(false);
+
+
+	const messageInputRef = useRef(null);
 
 
 	const toggleDropdown = () => {
@@ -119,22 +123,24 @@ const Message = () => {
 			getAllMessages(convertEmailToDomain(user.email), currentMessagingUser)
 				.then((messages) => {
 					setcurrentMessages(messages);
+					setisSendClicked(false);
 				})
 				.catch((error) => {
 					console.error('Error getting all messages: ' + error);
 				});
 		}
-	}, [currentMessagingUser, message]);
+	}, [isSendClicked,isCurrentUserClicked]);
 
 	const sendMessage = () => {
-		if (message !== "") {
-			addMessage(convertEmailToDomain(user.email), currentMessagingUser, message);
-			setmessage("");
-		}
-		else {
+		const inputValue = messageInputRef.current.value;
+
+		if (inputValue !== "") {
+			addMessage(convertEmailToDomain(user.email), currentMessagingUser, inputValue);
+			messageInputRef.current.value = "";
+		} else {
 			alert("Enter a message!");
 		}
-	}
+	};
 
 
 	const [windowWidth, setWindowWidth] = useState(0);
@@ -230,8 +236,8 @@ const Message = () => {
 				</div>
 				<div className="px-20 mt-3">
 					<div className="w-full h-[86vh] overflow-hidden  bg-[#ea64dc] rounded-2xl pt-5">
-						<div className="px-8 mb-5 text-3xl font-bold text-white">
-							Messages
+						<div className="px-8">
+							<div className="mb-3 text-3xl font-bold text-white">Messages</div>
 							<div className="w-full h-[70vh] bg-white rounded-3xl flex flex-row overflow-hidden">
 								<div className="w-1/3 h-full flex flex-col text-sm bg-[#0b1539] rounded-s-3xl">
 									<input className="ms-8 px-2 mt-6 w-[35vh] text-black rounded-full" type="text" placeholder="Search Users...." />
@@ -241,6 +247,7 @@ const Message = () => {
 												<li key={index} className="flex flex-row items-center" onClick={() => {
 													setcurrentMessagingUser(user);
 													setcurrentMessagingUserDp(messagedUserDps[index]);
+													setisCurrentUserClicked(true);
 												}}>
 													<Image
 														src={messagedUserDps[index]}
@@ -259,9 +266,9 @@ const Message = () => {
 									<div class="flex flex-col  bg-[#D9D9D9] relative w-full rounded-e-3xl">
 										<div className="h-[10%] w-[93%] gap-5 ps-5 bg-[#0b1539] text-lg ms-5 rounded-full flex flex-row items-center">
 											<span><Image src={currentMessagingUserDp} height={35} width={35} alt="Photo" className="rounded-full" /></span>
-											<span>{GetUserName(currentMessagingUser)}</span>
+											<span className="text-white">{GetUserName(currentMessagingUser)}</span>
 										</div>
-										{currentMessages ?
+										{currentMessages.length !== 0 ?
 											<div className="mt-3 ms-10 w-[90%] h-[75%] border border-black rounded-xl flex flex-col overflow-y-auto">
 												{currentMessages.map((message, index) => (
 													<div
@@ -275,8 +282,8 @@ const Message = () => {
 												))}
 											</div>
 											:
-											<div className="mt-3 ms-10 w-[90%] h-[75%] border text-black border-black rounded-xl">
-												No messages to show
+											<div className="mt-3 ms-10 w-[90%] h-[75%] flex flex-row justify-center items-center text-xl border text-black border-black rounded-xl">
+												<span>No messages to show</span>
 											</div>
 										}
 										<div className="ms-10 absolute bottom-3 w-fit text-center border border-black text-lg rounded-full">
@@ -284,16 +291,16 @@ const Message = () => {
 												type="text"
 												placeholder="Type your message...."
 												className="rounded-full text-black px-5 w-[93vh]"
-												value={message}
-												onChange={(e) => setmessage(e.target.value)}
+												ref={messageInputRef}
 											/>
-											<button className="w-fit h-fit px-5 bg-black text-white rounded-full" onClick={sendMessage}>
+											<button className="w-fit h-fit px-5 bg-black text-white rounded-full" onClick={() => { sendMessage(); setisSendClicked(true); }}>
 												Send
 											</button>
 										</div>
 									</div>
 									:
-									<div class="flex flex-col  bg-[#D9D9D9] relative w-full rounded-e-3xl">
+									<div class="flex flex-col  bg-[#D9D9D9] text-[#454545] justify-center items-center text-lg w-full rounded-e-3xl">
+										Select an user to chat or search a new user ....
 									</div>
 								}
 							</div>
@@ -334,7 +341,7 @@ const Message = () => {
 									<div className="h-[10%] w-[93%] gap-5 ps-5 bg-[#0b1539] text-lg ms-5 rounded-full flex flex-row items-center">
 										<button className="bg-white" onClick={() => { setcurrentMessagingUser("") }}>Back</button>
 										<span><Image src={currentMessagingUserDp} height={35} width={35} alt="Photo" className="rounded-full" /></span>
-										<span>{GetUserName(currentMessagingUser)}</span>
+										<span className="text-3xl font-bold text-white">{GetUserName(currentMessagingUser)}</span>
 									</div>
 									{currentMessages ?
 										<div className="mt-3 ms-5 w-[90%] h-[75%] border border-black rounded-xl flex flex-col overflow-y-auto">
@@ -358,11 +365,10 @@ const Message = () => {
 										<input
 											type="text"
 											placeholder="Type your message...."
-											className="rounded-full text-black px-5 w-[28vh]"
-											value={message}
-											onChange={(e) => setmessage(e.target.value)}
+											className="rounded-full text-black px-5 w-[93vh]"
+											ref={messageInputRef}
 										/>
-										<button className="w-fit h-fit px-5 bg-black text-white rounded-full" onClick={sendMessage}>
+										<button className="w-fit h-fit px-5 bg-black text-white rounded-full" onClick={() => { sendMessage() }}>
 											Send
 										</button>
 									</div>
