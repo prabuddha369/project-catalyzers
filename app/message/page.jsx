@@ -124,9 +124,9 @@ const Message = () => {
 					console.error('Error getting all messages: ' + error);
 				});
 		}
-	}, [currentMessagingUser,message]);
+	}, [currentMessagingUser, message]);
 
-	const sendMessage = ()=> {
+	const sendMessage = () => {
 		if (message !== "") {
 			addMessage(convertEmailToDomain(user.email), currentMessagingUser, message);
 			setmessage("");
@@ -154,28 +154,6 @@ const Message = () => {
 	return (
 		(windowWidth >= 768 ?
 			<div className="h-full w-full bg-[#0b1539]">
-				<style>
-					{`
-			  .message-container {
-				padding: 10px;
-				margin-bottom: 10px;
-				border: 1px solid #ccc;
-				border-radius: 5px;
-			  }
-			
-			  .sender-message {
-				background-color: #4caf50; /* Green background color */
-				color: white; 
-				float: right; 
-			  }
-			
-			  .receiver-message {
-				background-color: #f1f1f1; /* Light grey background color */
-				color: black; 
-				float: left;
-			  }
-			  `}
-				</style>
 				<div className="flex  justify-between bg-[#0b1539] sticky top-0 w-full h-[12vh] shadow-md shadow-black" style={{ zIndex: 50 }}>
 					<div className="text-white flex gap-8 text-xl place-items-center ps-10">
 						<button onClick={toggleDropdown}>
@@ -265,7 +243,7 @@ const Message = () => {
 												{currentMessages.map((message, index) => (
 													<div
 														key={index}
-														className={`w-[50%] text-sm message-container ${message.Sender === user.email ? 'sender-message' : 'receiver-message'}`}>
+														className={`w-[50%] text-sm h-fit ${message.Sender === user.email ? 'bg-white' : 'bg-blue'}`}>
 														<p>{message.Message}</p>
 														{/* <span className="time">{message.Time}</span> */}
 													</div>
@@ -329,7 +307,7 @@ const Message = () => {
 							<div className="w-full h-[70vh] bg-white rounded-3xl flex flex-row overflow-hidden">
 								<div class="flex flex-col  bg-[#D9D9D9] relative w-full rounded-e-3xl">
 									<div className="h-[10%] w-[93%] gap-5 ps-5 bg-[#0b1539] text-lg ms-5 rounded-full flex flex-row items-center">
-										<button className="bg-white" onClick={()=>{setcurrentMessagingUser("")}}>Back</button>
+										<button className="bg-white" onClick={() => { setcurrentMessagingUser("") }}>Back</button>
 										<span><Image src={currentMessagingUserDp} height={35} width={35} alt="Photo" className="rounded-full" /></span>
 										<span>{GetUserName(currentMessagingUser)}</span>
 									</div>
