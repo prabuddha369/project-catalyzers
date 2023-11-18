@@ -25,9 +25,7 @@ const BottomBar = () => {
     }
   }, [user]);
 
-  const handleIconClick = () => toast('Messages coming soon...', { icon: '🚀', duration: 2000  });
-
-  const notify = () => toast('Uploads only on laptops and desktops.', { icon: '💻', duration: 2000  });
+  const notify = () => toast('Uploads only on laptops and desktops.', { icon: '💻', duration: 2000 });
 
   return (
     <div className={(pathname === '/signin' || pathname === '/signup') ? `fixed bottom-0 left-0 z-50 w-full h-16 bg-fuchsia-800 rounded-t-xl text-white lg:hidden font-light hidden` : `fixed bottom-0 left-0 z-50 w-full h-16 bg-fuchsia-800 rounded-t-xl text-white lg:hidden font-light`}>
@@ -39,12 +37,26 @@ const BottomBar = () => {
         <Link href="/">
           {pathname === "/" ? (<GoHomeFill size={40} />) : (<GoHome size={40} />)}
         </Link>
-        {pathname === "/upload" ? (
-          <IoIosAddCircle size={40} onClick={notify} />
-        ) : (
-          <IoIosAddCircleOutline size={40} onClick={notify} />
-        )}
-        <AiFillMail size={40} onClick={handleIconClick} />
+        <IoIosAddCircle size={40} onClick={notify} />
+        {pathname === "/" ?
+          <Link href="/message">
+            <AiFillMail size={40} />
+          </Link>
+          :
+          pathname === "/project/[id]" ?
+            <Link href="../../message">
+              <AiFillMail size={40} />
+            </Link>
+            :
+            pathname === "/profile/[id]" ?
+              <Link href="../../message">
+                <AiFillMail size={40} />
+              </Link>
+              :
+              <Link href="../message">
+                <AiFillMail size={40} />
+              </Link>
+        }
         <Link
           href={user ? `/profile/myprofile` : `/signup`}
         >

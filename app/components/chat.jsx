@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { getMessagedUsers, GetUserName, GetUserPhotoUrl, getEmailsByUserName } from '../utils/GetData';
 import { convertEmailToDomain } from '../utils/UpdateData';
 import Image from "next/image";
+import { IoChevronBack } from "react-icons/io5";
 import ChatBox from './chatbox';
 
 const Chat = ({ user }) => {
@@ -105,20 +106,21 @@ const Chat = ({ user }) => {
             :
             <div>
                 {currentMessagingUser ?
-                    <div className="w-full h-[70vh] bg-white rounded-3xl flex flex-row overflow-hidden">
-                        < div class="flex flex-col  bg-[#D9D9D9] relative w-full rounded-e-3xl" >
-                            <div className="h-[10%] w-[93%] gap-5 ps-5 bg-[#0b1539] text-lg ms-5 rounded-full flex flex-row items-center">
-                                <button onClick={() => { console.log('Button clicked'); setcurrentMessagingUser(''); }}>Back</button>
-                                <span><Image src={currentMessagingUserDp} height={35} width={35} alt="Photo" className="rounded-full" /></span>
-                                <span className="text-3xl font-bold text-white">{GetUserName(currentMessagingUser)}</span>
-                                <ChatBox currentMessagingUser={currentMessagingUser} user={user} />
+                    <div className="w-full h-[80vh] bg-white rounded-3xl flex flex-row overflow-hidden">
+                        < div class="flex flex-col  bg-[#D9D9D9] relative w-full rounded-3xl" >
+                            <div className="h-[10%] w-[100%] gap-5 text-white ps-5 bg-[#0b1539] text-lg flex flex-row items-center">
+                                <button onClick={() => { console.log('Button clicked'); setcurrentMessagingUser(''); }}><IoChevronBack size={30} /></button>
+                                <Image src={currentMessagingUserDp} height={35} width={35} alt="Photo" className="rounded-full" />
+                                <span className="text-lg font-bold text-white">{GetUserName(currentMessagingUser)}</span>
                             </div>
+                            <ChatBox currentMessagingUser={currentMessagingUser} user={user} />
                         </div >
                     </div >
                     :
-                    <div className="w-full h-[70vh] bg-white rounded-3xl flex flex-row overflow-hidden">
+                    <div className="w-full h-[80vh] bg-white rounded-3xl flex flex-row overflow-hidden">
                         <div className="w-full h-full flex flex-col text-sm bg-[#0b1539] rounded-s-3xl">
                             <div className="h-[85%] text-white w-full p-5">
+                                <div className='ms-4 mt-3 mb-5 text-xl text-white'>Chats</div>
                                 {messagedUsers.length === 0 ?
                                     <span className='text-sm text-white'>No Users to show....</span>
                                     :

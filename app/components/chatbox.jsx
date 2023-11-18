@@ -58,7 +58,7 @@ const ChatBox = ({ currentMessagingUser, user }) => {
     return (
         <div>
             {currentMessages.length !== 0 ?
-                <div className="mt-3 ms-10 w-[90%] h-[50vh] border border-black rounded-xl flex flex-col overflow-y-auto">
+                <div className="mt-3 ms-[5%] w-[90%] h-[80%] border border-black rounded-xl flex flex-col overflow-y-auto">
                     {currentMessages.map((message, index) => (
                         <div
                             key={index}
@@ -71,18 +71,18 @@ const ChatBox = ({ currentMessagingUser, user }) => {
                     ))}
                 </div>
                 :
-                <div className="mt-3 ms-10 w-[90%] h-[50vh] flex flex-row justify-center items-center text-xl border text-black border-black rounded-xl">
+                <div className="mt-3 ms-[5%] w-[90%] h-[50vh] flex flex-row justify-center items-center text-xl border text-black border-black rounded-xl">
                     <span>No messages to show</span>
                 </div>
             }
-            < div className="ms-10 absolute bottom-3 w-fit text-center border border-black text-lg rounded-full" >
+            < div className="ms-[5%] absolute bottom-3 w-[90%] text-center border border-black text-lg rounded-full flex flex-row" >
                 <input
                     type="text"
                     placeholder="Type your message...."
-                    className="rounded-full text-black px-5 w-[93vh]"
+                    className="rounded-s-full text-black px-5 w-full"
                     ref={messageInputRef}
                 />
-                <button className="w-fit h-fit px-5 bg-black text-white rounded-full" onClick={() => { sendMessage(); }}>
+                <button className="w-fit h-fit px-5 bg-black text-white rounded-e-full" onClick={() => { sendMessage(); }}>
                     Send
                 </button>
             </div >
