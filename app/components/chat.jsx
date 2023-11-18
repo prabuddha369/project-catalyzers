@@ -1,7 +1,7 @@
 'use client';
-import { useEffect, useState} from 'react';
-import { getMessagedUsers, GetUserName, GetUserPhotoUrl, } from '../utils/GetData';
-import { convertEmailToDomain} from '../utils/UpdateData';
+import { useEffect, useState } from 'react';
+import { getMessagedUsers, GetUserName, GetUserPhotoUrl, getEmailsByUserName } from '../utils/GetData';
+import { convertEmailToDomain } from '../utils/UpdateData';
 import Image from "next/image";
 import ChatBox from './chatbox';
 
@@ -10,6 +10,11 @@ const Chat = ({ user }) => {
     const [messagedUserDps, setMessagedUsersDps] = useState([]);
     const [currentMessagingUserDp, setcurrentMessagingUserDp] = useState("");
     const [currentMessagingUser, setcurrentMessagingUser] = useState("");
+
+
+    const handleSearchInputChange = (event) => {
+        setSearchInput(event.target.value);
+    };
 
     useEffect(() => {
         if (user) {
@@ -53,27 +58,34 @@ const Chat = ({ user }) => {
 
     return (
         (windowWidth >= 768 ?
-            <div className="w-full h-[70vh] bg-white rounded-3xl flex flex-row overflow-hidden">
+            <div className="w-full mt-5 h-[70vh] bg-white rounded-3xl flex flex-row overflow-hidden">
                 <div className="w-1/3 h-full flex flex-col text-sm bg-[#0b1539] rounded-s-3xl">
-                    <input className="ms-8 px-2 mt-6 w-[35vh] text-black rounded-full" type="text" placeholder="Search Users...." />
                     <div className="h-[85%] text-white w-full p-5">
-                        <ul>
-                            {messagedUsers.map((users, index) => (
-                                <li key={index} className="flex flex-row items-center" onClick={() => {
-                                    setcurrentMessagingUser(users);
-                                    setcurrentMessagingUserDp(messagedUserDps[index]);
-                                }}>
-                                    <Image
-                                        src={messagedUserDps[index]}
-                                        height={30}
-                                        width={30}
-                                        alt="profile photo"
-                                        className="rounded-full me-3"
-                                    />
-                                    <span>{GetUserName(users)}</span>
-                                </li>
-                            ))}
-                        </ul>
+                        <div className='ms-2 mb-5 text-xl text-white'>Chats</div>
+                        {messagedUsers.length === 0 ?
+                            <div>
+                                <span className='text-sm text-white ms-5'>No Chats to show....</span>
+                            </div>
+                            :
+                            <ul>
+                                {messagedUsers.map((users, index) => (
+                                    <li key={index} className="flex flex-row items-center" onClick={() => {
+                                        setcurrentMessagingUser(users);
+                                        setcurrentMessagingUserDp(messagedUserDps[index]);
+                                    }}>
+                                        <Image
+                                            src={messagedUserDps[index]}
+                                            height={30}
+                                            width={30}
+                                            alt="profile photo"
+                                            className="rounded-full me-3"
+                                        />
+                                        <span>{GetUserName(users)}</span>
+                                    </li>
+                                ))
+                                }
+                            </ul>
+                        }
                     </div>
                 </div>
                 {currentMessagingUser ?
@@ -82,7 +94,7 @@ const Chat = ({ user }) => {
                             <span><Image src={currentMessagingUserDp} height={35} width={35} alt="Photo" className="rounded-full" /></span>
                             <span className="text-white">{GetUserName(currentMessagingUser)}</span>
                         </div>
-                        <ChatBox currentMessagingUser={currentMessagingUser} user={user}/>
+                        <ChatBox currentMessagingUser={currentMessagingUser} user={user} />
                     </div>
                     :
                     <div class="flex flex-col  bg-[#D9D9D9] text-[#454545] justify-center items-center text-lg w-full rounded-e-3xl">
@@ -99,32 +111,36 @@ const Chat = ({ user }) => {
                                 <button onClick={() => { console.log('Button clicked'); setcurrentMessagingUser(''); }}>Back</button>
                                 <span><Image src={currentMessagingUserDp} height={35} width={35} alt="Photo" className="rounded-full" /></span>
                                 <span className="text-3xl font-bold text-white">{GetUserName(currentMessagingUser)}</span>
-                                <ChatBox currentMessagingUser={currentMessagingUser} user={user}/>
+                                <ChatBox currentMessagingUser={currentMessagingUser} user={user} />
                             </div>
                         </div >
                     </div >
                     :
                     <div className="w-full h-[70vh] bg-white rounded-3xl flex flex-row overflow-hidden">
                         <div className="w-full h-full flex flex-col text-sm bg-[#0b1539] rounded-s-3xl">
-                            <input className="ms-8 px-2 mt-6 w-[35vh] text-black rounded-full" type="text" placeholder="Search Users...." />
                             <div className="h-[85%] text-white w-full p-5">
-                                <ul>
-                                    {messagedUsers.map((users, index) => (
-                                        <li key={index} className="flex flex-row items-center" onClick={() => {
-                                            setcurrentMessagingUser(users);
-                                            setcurrentMessagingUserDp(messagedUserDps[index]);
-                                        }}>
-                                            <Image
-                                                src={messagedUserDps[index]}
-                                                height={30}
-                                                width={30}
-                                                alt="profile photo"
-                                                className="rounded-full me-3"
-                                            />
-                                            <span>{GetUserName(users)}</span>
-                                        </li>
-                                    ))}
-                                </ul>
+                                {messagedUsers.length === 0 ?
+                                    <span className='text-sm text-white'>No Users to show....</span>
+                                    :
+                                    <ul>
+                                        {messagedUsers.map((users, index) => (
+                                            <li key={index} className="flex flex-row items-center" onClick={() => {
+                                                setcurrentMessagingUser(users);
+                                                setcurrentMessagingUserDp(messagedUserDps[index]);
+                                            }}>
+                                                <Image
+                                                    src={messagedUserDps[index]}
+                                                    height={30}
+                                                    width={30}
+                                                    alt="profile photo"
+                                                    className="rounded-full me-3"
+                                                />
+                                                <span>{GetUserName(users)}</span>
+                                            </li>
+                                        ))
+                                        }
+                                    </ul>
+                                }
                             </div>
                         </div>
                     </div>

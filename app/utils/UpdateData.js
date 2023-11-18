@@ -357,4 +357,4 @@ async function addMessage(email, email2, message) {
 }
 
 
-export { UploadProject, UploadUserData, convertEmailToDomain, createProjectId, addMessage, IncrementFollower, IncrementFollowing, IncrementFollowingList, DecrementFollower, DecrementFollowing, DecrementFollowingList, IncrementLikes, DecrementLikes, IncrementLikedList, DecrementLikedList };
+export { UploadProject, UploadUserData, convertEmailToDomain, createProjectId,updateUsersMessages , addMessage, IncrementFollower, IncrementFollowing, IncrementFollowingList, DecrementFollower, DecrementFollowing, DecrementFollowingList, IncrementLikes, DecrementLikes, IncrementLikedList, DecrementLikedList };

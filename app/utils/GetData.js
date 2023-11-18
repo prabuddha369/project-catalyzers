@@ -1,5 +1,5 @@
 import { database } from "../firebase";
-import { ref, child, get, onValue, off } from "firebase/database";
+import { ref, child, get, onValue, off} from "firebase/database";
 import { storage } from '../firebase';
 import { ref as sRef } from 'firebase/storage';
 import {
@@ -331,31 +331,6 @@ async function getCodeContent(itemPath) {
   return { langdetect, codeContent };
 }
 
-async function getEmailsByUserName(userNameToSearch) {
-  const usersRef = ref(database, 'users');
-  const normalizedSearchName = userNameToSearch.toLowerCase().replace(/\s+/g, '');
-
-  try {
-    const snapshot = await get(usersRef.orderByChild('Name'));
-    const emailIDs = [];
-
-    snapshot.forEach((childSnapshot) => {
-      const name = childSnapshot.child('Name').val();
-
-      if (name) {
-        const normalizedDBName = name.toLowerCase().replace(/\s+/g, '');
-        if (normalizedDBName.includes(normalizedSearchName)) {
-          emailIDs.push(childSnapshot.key);
-        }
-      }
-    });
-
-    return emailIDs;
-  } catch (error) {
-    console.error('Error getting data: ' + error);
-    return null;
-  }
-}
 
 function getAllMessages(email, email2, callback) {
   const messagesRef1 = ref(database, `messages/${email}-${email2}`);
@@ -470,8 +445,8 @@ async function getMessagedUsers(email) {
 
 export {
   GetProjectData,
-  GetAllProjectData, getMessagedUsers,getAllMessagesInitially,
-  GetAllProjectsDataUnderProfile, getEmailsByUserName, getAllMessages,
+  GetAllProjectData, getMessagedUsers, getAllMessagesInitially,
+  GetAllProjectsDataUnderProfile, getAllMessages,
   GetUserName, generateFolderData, getCodeContent, GetLikes, GetLikedList,
   GetUserPhotoUrl, GetFollower, GetFollowing, GetFollowingList, GetProjectThumbnailUrl, GetProjectTitle, GetProjectDescription
 };

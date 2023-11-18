@@ -13,7 +13,7 @@ import {
   GetFollowing,
   GetFollowingList,
 } from "../../utils/GetData.js";
-import { convertEmailToDomain, IncrementFollower, IncrementFollowing, DecrementFollower, DecrementFollowing, IncrementFollowingList, DecrementFollowingList } from "../../utils/UpdateData";
+import { convertEmailToDomain, IncrementFollower, IncrementFollowing, DecrementFollower, DecrementFollowing, IncrementFollowingList, DecrementFollowingList, updateUsersMessages } from "../../utils/UpdateData";
 import { UserAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -30,6 +30,12 @@ export default function Page({ params }) {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+
+
+  const handleMessage = () => {
+    updateUsersMessages(convertEmailToDomain(user.email), profileID);
+  }
 
 
   const [isFollowing, setIsFollowing] = useState(false);
@@ -77,7 +83,7 @@ export default function Page({ params }) {
     };
 
     getFollowingList(); // Call the function on page load
-  }, []);
+  }, [user]);
 
   const handleSignOut = async () => {
     try {
@@ -136,6 +142,7 @@ export default function Page({ params }) {
         });
     }
   }, [user]);
+
   useEffect(() => {
     // Fetch owner's name asynchronously and update state
     if (user) {
@@ -156,7 +163,7 @@ export default function Page({ params }) {
           console.error(error);
         });
     }
-  }, [Followers, Following]);
+  }, [user, Followers, Following]);
 
 
   const [windowWidth, setWindowWidth] = useState(0);
@@ -223,6 +230,9 @@ export default function Page({ params }) {
             <div className="w-fit p-1 bg-lime-500 rounded-full mx-auto" onClick={handleFollow} style={{ cursor: "pointer" }}>
               <span className="px-3">{isFollowing ? "Unfollow" : "Follow"}</span>
             </div>
+            <Link href="../../message" className="w-fit p-1 bg-[#EB65DD] rounded-full mx-auto" onClick={handleMessage} style={{ cursor: "pointer" }}>
+              <span className="px-3">Message</span>
+            </Link>
           </div>
           <div className="flex justify-between gap-4 text-white p-4 pe-10 place-items-center">
             <Link href="/profile/myprofile">
@@ -320,8 +330,13 @@ export default function Page({ params }) {
               {Following}
             </div>
           </div>
-          <div className="w-fit p-1 bg-lime-500 rounded-full mx-auto" onClick={handleFollow} style={{ cursor: "pointer" }}>
-            <span className="px-3">{isFollowing ? "Unfollow" : "Follow"}</span>
+          <div className="flex flex-col ms-10 gap-4">
+            <div className="w-fit p-1 bg-lime-500 rounded-full mx-auto" onClick={handleFollow} style={{ cursor: "pointer" }}>
+              <span className="px-3">{isFollowing ? "Unfollow" : "Follow"}</span>
+            </div>
+            <Link href="../../message" className="w-fit p-1 bg-[#EB65DD] rounded-full mx-auto" onClick={handleMessage} style={{ cursor: "pointer" }}>
+              <span className="px-3">Message</span>
+            </Link>
           </div>
         </div>
         <div className="ms-8 pt-5 text-3xl font-bold text-white">
