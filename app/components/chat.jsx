@@ -70,7 +70,7 @@ const Chat = ({ user }) => {
                             :
                             <ul>
                                 {messagedUsers.map((users, index) => (
-                                    <li key={index} className="flex flex-row items-center" onClick={() => {
+                                    <li key={index} className="flex flex-row items-center mb-5"  style={{ cursor: "pointer" }} onClick={() => {
                                         setcurrentMessagingUser(users);
                                         setcurrentMessagingUserDp(messagedUserDps[index]);
                                     }}>
@@ -126,7 +126,7 @@ const Chat = ({ user }) => {
                                     :
                                     <ul>
                                         {messagedUsers.map((users, index) => (
-                                            <li key={index} className="flex flex-row items-center" onClick={() => {
+                                            <li key={index} className="flex flex-row items-center mb-5" onClick={() => {
                                                 setcurrentMessagingUser(users);
                                                 setcurrentMessagingUserDp(messagedUserDps[index]);
                                             }}>

@@ -8,6 +8,7 @@ import { convertEmailToDomain } from '../utils/UpdateData';
 const ChatBox = ({ currentMessagingUser, user }) => {
     const [currentMessages, setCurrentMessages] = useState([]);
     const messageInputRef = useRef(null);
+    const messagesContainerRef = useRef(null);
 
 
     useEffect(() => {
@@ -40,8 +41,14 @@ const ChatBox = ({ currentMessagingUser, user }) => {
                     console.error('Error loading initial messages: ' + error);
                 });
         }
-    }, []);
+    }, [currentMessagingUser]);
 
+    useEffect(() => {
+        // Scroll to the bottom of the messages container
+        if (messagesContainerRef.current) {
+          messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
+      }, [currentMessages]);
 
     const sendMessage = () => {
         const inputValue = messageInputRef.current.value;
@@ -58,7 +65,7 @@ const ChatBox = ({ currentMessagingUser, user }) => {
     return (
         <div>
             {currentMessages.length !== 0 ?
-                <div className="mt-3 ms-[5%] w-[90%] h-[80%] border border-black rounded-xl flex flex-col overflow-y-auto">
+                <div className="mt-3 ms-[5%] w-[90%] h-[50vh] border border-black rounded-xl flex flex-col overflow-y-auto" ref={messagesContainerRef}>
                     {currentMessages.map((message, index) => (
                         <div
                             key={index}
