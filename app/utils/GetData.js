@@ -1,5 +1,5 @@
 import { database } from "../firebase";
-import { ref, child, get} from "firebase/database";
+import { ref, child, get, onValue, off } from "firebase/database";
 import { storage } from '../firebase';
 import { ref as sRef } from 'firebase/storage';
 import {
@@ -357,7 +357,46 @@ async function getEmailsByUserName(userNameToSearch) {
   }
 }
 
-async function getAllMessages(email, email2) {
+function getAllMessages(email, email2, callback) {
+  const messagesRef1 = ref(database, `messages/${email}-${email2}`);
+  const messagesRef2 = ref(database, `messages/${email2}-${email}`);
+
+  const handleSnapshot = (snapshot) => {
+    if (snapshot.exists()) {
+      let messages = [];
+
+      snapshot.forEach((childSnapshot) => {
+        const messageData = {
+          Sender: childSnapshot.child('Sender').val(),
+          Message: childSnapshot.child('message').val(),
+          Time: childSnapshot.child('time').val(),
+        };
+        messages.push(messageData);
+      });
+
+      callback(messages);
+    } else {
+      callback([]);
+    }
+  };
+
+  const handleError = (error) => {
+    console.error('Error getting all messages: ' + error);
+    // You might want to handle the error in your application, e.g., show an error message to the user
+  };
+
+  // Set up a listener for real-time updates
+  onValue(messagesRef1, handleSnapshot, { error: handleError });
+  onValue(messagesRef2, handleSnapshot, { error: handleError });
+
+  // Return a function to remove the listeners when they are no longer needed
+  return () => {
+    off(messagesRef1, 'value', handleSnapshot);
+    off(messagesRef2, 'value', handleSnapshot);
+  };
+}
+
+async function getAllMessagesInitially(email, email2) {
   const messagesRef1 = ref(database, `messages/${email}-${email2}`);
   const messagesRef2 = ref(database, `messages/${email2}-${email}`);
 
@@ -365,40 +404,41 @@ async function getAllMessages(email, email2) {
     const snapshot1 = await get(messagesRef1);
     const snapshot2 = await get(messagesRef2);
 
-    if (snapshot1.exists() || snapshot2.exists()) {
-      let messages = [];
+    const messages1 = snapshot1.exists() ? parseSnapshot(snapshot1) : [];
+    const messages2 = snapshot2.exists() ? parseSnapshot(snapshot2) : [];
 
-      if (snapshot1.exists()) {
-        snapshot1.forEach((childSnapshot) => {
-          const messageData = {
-            Sender: childSnapshot.child('Sender').val(),
-            Message: childSnapshot.child('message').val(),
-            Time: childSnapshot.child('time').val(),
-          };
-          messages.push(messageData);
-        });
-      }
-
-      if (snapshot2.exists()) {
-        snapshot2.forEach((childSnapshot) => {
-          const messageData = {
-            Sender: childSnapshot.child('Sender').val(),
-            Message: childSnapshot.child('message').val(),
-            Time: childSnapshot.child('time').val(),
-          };
-          messages.push(messageData);
-        });
-      }
-
-      return messages;
+    // Determine which array of messages to return based on existence and emptiness
+    if (snapshot1.exists() && messages1.length > 0) {
+      return messages1;
+    } else if (snapshot2.exists() && messages2.length > 0) {
+      return messages2;
     } else {
+      // Handle the case where both snapshots are empty or don't exist
       return [];
     }
   } catch (error) {
-    console.error('Error getting all messages: ' + error);
-    throw error;
+    console.error('Error getting all messages initially: ' + error);
+    // Handle the error in your application (e.g., show an error message to the user)
+    return [];
   }
 }
+
+function parseSnapshot(snapshot) {
+  let messages = [];
+
+  snapshot.forEach((childSnapshot) => {
+    const messageData = {
+      Sender: childSnapshot.child('Sender').val(),
+      Message: childSnapshot.child('message').val(),
+      Time: childSnapshot.child('time').val(),
+    };
+    messages.push(messageData);
+  });
+
+  return messages;
+}
+
+
 
 async function getMessagedUsers(email) {
   const messagesRef = ref(database, `users/${email}/messages`);
@@ -430,7 +470,7 @@ async function getMessagedUsers(email) {
 
 export {
   GetProjectData,
-  GetAllProjectData, getMessagedUsers,
+  GetAllProjectData, getMessagedUsers,getAllMessagesInitially,
   GetAllProjectsDataUnderProfile, getEmailsByUserName, getAllMessages,
   GetUserName, generateFolderData, getCodeContent, GetLikes, GetLikedList,
   GetUserPhotoUrl, GetFollower, GetFollowing, GetFollowingList, GetProjectThumbnailUrl, GetProjectTitle, GetProjectDescription
