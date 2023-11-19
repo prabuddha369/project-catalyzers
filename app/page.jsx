@@ -23,6 +23,38 @@ export default function Home() {
     }
   };
 
+  const customStyles = `
+  .search-input {
+    margin-left: 15px;
+    width: fit-content;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    placeholder: white;
+  }
+
+  .search-input::placeholder {
+    color: white;
+  }
+
+  .search-input::-webkit-search-cancel-button {
+    appearance: none;
+    background-image: url('https://img.icons8.com/ios/50/multiply.png'); /* Replace with your custom icon URL */
+    background-size: contain;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+  }
+`;
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.target.blur();
+    }
+  };
+
+
   const [userName, setUserName] = useState("<Anonymous>");
   const [dpUrl, setDpUrl] = useState(
     "https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png"
@@ -30,6 +62,7 @@ export default function Home() {
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [projects, setProjects] = useState([]);
+
   useEffect(() => {
     GetAllProjectData().then((data) => {
       setProjects([...data]);
@@ -72,7 +105,7 @@ export default function Home() {
       });
     }
   }, [user]);
-  
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -96,7 +129,7 @@ export default function Home() {
   return (
     (windowWidth >= 768 ? (
       <main>
-        <div className=" p-10 w-full h-full bg-gradient-to-b from-[#0c163a] to-[#ea65dd] text-stone-300 ">
+        <div className=" p-10 w-full h-screen bg-gradient-to-b from-[#0c163a] to-[#ea65dd] text-stone-300 ">
           {user ? (
             <div>
               <div className="h-full">
@@ -258,7 +291,7 @@ export default function Home() {
                 <div className="bg-[#9f74ac] w-1/4 rounded-xl h-fit p-2 flex items-center">
                   <AiOutlineFileSearch size={20} />
                   <input
-                    type="text"
+                    type="search"
                     className="mx-auto bg-transparent border-none outline-none text-white placeholder-white"
                     placeholder="Search Projects"
                     value={searchInput}
@@ -268,9 +301,8 @@ export default function Home() {
               </div>
             </div>
           )}
-          <div className="w-full h-[42.5vh] overflow-y-auto p-5 custom-scrollbar">
-            <style jsx>
-              {`
+          <style jsx>
+            {`
               .custom-scrollbar {
                 scrollbar-width: thin;
                 scrollbar-color: gray transparent;
@@ -289,65 +321,66 @@ export default function Home() {
                 background: transparent;
               }
             `}
-            </style>
-            <div className="flex flex-row justify-left">
-              <Projects projects={filteredProjects} />
-            </div>
+          </style>
+          <div className="w-full h-[50%] overflow-y-auto py-5 custom-scrollbar">
+            {projects.length !== 0 ?
+              <div className="flex flex-row justify-left">
+                {filteredProjects.length !== 0 ? (
+                  <Projects projects={filteredProjects} />
+                ) : (
+                  <div className="w-screen mt-5 flex flex-col justify-center items-center">
+                    <img
+                      width="40"
+                      height="40"
+                      src="https://img.icons8.com/ios/40/nothing-found.png"
+                      alt="nothing-found"
+                      style={{ filter: 'invert(1)', fill: 'white' }}
+                    />
+                    <span>No search result</span>
+                  </div>
+                )}
+              </div>
+              :
+              <div className="flex justify-center gap-5">
+                <style>
+                  {`
+          .skeleton-box {
+            height: 150px;
+            width: 320px;
+            margin-bottom: 16px;
+            background: linear-gradient(to right, #626363 25%, #ddd 50%, #626363 75%);
+            background-size: 800% 100%;
+            animation: wave 2s infinite linear;
+            border-radius: 5px; 
+          }
+
+          @keyframes wave {
+            0% {
+              background-position: 100% 0%;
+            }
+            100% {
+              background-position: -100% 0%;
+            }
+          }
+        `}
+                </style>
+
+                <div className="skeleton-box"></div>
+                <div className="skeleton-box"></div>
+                <div className="skeleton-box"></div>
+              </div>
+            }
           </div>
         </div>
       </main>
     ) : (
       <main>
-        <div className=" p-10 w-full h-full bg-gradient-to-b from-[#0c163a] to-[#ea65dd] text-stone-300 ">
-          {user ? (
-            <div>
-              <div className="h-full">
-                <div className="flex justify-between">
-                  <div className="w-[2.5] flex gap-4 items-center">
-                    <div>
-                      <p className="text-xl font-bold text-white pb-4 font-['Krona One'] tracking-[.2rem]">
-                        PROJECT
-                        <br />
-                        CATALYZERS
-                      </p>
-                      <p className="text-[10px]">
-                        Welcome to
-                        <br />
-                        Project Catalyzer,where we
-                        <br />
-                        nurture Innovation through collaborative learning.
-                      </p>
-                    </div>
-                    <Image
-                      alt="Logo"
-                      src={pcat}
-                      width={100}
-                      onClick={() => window.location.reload()}
-                      style={{ cursor: "pointer" }}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <div className="bg-[#9f74ac] my-10 w-full rounded-xl h-fit p-2 flex items-center">
-                  <AiOutlineFileSearch size={20} />
-                  <input
-                    type="text"
-                    className="ms-5 w-fit bg-transparent border-none outline-none text-white placeholder-white"
-                    placeholder="Search Projects"
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                  />
-                </div>
-                <p className=" mb-2 text-xl">Look In to Library</p>
-              </div>
-            </div>
-          ) : (
-            <div>
+        <div className=" p-10 w-screen h-screen bg-gradient-to-b from-[#0c163a] to-[#ea65dd] text-stone-300 ">
+          <div>
+            <style dangerouslySetInnerHTML={{ __html: customStyles }} />
+            <div className="h-full">
               <div className="flex justify-between">
-                <div className="flex gap-4 pb-[6%]">
-                </div>
-                <div className="w-full flex gap-4 items-center">
+                <div className="w-[2.5] flex gap-4 items-center">
                   <div>
                     <p className="text-xl font-bold text-white pb-4 font-['Krona One'] tracking-[.2rem]">
                       PROJECT
@@ -371,44 +404,71 @@ export default function Home() {
                   />
                 </div>
               </div>
-              <div className="bg-[#9f74ac] my-5 w-full rounded-xl h-fit p-2 flex items-center">
-                <AiOutlineFileSearch size={20} />
+            </div>
+            <div className="flex flex-col">
+              <div className="bg-[#9f74ac] my-5 w-full rounded-xl h-fit p-2 flex flex-row items-center">
+                <span><AiOutlineFileSearch size={20} /></span>
                 <input
-                  type="text"
-                  className="ms-5 w-fit bg-transparent border-none outline-none text-white placeholder-white"
+                  type="search"
+                  className="search-input"
                   placeholder="Search Projects"
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
+                  onKeyPress={(e) => handleKeyPress(e)}
                 />
               </div>
               <p className=" mb-2 text-xl">Look In to Library</p>
             </div>
-          )}
-          <div className="w-full h-[59vh] overflow-y-auto py-5 custom-scrollbar">
-            <style jsx>
-              {`
-              .custom-scrollbar {
-                scrollbar-width: thin;
-                scrollbar-color: gray transparent;
-              }
+          </div>
+          <div className="w-full h-[60%] overflow-y-auto py-5">
+            {projects.length !== 0 ?
+              <div className="flex flex-row justify-left">
+                {filteredProjects.length !== 0 ? (
+                  <Projects projects={filteredProjects} />
+                ) : (
+                  <div className="w-screen mt-5 flex flex-col justify-center items-center">
+                    <img
+                      width="40"
+                      height="40"
+                      src="https://img.icons8.com/ios/40/nothing-found.png"
+                      alt="nothing-found"
+                      style={{ filter: 'invert(1)', fill: 'white' }}
+                    />
+                    <span>No search result</span>
+                  </div>
+                )}
+              </div>
+              :
+              <div className="flex flex-col text-white gap-5 text-xl">
+                <style>
+                  {`
+          .skeleton-box {
+            height: 140px;
+            width: 300px;
+            margin-bottom: 16px;
+            background: linear-gradient(to right, #626363 25%, #ddd 50%, #626363 75%);
+            background-size: 800% 100%;
+            animation: wave 2s infinite linear;
+            border-radius: 5px; 
+          }
 
-              .custom-scrollbar::-webkit-scrollbar {
-                width: 8px;
-              }
+          @keyframes wave {
+            0% {
+              background-position: 100% 0%;
+            }
+            100% {
+              background-position: -100% 0%;
+            }
+          }
+        `}
+                </style>
 
-              .custom-scrollbar::-webkit-scrollbar-thumb {
-                background-color: gray;
-                border-radius: 5px;
-              }
-
-              .custom-scrollbar::-webkit-scrollbar-track {
-                background: transparent;
-              }
-            `}
-            </style>
-            <div className="flex flex-row justify-left">
-              <Projects projects={filteredProjects} />
-            </div>
+                <div className="skeleton-box"></div>
+                <div className="skeleton-box"></div>
+                <div className="skeleton-box"></div>
+                <div className="skeleton-box"></div>
+              </div>
+            }
           </div>
         </div>
       </main>
