@@ -9,6 +9,7 @@ import {
 import { UserAuth } from "../context/AuthContext";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import BottomBar from "../components/BottomBar";
 let flg = false;
 const page = () => {
   const { user, googleSignIn, githubSignIn, signInWithEmailPassword } =
