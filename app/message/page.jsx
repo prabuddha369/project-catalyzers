@@ -15,6 +15,7 @@ import { UserAuth } from "../context/AuthContext";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Chat from "../components/chat.jsx";
+import BottomBar from "../components/BottomBar.jsx";
 
 const Message = () => {
 	const { user, logOut } = UserAuth();
@@ -209,6 +210,7 @@ const Message = () => {
 						<Chat user={user} />
 					</div>
 				</div>
+				<BottomBar dpUrl={userDp}/>
 			</div>
 		)
 	)

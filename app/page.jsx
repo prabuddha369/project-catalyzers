@@ -11,6 +11,7 @@ import { GetUserPhotoUrl, GetUserName } from "./utils/GetData";
 import { convertEmailToDomain } from "./utils/UpdateData";
 import { GetAllProjectData } from "./utils/GetData";
 import { useState, useEffect } from "react";
+import BottomBar from "./components/BottomBar";
 
 const Projects = dynamic(() => import("./components/Projects"));
 export default function Home() {
@@ -471,6 +472,7 @@ export default function Home() {
             }
           </div>
         </div>
+        <BottomBar dpUrl={dpUrl}/>
       </main>
     ))
   );

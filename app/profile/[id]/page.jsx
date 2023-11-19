@@ -17,6 +17,7 @@ import { convertEmailToDomain, IncrementFollower, IncrementFollowing, DecrementF
 import { UserAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import BottomBar from "../../components/BottomBar.jsx";
 export default function Page({ params }) {
   const profileID = params.id;
   const { user, logOut } = UserAuth();
@@ -396,6 +397,7 @@ export default function Page({ params }) {
             );
           })}
         </div>
+        <BottomBar dpUrl={userDp}/>
       </div>
     ))
   );

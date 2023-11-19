@@ -27,6 +27,7 @@ import {
 import { UserAuth } from "../../context/AuthContext";
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import BottomBar from "../../components/BottomBar.jsx";
 export default function Page({ params }) {
   const { user } = UserAuth();
   const [project, setProject] = useState([]);
@@ -581,6 +582,7 @@ export default function Page({ params }) {
             </div>
           </div>
         </div>
+        <BottomBar dpUrl={userDp}/>
       </div>
     ))
   );

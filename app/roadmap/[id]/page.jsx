@@ -108,6 +108,21 @@ const Page = ({ params }) => {
     }
   }
 
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+
   return (
     <div className="h-full w-full bg-[#0b1539]">
       <div className="flex justify-between  bg-[#0b1539] sticky top-0 w-full shadow-md shadow-black" style={{ zIndex: 50 }}>
@@ -188,6 +203,7 @@ const Page = ({ params }) => {
           </Timeline>
         </div>
       </div>
+      {windowWidth >= 768?null:<BottomBar dpUrl={userDp}/>}
     </div>
   );
 };

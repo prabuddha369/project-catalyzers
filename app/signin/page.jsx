@@ -135,6 +135,7 @@ const page = () => {
           </div>
         </div>
       </div>
+      {windowWidth >= 768?null:<BottomBar dpUrl={"https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png"}/>}
     </div>
   );
 };

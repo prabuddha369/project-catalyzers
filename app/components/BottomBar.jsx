@@ -1,29 +1,13 @@
-"use client";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
 import { GoHome, GoHomeFill } from "react-icons/go";
-import { IoIosAddCircleOutline, IoIosAddCircle } from "react-icons/io";
+import { IoIosAddCircle } from "react-icons/io";
 import Link from "next/link";
-import { UserAuth } from "../context/AuthContext";
 import Image from "next/image";
-import { GetUserPhotoUrl } from "../utils/GetData";
-import { convertEmailToDomain } from "../utils/UpdateData";
 import toast, { Toaster } from 'react-hot-toast';
 import { AiFillMail } from "react-icons/ai";
 
-const BottomBar = () => {
-  const { user } = UserAuth()
+const BottomBar = ({dpUrl}) => {
   const pathname = usePathname();
-  const [dpUrl, setDpUrl] = useState(
-    "https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png"
-  );
-  useEffect(() => {
-    if (user) {
-      GetUserPhotoUrl(convertEmailToDomain(user.email)).then((url) => {
-        setDpUrl(url);
-      });
-    }
-  }, [user]);
 
   const notify = () => toast('Uploads only on laptops and desktops.', { icon: '💻', duration: 2000 });
 
@@ -58,7 +42,7 @@ const BottomBar = () => {
               </Link>
         }
         <Link
-          href={user ? `/profile/myprofile` : `/signup`}
+          href={dpUrl !== "https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png" ? `/profile/myprofile` : `/signup`}
         >
           <Image
             src={dpUrl}

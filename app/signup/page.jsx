@@ -6,6 +6,7 @@ import { UserAuth } from "../context/AuthContext";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { UploadUserData, convertEmailToDomain } from "../utils/UpdateData";
+import BottomBar from "../components/BottomBar";
 let flg = false;
 const page = () => {
   const { user, googleSignIn, githubSignIn, signUpWithEmailAndPassword } =
@@ -138,6 +139,7 @@ const page = () => {
           </p>
         </div>
       </div>
+      {windowWidth >= 768?null:<BottomBar dpUrl={"https://i.ibb.co/n3j7DWd/Windows-10-Default-Profile-Picture-svg.png"}/>}
     </div>
   );
 };

@@ -16,6 +16,7 @@ import { convertEmailToDomain } from "../../utils/UpdateData";
 import { UserAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import BottomBar from "../../components/BottomBar.jsx";
 
 const page = () => {
   const { user, logOut } = UserAuth();
@@ -310,6 +311,7 @@ const page = () => {
             );
           })}
         </div>
+        <BottomBar dpUrl={userDp}/>
       </div>
     ))
   );
